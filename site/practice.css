@@ -1,0 +1,33 @@
+#genreRow {display:flex;align-items:center;gap:10px;margin-top:16px;font-size:12px;color:var(--muted)}
+#genre,#wordInput {font:inherit;color:var(--ink);background:#fcfdf9;border:1px solid #aabbaa;border-radius:6px;padding:6px 9px}
+#wordForm label {display:block;margin:0 0 8px;color:var(--muted)}
+.entry {display:flex;gap:8px;max-width:490px}
+#wordInput {min-width:0;flex:1;font-size:17px;padding:9px 12px}
+#wordInput:focus-visible {outline:2px solid #458068;outline-offset:2px}
+#inputNote {color:#99452b;font-size:13px}
+.recallHelp {margin-top:8px;font-size:12px;color:var(--muted)}
+#wordVerdict {background:#edf4e9;border-left:3px solid #568365;border-radius:4px;padding:11px 14px;margin-bottom:19px;color:#2b583c;overflow-wrap:anywhere}
+#wordVerdict.missed {background:#fff5e9;border-color:#b8814e;color:#754227}
+#battle {background:#224e42;color:#f5f2df;border:1px solid #254a39;border-radius:12px;padding:15px 17px;margin:0 0 13px;overflow:hidden}
+.battleTop {display:flex;align-items:center;justify-content:space-between;gap:5px;font-size:13px}
+#battleLevel {font:600 12px/1.5 "Segoe UI",sans-serif;letter-spacing:.035em;color:#c5e7bc}
+.arena {position:relative;display:grid;place-items:center;overflow:hidden;height:112px;margin:7px -3px;background:radial-gradient(ellipse at 50% 83%,#91ac76 0 15%,transparent 16%),radial-gradient(ellipse at 40% 170%,#567f61 0 50%,transparent 51%),radial-gradient(ellipse at 100% 116%,#416c56 0 32%,transparent 33%),linear-gradient(#254e42,#33664f);border-radius:7px}
+#creature {height:104px;width:130px;position:relative}
+#creature img {position:absolute;object-fit:fill;pointer-events:none}
+#creature .body {left:29px;top:26px;width:72px;height:59px}
+#creature .leg {top:72px;width:17px;height:22px}
+#creature .leg.left {left:42px;transform:scaleX(-1)} #creature .leg.right {right:42px}
+#creature .arm {top:50px;width:21px;height:22px}
+#creature .arm.left {left:15px;transform:scaleX(-1)} #creature .arm.right {right:15px}
+#creature .crest {top:10px;width:18px;height:26px}
+#creature .crest.left {left:37px;transform:scaleX(-1) rotate(12deg)} #creature .crest.right {right:37px;transform:rotate(12deg)}
+#creature .eye {top:43px;width:17px;height:17px}
+#creature .eye.left {left:44px} #creature .eye.right {right:44px}
+#creature .mouth {top:63px;left:55px;width:20px;height:10px}
+#monsterName {font-size:17px;line-height:1.3}
+#hpValue {display:block;margin-top:3px;color:#d6e8d5;font:12px "Segoe UI",sans-serif;font-variant-numeric:tabular-nums}
+#hpBar {height:7px;margin:7px 0 8px;background:#183a31}
+#hpBar::-webkit-progress-bar {background:#183a31} #hpBar::-webkit-progress-value {background:#b6dc8c}
+#battleMessage {font-size:12px;color:#edf1da}
+@media(max-width:820px){#battle {margin:0}aside {grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){#battle {grid-column:1/-1;display:grid;grid-template-columns:85px 1fr;column-gap:14px}.arena {grid-row:1/6;grid-column:1;height:86px;margin:0}.arena #creature {transform:scale(.73)}.battleTop,#monsterName,#hpValue,#hpBar,#battleMessage {grid-column:2}}

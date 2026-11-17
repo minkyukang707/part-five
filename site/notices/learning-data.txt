@@ -1,0 +1,63 @@
+Part Five — learning materials
+
+The adapted vocabulary collection in vocabulary.js is available under CC BY-SA 4.0.
+https://creativecommons.org/licenses/by-sa/4.0/
+Changes include headword selection, sense selection, Korean editing, grouping, enrichment and learner-facing labels.
+
+TOEIC Service List and Business Service List: Charles Browne and Brent Culligan.
+New General Service List: Charles Browne, Brent Culligan and Joseph Phillips.
+Lists used to select headwords (version 1.2). CC BY-SA 4.0.
+https://www.newgeneralservicelist.com/toeic-service-list
+https://www.newgeneralservicelist.com/business-service-list
+https://www.newgeneralservicelist.com/new-general-service-list
+
+English and Korean Wiktionary contributors; Wiktextract by Tatu Ylönen and contributors.
+https://en.wiktionary.org/  https://ko.wiktionary.org/  https://kaikki.org/kowiktionary/rawdata.html
+English-to-Korean StarDict compilation by DanielGregorini/koreader-dicts via Kaikki/Wiktionary.
+https://danielgregorini.github.io/koreader-dicts/en/en-ko/
+Open Multilingual Wordnet, Extended OMW, Wiktionary wordnet, Francis Bond and Ryan Foster (2013).
+https://omwn.org/omw1.html
+Princeton WordNet 3.0 (see wordnet.txt for the full license).
+Copy of the dictionary attribution and the full CC BY-SA license are in this folder.
+
+Online sentences: Tatoeba contributors, selected/packaged by ManyThings.org.
+https://www.manythings.org/anki/  https://tatoeba.org/
+Each imported sentence retains its Tatoeba sentence ID and attribution in feedback.
+Only English originals are used from non-Korean packs. Re-used originals are transformed
+into fill-in-the-blank exercises; grammar explanations and answer options are added locally.
+Originals carry CC BY 2.0 FR as indicated on each source line.
+https://creativecommons.org/licenses/by/2.0/fr/
+
+Advanced grammar: original exercises and Korean explanations informed by the following references.
+British Council LearnEnglish: C1 emphasis, conditional inversion, participle clauses and reporting verbs.
+https://learnenglish.britishcouncil.org/free-resources/grammar/c1/emphasis-cleft-sentences-inversion-auxiliaries
+https://learnenglish.britishcouncil.org/free-resources/grammar/c1/inversion-conditionals
+https://learnenglish.britishcouncil.org/grammar/c1-grammar/participle-clauses
+https://learnenglish.britishcouncil.org/free-resources/grammar/b1-b2/reported-speech-reporting-verbs
+Cambridge English Grammar Today: conditionals and alternatives to if.
+https://dictionary.cambridge.org/grammar/british-grammar/conditionals-other-expressions-unless-should-as-long-as
+
+Academic and news imports: the app selects one sentence per eligible article per download,
+replaces one expression with a gap, and supplies choices and Korean grammar notes.
+Europe PMC: only research abstracts marked "cc by" are accepted. Feedback gives
+the credited authors, work title, license, and the specific article with its license details.
+https://europepmc.org/RestfulWebService  https://creativecommons.org/licenses/by/4.0/
+NASA: English editorial text, with article title, source URL and feed byline when present.
+https://www.nasa.gov/news-release/feed/  https://www.nasa.gov/nasa-brand-center/images-and-media/
+Images and logos are not imported. Classroom examples labeled by subject are original exercises.
+
+Monster artwork: Kenney, Monster Builder Pack, CC0. See monster-builder.txt.
+https://kenney.nl/assets/monster-builder-pack
+
+Writing practice: the prompts, examples, phrase categories and Korean coaching text are
+original study activities. Task selection and revision criteria draw on the ETS TOEIC
+Speaking and Writing Examinee Handbook and the TOEFL iBT Writing description and rubric.
+https://www.ets.org/pdfs/toeic/toeic-speaking-writing-examinee-handbook.pdf
+https://www.ets.org/toefl/test-takers/ibt/about/content/writing.html
+https://www.ets.org/pdfs/toefl/writing-rubrics.pdf
+University of Manchester Academic Phrasebank: functions of comparison and cautious language.
+https://www.phrasebank.manchester.ac.uk/compare-and-contrast/
+https://www.phrasebank.manchester.ac.uk/using-cautious-language/
+Local English checking: Harper 3.2.0 by Elijah Potter and contributors, Apache-2.0.
+https://github.com/Automattic/harper  See harper-license.txt.
+Feedback describes observed patterns, not official TOEIC, TOEFL or CEFR scores.

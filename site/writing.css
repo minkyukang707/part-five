@@ -1,0 +1,21 @@
+.writeBrief{margin:22px 0;background:#f5f6ef;border-left:3px solid #76936b;padding:15px 19px;border-radius:0 7px 7px 0}
+.writeBrief h2,#reportBody h3{font-size:16px;letter-spacing:-.4px}
+#writingPrompt,#exampleLine{font:19px/1.5 var(--serif);margin:6px 0 0;color:#203b2f}
+#writingGoals{display:flex;gap:5px 20px;padding-left:15px;flex-wrap:wrap;margin:10px 0 0;color:#53645b;font-size:12px}
+#writingGoals:empty{display:none}.writerLabel,.writeActions{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.writerLabel{margin:0 0 7px;font-weight:700}.writerLabel span,.writeActions small{font-size:12px;color:#55675c;font-weight:400}
+#draft{width:100%;min-height:174px;resize:vertical;border:1px solid #9fac98;background:#fffefb;border-radius:7px;padding:14px 16px;font:19px/1.52 var(--serif);color:#20362a;display:block}
+#draft::placeholder{font:14px "Malgun Gothic",sans-serif;color:#728174}#draft:focus{outline:2px solid #4a7f63;outline-offset:2px}
+.writeActions{margin-top:12px}.writeActions button{flex-shrink:0}.writeActions button:disabled{opacity:.6;cursor:wait}
+.writingPick{background:#e6ede2;border:1px solid #d5e1d0;border-radius:11px;padding:17px}
+.writingPick h2,.writingHelp h2{font-size:16px}.writingPick label{display:block;font-size:12px;color:#4b6455;margin:10px 0 4px}
+.writingPick select{width:100%;min-width:0;background:#fffef8;border:1px solid #b5c3af;border-radius:5px;color:var(--ink);font:inherit;padding:6px}
+.writingHelp p,.credits p{margin-top:9px}
+#writeResult{border-top:1px solid var(--rule);margin-top:22px;padding-top:18px}
+.writeSummary{background:#204b3c;color:#f8f5e7;border-radius:8px;padding:15px 18px}.writeSummary span{font-size:12px;color:#c6ddc2}.writeSummary h2{font-size:22px;margin:2px 0 5px}.writeSummary p{font-size:13px;color:#e6eee6}.writeSummary #revisionDelta{border-top:1px solid #51715e;padding-top:7px;margin-top:8px}
+.reportNav{display:flex;gap:5px;flex-wrap:wrap;margin:16px 0}.reportNav button{font-size:13px;border:1px solid var(--rule);border-radius:20px;background:white;padding:6px 12px}.reportNav button[aria-pressed=true]{background:#e8f0e3;color:#244a33;border-color:#94ab8e;font-weight:700}
+#reportBody h3{margin:19px 0 7px}.writeItem{padding:8px 0;border-bottom:1px solid #e9ece3}.writeItem p,.writeEmpty{font-size:13px;color:#4c6053;margin:4px 0}.writeItem small{display:block;color:#596c5d;font-size:12px}
+.writeQuote{display:inline-block;text-align:left;max-width:100%;overflow-wrap:anywhere;border:0;border-radius:4px;background:#eef3e9;color:#234b35;padding:4px 7px;margin:3px 4px 0 0;font:17px/1.35 var(--serif)}.writeQuote:hover,.writeQuote:focus-visible{background:#dcebd7}.writeSuggestion{display:inline-block;color:#285834;font:17px/1.35 var(--serif);overflow-wrap:anywhere}
+.writeItem details{font-size:12px;color:#5b675d;margin-top:4px}#exampleBox{margin-top:16px;padding:10px 12px;background:#f5f5ee;border-radius:6px;font-size:13px}
+@media(max-width:820px){#writingPage{display:flex;flex-direction:column}#writingPage>.sheet,#writingSide{width:100%}#writingSide{order:-1;display:block}#writingSide>.due,#writingSide>.credits{margin:6px 0}#writingSide>.writingHelp{display:none}.writingPick{display:grid;grid-template-columns:auto minmax(82px,1fr) auto minmax(105px,1.5fr);align-items:center;gap:6px}.writingPick h2{display:none}.writingPick label{margin:0}}
+@media(max-width:620px){.bar{flex-wrap:wrap;gap:8px}.bar nav{flex-wrap:wrap}.bar nav button{padding:6px 9px}.writeBrief{padding:12px}.writeActions{align-items:flex-end}}
