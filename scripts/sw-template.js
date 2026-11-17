@@ -5,6 +5,15 @@ const cacheName=prefix+'__RELEASE__';
 const assets=/*ASSETS*/[];
 const wasm=new URL('vendor/harper/harper.wasm',scope).href;
 const known=new Set(assets.map(file=>new URL(file,scope).href));
+self.addEventListener('message',event=>{
+  if(event.data==='cache-writing')event.waitUntil((async()=>{
+    const cache=await caches.open(cacheName);
+    if(!await cache.match(wasm)){
+      const response=await fetch(wasm,{cache:'force-cache'});
+      if(response.ok)await cache.put(wasm,response);
+    }
+  })().catch(()=>{}));
+});
 self.addEventListener('install',event=>{
   event.waitUntil((async()=>{
     const cache=await caches.open(cacheName);

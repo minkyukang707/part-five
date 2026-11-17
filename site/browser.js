@@ -53,7 +53,13 @@
           clearTimeout(timer);worker.terminate();worker=null;reject(Error(message));
         };
         const timer = setTimeout(()=>reset('검사기를 준비하는 데 시간이 걸립니다. 인터넷 연결을 확인한 뒤 다시 시도해 주세요.'),120000);
-        worker.onmessage = ({data})=>{clearTimeout(timer);resolve(data);};
+        worker.onmessage = ({data})=>{
+          clearTimeout(timer);resolve(data);
+          if (data.report && 'serviceWorker' in navigator) {
+            // The first analysis may finish before the offline worker takes control.
+            navigator.serviceWorker.ready.then(reg=>reg.active?.postMessage('cache-writing')).catch(()=>{});
+          }
+        };
         worker.onerror = ()=>reset('Writing 검사기를 열지 못했어요. 처음 검사할 때는 인터넷에 연결해 주세요.');
         worker.postMessage({id,text});
       });
