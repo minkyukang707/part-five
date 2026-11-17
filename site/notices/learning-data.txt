@@ -49,6 +49,9 @@ Images and logos are not imported. Classroom examples labeled by subject are ori
 Monster artwork: Kenney, Monster Builder Pack, CC0. See monster-builder.txt.
 https://kenney.nl/assets/monster-builder-pack
 
+The battle backdrop (arena/moon-forest.webp) was generated with the built-in ImageGen tool.
+Prompt: A wide landscape pixel-art background for a side-view fantasy RPG battle in a moss forest at blue hour. Hand-placed crisp square pixels, restrained 32-color palette, layered spruce silhouettes in cool teal and midnight blue, a luminous pale apricot moon above ruined stone arches near the center, a few golden fireflies and white stars. An uninterrupted level mossy woodland path crosses the entire foreground at 82 percent of image height for two player sprites that will be added by the game. Foreground edges framed by dark trunks and ferns; leave center-left and center-right of path unobstructed. Wide cinematic 2.4:1 composition. No characters, creatures, text, lettering, user interface or borders.
+
 Writing practice: the prompts, examples, phrase categories and Korean coaching text are
 original study activities. Task selection and revision criteria draw on the ETS TOEIC
 Speaking and Writing Examinee Handbook and the TOEFL iBT Writing description and rubric.

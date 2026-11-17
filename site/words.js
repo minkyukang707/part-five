@@ -30,6 +30,13 @@ const WordStudy=(()=>{
     $('setSelect').value=data.set;
     $('setProgress').textContent=index+' / '+size;$('setMeter').value=index;
     $('setCounts').textContent='외운 단어 '+ids.filter(i=>data.marks[i]==='known').length+'개 · 다시 볼 단어 '+again.length+'개';
+    $('wordTiles').replaceChildren(...ids.map(i=>{
+      const tile=document.createElement('span');
+      tile.textContent=i%size+1;
+      if(data.marks[i]==='known'||data.marks[i]==='again')tile.className=data.marks[i];
+      if(!done&&i===(result?result.word:current()))tile.classList.add('current');
+      return tile;
+    }));
     $('wordCounter').textContent=result?result.counter:done?'30 / 30':review?'복습 '+(review.i+1)+' / '+review.words.length:(index+1)+' / '+size;
     if(done){
       $('wordFinishTitle').textContent=(data.set+1)+'세트 학습을 마쳤어요.';

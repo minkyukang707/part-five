@@ -59,6 +59,25 @@ const Battle=(()=>{
     $('battleLevel').textContent=(Game.boss(lv)?'BOSS · ':'')+'Lv. '+String(lv).padStart(2,'0')+' / 100';
     $('monsterName').textContent=regions[Math.floor((lv-1)/10)]+' '+names[(lv-1)%10];
     $('hpBar').max=max;$('hpBar').value=hp;$('hpValue').textContent=hp+' / '+max+' HP';
+    const chapter=Math.ceil(lv/10);
+    $('chapterNumber').textContent='구역 '+String(chapter).padStart(2,'0')+' / 10';
+    $('chapterName').textContent=regions[chapter-1]+' 원정';
+    $('bossGoal').textContent=g.kills===100?'마지막 보스 격파':'보스 Lv. '+chapter*10;
+    const route=$('routeSteps');
+    if(route.dataset.chapter!==String(chapter)){
+      route.dataset.chapter=chapter;
+      route.replaceChildren(...Array.from({length:10},(_,i)=>{
+        const step=document.createElement('li');
+        step.textContent=(chapter-1)*10+i+1;
+        return step;
+      }));
+    }
+    for(const step of route.children){
+      const n=Number(step.textContent);
+      step.classList.toggle('passed',n<=g.kills);
+      step.classList.toggle('current',n===lv && n>g.kills);
+      step.setAttribute('aria-label',n+'레벨 · '+(n<=g.kills?'처치 완료':n===lv?'전투 중':'미도달'));
+    }
   }
   function draw(g,event=null,notice=''){
     cancelFx();

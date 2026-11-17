@@ -30,4 +30,3 @@
 #hpBar::-webkit-progress-bar {background:#183a31} #hpBar::-webkit-progress-value {background:#b6dc8c}
 #battleMessage {font-size:12px;color:#edf1da}
 @media(max-width:820px){#battle {margin:0}aside {grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:620px){#battle {grid-column:1/-1;display:grid;grid-template-columns:85px 1fr;column-gap:14px}.arena {grid-row:1/6;grid-column:1;height:86px;margin:0}.arena #creature {transform:scale(.73)}.battleTop,#monsterName,#hpValue,#hpBar,#battleMessage {grid-column:2}}

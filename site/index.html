@@ -10,19 +10,24 @@
   <link rel="stylesheet" href="practice.css">
   <link rel="stylesheet" href="writing.css">
   <link rel="stylesheet" href="game.css">
+  <link rel="stylesheet" href="expedition.css">
   <script src="browser.js" defer></script><script src="progress-reset.js" defer></script><script src="game.js" defer></script>
   <script src="writing-tasks.js" defer></script><script src="writing-ui.js" defer></script>
-  <script src="data.js" defer></script><script src="engine.js" defer></script><script src="battle.js" defer></script><script src="vocabulary.js" defer></script><script src="words.js" defer></script><script src="screen.js" defer></script>
+  <script src="data.js" defer></script><script src="engine.js" defer></script><script src="battle.js" defer></script><script src="character.js" defer></script><script src="vocabulary.js" defer></script><script src="words.js" defer></script><script src="screen.js" defer></script>
 </head>
 <body>
   <header><div class="bar">
     <div class="brand"><img src="icon.png" alt=""><span lang="en">Part Five</span></div>
     <nav aria-label="학습 모드"><div class="navGroup" role="group" aria-label="게임 모드"><small>게임 모드</small><button id="studyTab" aria-pressed="true">문제 풀기</button><button id="reviewTab" aria-pressed="false">오답 복습</button></div><div class="navGroup" role="group" aria-label="공부 모드"><small>공부 모드</small><button id="wordsTab" aria-pressed="false">단어 공부</button><button id="writingTab" aria-pressed="false">Writing</button></div></nav>
-    <button id="resetOpen" class="headerAction">진도 초기화</button>
+    <button id="profileOpen" type="button" aria-haspopup="dialog"><span class="portrait"><img id="navAvatar" src="arena/knight.png" alt=""></span><span id="profileLabel">캐릭터 설정</span><span class="editMark" aria-hidden="true">✎</span></button>
   </div></header>
   <main id="grammarPage">
+    <section class="route" aria-labelledby="chapterName">
+      <div class="routeTitle"><span id="chapterNumber"></span><h1 id="chapterName"></h1></div>
+      <div class="routeProgress"><div class="routeCaption"><span>원정 경로</span><strong id="bossGoal"></strong></div><ol id="routeSteps" aria-label="이번 지역의 몬스터 레벨"></ol></div>
+    </section>
     <section class="sheet" aria-labelledby="title">
-      <div class="sheethead"><h1 id="title">문장 완성</h1><span class="count" id="counter"></span></div>
+      <div class="sheethead"><h2 id="title">문장 완성</h2><span class="count" id="counter"></span></div>
       <div id="genreRow"><label for="genre">문장 주제</label><select id="genre"><option value="all">전체 주제</option><option value="work">업무·일상</option><option value="research">연구·논문</option><option value="news">뉴스·공공</option></select></div>
       <div id="quiz">
         <p id="instruction"></p><h2 id="stem" tabindex="-1" lang="en"></h2>
@@ -37,16 +42,15 @@
       </div>
       <div id="empty" hidden><h2 id="emptyTitle"></h2><p>틀린 유형이 생기면 이곳에서 다른 문장으로 다시 풀 수 있어요.</p><button id="back" class="primary">문제 풀기 →</button></div>
     </section>
-    <aside>
       <section id="battle" aria-label="몬스터 전투">
         <div class="battleTop"><strong>몬스터 전투</strong><span id="battleLevel"></span></div>
         <div id="field" class="field">
-          <div id="hero" class="fighter" role="img" aria-label="플레이어 기사 루미"><img src="arena/knight.png" alt=""><img id="heroArmor" src="arena/armor-0.png" alt=""><img id="heroSword" src="arena/sword-0.png" alt=""></div>
+          <div id="hero" class="fighter" role="img" aria-label="플레이어 루미"><img id="heroBase" src="arena/knight.png" alt=""><img id="heroArmor" src="arena/armor-0.png" alt=""><img id="heroSword" src="arena/sword-0.png" alt=""></div>
           <div id="enemySprite" class="enemySprite"><div id="creature" class="creature" aria-hidden="true"></div></div>
           <div id="battleFx" aria-hidden="true"></div><div id="taunt" role="status" hidden></div><div id="killFlag" hidden></div>
         </div>
         <div class="duelStatus">
-          <div><strong>기사 루미</strong><span id="playerHp"></span><progress id="playerBar" value="100" max="100" aria-label="기사 체력"></progress></div>
+          <div><strong id="playerName">루미</strong><span id="playerHp"></span><progress id="playerBar" value="100" max="100" aria-label="기사 체력"></progress></div>
           <div><strong id="monsterName"></strong><span id="hpValue"></span><progress id="hpBar" max="30" value="30" aria-label="몬스터 체력"></progress></div>
         </div>
         <p id="battleMessage" role="status"></p>
@@ -55,6 +59,7 @@
         <button id="revive" class="primary" hidden>체력 회복하고 재도전</button>
         <details class="battleRules"><summary>전투 규칙</summary><p>객관식 정답은 공격, 오답은 내 체력 −10과 몬스터 회복 +10입니다. 3연속부터 피해가 5씩 늘고, 10연속은 직전 타격의 2배, 11연속부터 다시 5씩 늘어납니다.</p><p>처치하면 골드와 현재·최대 체력 +10을 얻습니다. 10레벨마다 이전 몬스터 체력의 두 배인 보스가 등장합니다. 난이도를 바꾸면 현재 몬스터의 남은 체력 비율과 출제 범위가 함께 반영됩니다.</p></details>
       </section>
+    <aside class="records" aria-label="학습 기록과 자료">
       <section class="stats"><h2>학습 기록</h2><div class="metric">누적 정답률</div><strong id="rate"></strong><progress id="meter" value="0" max="100" aria-label="정답률"></progress><p id="totals"></p></section>
       <section class="due"><div class="duetop"><h2>복습할 유형</h2><span id="dueCount"></span></div><p id="noDue">틀린 문제의 유형이 여기에 모여요.</p><div id="topics"></div></section>
       <section class="due"><div class="duetop"><h2>온라인 문제</h2><span id="onlineCount">0개</span></div>
@@ -62,8 +67,8 @@
         <button id="syncNow" class="outline">새 문장 받기</button><button id="playSaved" class="outline" hidden>받은 문제 풀기</button>
         <label class="auto"><input type="checkbox" id="autoSync" checked> 자동으로 받기</label>
       </section>
-      <p id="storage" role="status"></p>
     </aside>
+    <p id="storage" role="status"></p>
   </main>
   <main id="wordPage" hidden>
     <section class="sheet" aria-labelledby="wordsTitle">
@@ -85,7 +90,7 @@
       <div id="wordFinish" hidden><h2 id="wordFinishTitle"></h2><p id="wordSummary"></p><div class="wordActions"><button id="repeatMissed" class="outline">다시 볼 단어 복습</button><button id="nextSet" class="primary">다음 세트 →</button><button id="redoSet" class="outline">이 세트 다시 풀기</button></div></div>
     </section>
     <aside><section class="stats"><h2>나의 단어장</h2><p class="metric">외운 단어</p><strong id="wordTotal"></strong><progress id="wordMeter" max="3000" value="0"></progress><p>전체 3,000단어 · 100세트</p></section>
-      <section class="due"><h2><label for="setSelect">학습 세트</label></h2><select id="setSelect"></select><div class="duetop progressLabel"><span>이번 세트</span><span id="setProgress"></span></div><progress id="setMeter" max="30" value="0"></progress><p id="setCounts"></p></section>
+      <section class="due"><h2><label for="setSelect">학습 세트</label></h2><select id="setSelect"></select><div class="duetop progressLabel"><span>이번 세트</span><span id="setProgress"></span></div><progress id="setMeter" max="30" value="0"></progress><div id="wordTiles" aria-hidden="true"></div><p id="setCounts"></p></section>
       <details class="credits"><summary>학습 자료와 그림 출처</summary><p>단어 선정은 NGSL·TSL·BSL, 한국어 뜻은 영어 위키낱말사전·Extended OMW와 자체 편집 풀이를 사용합니다. 영어 관계어는 Princeton WordNet 3.0과 자체 편집 자료에서 가져왔습니다. 어휘 데이터는 CC BY-SA 4.0으로 재배포합니다.</p><p>문법 예문은 British Council과 Cambridge의 문법 설명을 참고해 작성했습니다. 온라인 자료는 Tatoeba·ManyThings, Europe PMC 공개 논문, NASA 보도자료에서 가져옵니다. 가공 문장의 출처는 해설에 표시합니다. 몬스터 그림은 Kenney의 Monster Builder Pack입니다. <a href="notices/learning-data.txt" target="_blank" rel="noopener">자료별 출처와 라이선스</a></p></details>
       <p id="wordStorage" role="status"></p>
     </aside>
@@ -110,6 +115,19 @@
       <details class="credits"><summary>Writing 자료 출처</summary><p>ETS의 TOEIC Writing 안내와 TOEFL iBT Writing 평가 기준, 맨체스터대학교 Academic Phrasebank의 비교·추론 설명을 참고했습니다. 과제와 예시는 자체 제작했습니다. 첫 피드백 때 영어 검사기를 내려받습니다. 작성한 글은 이 브라우저에서 처리하고 저장합니다.</p></details>
     </aside>
   </main>
+  <dialog id="profileDialog" aria-labelledby="profileTitle">
+    <div class="dialogHead"><h2 id="profileTitle">내 캐릭터</h2><button type="button" class="outline" data-close="profileDialog">닫기</button></div>
+    <form id="profileForm">
+      <fieldset><legend>캐릭터 성별</legend><div class="avatarChoices">
+        <label><input type="radio" name="gender" value="male" checked><span class="avatarArt"><img src="arena/knight.png" alt=""><img class="previewArmor" alt=""><img class="previewSword" alt=""></span><span>남자 기사</span></label>
+        <label><input type="radio" name="gender" value="female"><span class="avatarArt"><img src="arena/knight-female.png" alt=""><img class="previewArmor" alt=""><img class="previewSword" alt=""></span><span>여자 기사</span></label>
+      </div></fieldset>
+      <label class="nameLabel" for="heroNameInput">캐릭터 이름 <small>최대 16자</small></label>
+      <input id="heroNameInput" type="text" maxlength="16" required autocomplete="off" placeholder="이름 입력" dir="auto">
+      <p id="profileStatus" role="status"></p>
+      <div class="profileFoot"><button type="button" id="resetOpen">진도 초기화</button><button type="submit" class="primary">캐릭터 저장</button></div>
+    </form>
+  </dialog>
   <dialog id="shopDialog" aria-labelledby="shopTitle"><div class="dialogHead"><h2 id="shopTitle">장비 상점</h2><button class="outline" data-close="shopDialog">닫기</button></div>
     <div class="shopBalance">보유 골드 <strong id="shopGold"></strong></div>
     <div id="merch"></div><p id="shopNotice" role="status"></p>

@@ -1,0 +1,222 @@
+:root {
+  --night:#121c2a; --panel:#1b2b3c; --line:#36495a; --pale:#f9f6ec;
+  --gold:#f2c578; --mist:#b8cbd6; --ink:#1d3140; --muted:#506575;
+  --forest:#255853; --rule:#d6d8cf; --serif:"STIX Two Text",Georgia,Cambria,serif;
+}
+body {
+  min-height:100vh;
+  background-color:var(--night);
+  background-image:radial-gradient(ellipse at 82% 12%,#243e4c88,transparent 59%),radial-gradient(#a7cace12 .9px,transparent .9px);
+  background-size:auto,16px 16px;
+  font-family:"Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;
+}
+header {background:#132130;border-bottom:1px solid #344755}
+.bar,main {max-width:1560px;padding-inline:clamp(15px,3.6vw,60px)}
+.bar {min-height:72px;gap:clamp(12px,2.8vw,42px)}
+.brand {gap:10px;color:var(--pale);font-size:30px;white-space:nowrap}
+.brand img {width:34px;height:34px}
+.bar nav {margin:0 auto 0 0;gap:14px}
+.navGroup small {color:#acc0cb;letter-spacing:0;font-size:10px}
+.navGroup+.navGroup {border-color:var(--line)}
+.bar nav button {color:#d2dbe3;border-radius:7px;font-size:13px;white-space:nowrap}
+.bar nav button:hover {background:#2c4052}
+.bar nav button[aria-pressed=true] {background:#324759;color:#ffdfa2}
+#profileOpen {
+  display:inline-flex;align-items:center;gap:8px;min-width:0;max-width:220px;padding:4px 11px 4px 5px;
+  color:#fbe8bd;background:#223746;border:1px solid #49606d;border-radius:24px;font-size:13px;font-weight:700;
+}
+.portrait {width:32px;height:32px;overflow:hidden;flex:none;background:#465b65;border:1px solid #738687;border-radius:50%}
+.portrait img {width:62px;height:57px;image-rendering:pixelated;transform:translate(-11px,-4px)}
+#profileLabel,#playerName {overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.editMark {color:var(--gold);font-size:17px;line-height:1}
+main {padding-block:22px 32px}
+#grammarPage {
+  grid-template-columns:minmax(0,1.06fr) minmax(0,1fr);gap:16px;
+  grid-template-areas:"route route" "quiz battle" "records records" "warning warning";
+}
+.route {
+  grid-area:route;display:flex;align-items:center;justify-content:space-between;gap:26px;min-width:0;
+  color:var(--pale);padding:0 0 12px;border-bottom:1px solid var(--line);
+}
+.routeTitle {flex:0 0 auto}
+#chapterNumber,.routeCaption {font-size:11px;color:var(--mist);font-weight:650;letter-spacing:.055em}
+#chapterNumber {color:var(--gold)}
+#chapterName {font-size:clamp(22px,2.2vw,34px);line-height:1.3;letter-spacing:-.055em;margin:2px 0 0}
+.routeProgress {width:min(59%,610px)}
+.routeCaption {display:flex;justify-content:space-between;align-items:center;margin:0 0 6px}
+.routeCaption strong {color:var(--gold);letter-spacing:0}
+#routeSteps {list-style:none;margin:0;padding:0;display:flex;align-items:center;justify-content:space-between;position:relative}
+#routeSteps::before {position:absolute;content:"";height:2px;background:#446171;left:5px;right:5px;top:50%}
+#routeSteps li {
+  z-index:1;min-width:24px;height:23px;display:grid;place-items:center;background:#243747;color:#b6c7d3;
+  border:1px solid #4a5e6b;border-radius:5px;font:600 11px/1 ui-monospace,Consolas,monospace;
+}
+#routeSteps li:last-child {border-color:#97815b;color:var(--gold)}
+#routeSteps .passed {background:#316360;border-color:#639a8c;color:#e6faf2}
+#routeSteps .current {background:var(--gold);border-color:#ffe0a2;color:#342818;box-shadow:0 0 0 3px #efbe7628}
+.sheet {
+  border-color:#cfcfc1;background:var(--pale);border-radius:14px;padding:clamp(19px,2.3vw,34px);
+  box-shadow:0 5px 17px #07101922;min-width:0;
+}
+#grammarPage>.sheet {grid-area:quiz;align-self:stretch;position:relative}
+.sheethead {border-bottom-color:#d2d5cd;padding-bottom:12px}
+.sheethead h1,.sheethead h2 {font-size:clamp(21px,1.85vw,29px);letter-spacing:-.045em;color:var(--ink)}
+.count {font:700 12px/1.4 "Segoe UI",sans-serif;color:#465968;background:#e9e8db;border:1px solid #d7d6c8;border-radius:5px;padding:4px 8px}
+#genreRow {margin:14px 0 0}
+#genre {background:#fffdf6;color:#314653;border-color:#bdc6bd}
+#instruction {margin:21px 0 7px;color:#516d6a;font-size:12px;font-weight:700}
+#stem {font-size:clamp(26px,2.25vw,37px);line-height:1.27;color:#192e3c;margin:0 0 22px;letter-spacing:-.026em}
+.blank {border-color:#879e91}
+#choices {gap:9px}
+.choice {min-height:51px;border-color:#c7cfc5;background:#fffdf8;border-radius:8px;padding:10px 13px}
+.choice:not(:disabled):hover {border-color:#527e77;background:#eff2e8;box-shadow:0 1px 0 #698e793d}
+.letter {color:#465e59;background:#e9ede3;border-radius:5px}
+.word {color:#243944;font-size:clamp(17px,1.6vw,23px)}
+#hint {margin-top:14px}
+#grammarPage #battle {
+  grid-area:battle;align-self:start;margin:0;padding:16px 18px 12px;border:1px solid #4a6068;
+  background:linear-gradient(148deg,#213646,#192a3a 76%);color:var(--pale);border-radius:14px;display:block;
+}
+.battleTop {font-size:17px;letter-spacing:-.025em}
+.battleTop #battleLevel {background:#233e49;color:#c3e8d5;border:1px solid #527268;font:650 11px/1.6 ui-monospace,monospace;padding:1px 8px}
+#battle .field {
+  margin:11px 0 12px;height:auto;aspect-ratio:2.55;min-height:132px;max-height:270px;
+  background:#244858 url(arena/moon-forest.webp) center/cover no-repeat;
+  border:1px solid #617078;border-radius:8px;image-rendering:auto;
+}
+.fighter {left:16%;bottom:13%;width:22%;max-width:106px;filter:drop-shadow(0 2px 1px #10202490)}
+.enemySprite {right:13%;bottom:13%;transform:scale(.88);filter:drop-shadow(0 2px 1px #10202470)}
+#battle.boss .field {border-color:#e2b962;background-color:#74706b;background-blend-mode:soft-light}
+#battle.boss .enemySprite {transform:scale(1.04)}
+.duelStatus {gap:20px}
+.duelStatus>div {display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;column-gap:4px}
+.duelStatus strong,.duelStatus #monsterName {font-size:13px;color:#f2f1e7;line-height:1.35}
+.duelStatus span,.duelStatus #hpValue {color:#c0d1d7;font-size:11px}
+.duelStatus progress,.duelStatus #hpBar {grid-column:1/-1;height:6px;margin:5px 0}
+#playerBar::-webkit-progress-value {background:#79c9d7}
+#battle #hpBar::-webkit-progress-value {background:#bad784}
+#battleMessage {color:#ffe0a8;margin:4px 0 7px;line-height:1.5}
+.gameStats {border-color:#415867;color:#cbdbe0;justify-content:flex-start;gap:20px}
+#wallet {margin-left:auto;color:#ffda89}
+.gameControls {gap:8px}
+.gameControls label,.battleRules {color:#c0cdd4}
+.gameControls select {background:#233c4b;color:#eef1e7;border-color:#506976}
+.gameControls button {background:#f2c578;border-color:#edc87e;color:#352d26;padding-inline:13px}
+.gameControls button:hover {background:#ffda92}
+.battleRules {margin-top:7px}
+.records {
+  grid-area:records;display:grid;grid-template-columns:.9fr 1fr 1.22fr;gap:16px;align-items:start;
+}
+#grammarPage>.records {display:grid}
+.records>section {align-self:stretch}
+.records .stats,.records .due,#wordPage aside .stats,#wordPage aside .due,.writingPick,#writingSide .due {
+  border:1px solid var(--line);background:#1c2d3c;border-radius:12px;color:var(--pale);padding:17px 19px;margin:0;
+}
+.records h2,#wordPage aside h2,#writingSide h2 {color:#eef1ea;letter-spacing:-.045em}
+.records .stats h2::before,.records .duetop h2::before {
+  content:"";display:inline-block;width:7px;height:7px;margin:0 9px 2px 1px;background:#a9d1c0;transform:rotate(45deg);
+}
+.records .due:nth-child(2) h2::before {background:#e7b976}
+.records .due:nth-child(3) h2::before {background:#88b2d3}
+.records .metric,.records p,.records #noDue,.records #totals,#wordPage aside p,#wordPage .progressLabel,#writingSide .due p {color:var(--mist)}
+.records .metric {margin-top:7px}
+.records #rate {font-size:32px;line-height:1.05;color:#c6ead3}
+.records #dueCount,.records #onlineCount {color:#f5cc82}
+.records #topics {display:flex;flex-wrap:wrap;gap:5px;max-height:170px;overflow:auto}
+.records #topics button,.records .outline {background:#2a3f50;color:#e3eceb;border-color:#526976}
+.records .auto {color:#c8d9de;margin-top:6px}
+.records #syncStatus {margin:6px 0}
+.records .stats progress,.stats #wordMeter {margin:6px 0;height:4px}
+.records progress::-webkit-progress-bar,#wordPage aside progress::-webkit-progress-bar {background:#354b58}
+.records progress::-webkit-progress-value,#wordPage aside progress::-webkit-progress-value {background:#95c3ae}
+#storage {grid-area:warning;color:#ffd09a}
+#storage:empty,#wordStorage:empty {display:none}
+#wordPage,#writingPage {grid-template-columns:minmax(0,1.6fr) minmax(295px,.8fr);align-items:start}
+#wordPage aside,#writingSide {display:grid;gap:12px}
+#wordTotal {color:#c6ead3}
+#wordPage .metric,.writingPick label,.credits,.credits p,.credits a {color:var(--mist)}
+#wordTiles {display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;margin:12px 0}
+#wordTiles span {background:#2b4151;color:#b9cad3;border-radius:3px;border:1px solid #3a5261;text-align:center;font:10px/1.8 monospace}
+#wordTiles .current {border-color:var(--gold);color:var(--gold)}
+#wordTiles .known {background:#38635c;color:#dcf6e3}
+#wordTiles .again {background:#785441;color:#ffe8ce}
+#wordPage .entry {max-width:none}
+.writeBrief {background:#eaeedf;border-left-color:#73978a}
+#draft {min-height:clamp(174px,26vh,290px)}
+
+dialog {border-color:#a9b9af;background:var(--pale);color:var(--ink);max-height:90dvh}
+dialog::backdrop {background:#08131dd9}
+#profileDialog {width:min(445px,94vw);padding:23px}
+#profileDialog fieldset {border:0;padding:0;margin:16px 0}
+#profileDialog legend,.nameLabel {font-size:13px;font-weight:700;display:block;margin:0 0 7px}
+.nameLabel small {margin-left:3px;color:#5f736e;font-size:11px;font-weight:400}
+.avatarChoices {display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.avatarChoices label {
+  position:relative;display:grid;place-items:center;gap:3px;background:#e9ece3;border:2px solid #c6d1c7;
+  border-radius:9px;padding:5px 6px 8px;cursor:pointer;color:#425652;font-weight:700;
+}
+.avatarChoices label:has(input:checked) {background:#dae8dd;border-color:#397468;color:#204d45}
+.avatarChoices label:has(input:focus-visible) {outline:3px solid #b7852b;outline-offset:2px}
+.avatarChoices input {position:absolute;top:8px;left:8px;accent-color:#2e6d60}
+.avatarArt {display:block;position:relative;width:85px;height:78px}
+.avatarArt img {position:absolute;width:100%;height:100%;inset:0;image-rendering:pixelated}
+#heroNameInput {width:100%;border:1px solid #9baea4;border-radius:6px;background:#fffefa;color:#21383b;font:inherit;padding:10px 12px}
+#profileStatus {font-size:12px;color:#8a472a}
+#profileStatus:empty {display:none}
+.profileFoot {display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:20px}
+#resetOpen {background:transparent;border:0;color:#75554e;text-decoration:underline;text-underline-offset:3px;font-size:12px;padding:6px}
+@media(min-width:1500px) {
+  #battle .field {aspect-ratio:2.7}
+}
+@media(max-width:900px) {
+  .bar {gap:12px;flex-wrap:wrap}
+  .bar nav {gap:7px}
+  .bar nav button {padding:6px 8px}
+  #grammarPage {grid-template-columns:minmax(0,1fr) minmax(0,.92fr);gap:12px}
+  #grammarPage #battle {padding:12px}
+  .duelStatus {gap:12px}
+  .duelStatus>div {display:block}
+  .records {gap:10px}
+  .records .stats,.records .due {padding:13px}
+  #wordPage,#writingPage {grid-template-columns:minmax(0,1fr) minmax(235px,.7fr)}
+}
+@media(max-width:740px) {
+  .bar {min-height:0;padding-block:8px;gap:6px 12px}
+  .bar .brand {font-size:25px}
+  .bar .brand img {width:30px;height:30px}
+  .bar nav {order:3;justify-content:space-between;flex-wrap:nowrap;width:100%;margin:0}
+  #profileOpen {margin-left:auto;max-width:48%;font-size:12px}
+  .navGroup small {display:none}
+  .navGroup+.navGroup {margin-left:auto;border-left:1px solid var(--line);padding-left:8px}
+  main {padding-block:14px 24px}
+  #grammarPage {
+    grid-template-columns:minmax(0,1fr);gap:12px;
+    grid-template-areas:"route" "quiz" "battle" "records" "warning";
+  }
+  .route {gap:12px;padding-bottom:10px}
+  .routeProgress {width:59%}
+  .routeTitle {flex-shrink:1}
+  #chapterName {font-size:20px}
+  #chapterNumber,.routeCaption {font-size:10px}
+  #routeSteps li {min-width:14px;height:16px;font-size:9px;border-radius:3px}
+  #grammarPage .sheet {padding:16px}
+  #genreRow {margin-top:9px}
+  #instruction {margin-top:12px}
+  #stem {font-size:25px;margin-bottom:14px}
+  #hint {display:none}
+  #battle .field {max-height:205px}
+  .duelStatus>div {display:grid}
+  #grammarPage .records {display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .records>section:last-child {grid-column:1/-1}
+  #wordPage,#writingPage {display:flex;flex-direction:column;gap:12px}
+  #wordPage>.sheet,#wordPage>aside,#writingPage>.sheet,#writingSide {width:100%}
+  #wordPage aside {grid-template-columns:1fr}
+  #writingSide {order:-1;display:block}
+  #writingSide .writingPick {padding:10px}
+}
+@media(max-width:375px) {
+  .bar nav button {padding:6px;font-size:12px}
+  #routeSteps li {min-width:13px}
+  .duelStatus>div {display:block}
+  .route {gap:6px}
+}

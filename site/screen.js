@@ -203,7 +203,7 @@
     text('shopNotice',Game.gear[kind][game[kind]][0]+' 착용 완료 · '+(kind==='sword'?'공격력 '+Game.attack(game):'최대 체력 '+Game.maxHp(game)));
   }
   byId('openShop').onclick=()=>{Battle.shop(game,buy);text('shopNotice','');byId('shopDialog').showModal();};
-  byId('resetOpen').onclick=()=>{byId('eraseDrafts').checked=false;text('resetStatus','');byId('resetDialog').showModal();};
+  byId('resetOpen').onclick=()=>{byId('profileDialog').close();byId('eraseDrafts').checked=false;text('resetStatus','');byId('resetDialog').showModal();};
   document.querySelectorAll('button[data-close]').forEach(b=>{b.onclick=()=>byId(b.dataset.close).close();});
   byId('resetConfirm').onclick=()=>{
     try{ProgressReset.apply(byId('eraseDrafts').checked);location.reload();}
