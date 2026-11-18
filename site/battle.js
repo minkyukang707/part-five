@@ -130,11 +130,11 @@ const Battle=(()=>{
     $('shopGold').textContent=g.gold.toLocaleString()+' G';
     const host=$('merch');host.replaceChildren();
     const preview=el('section',undefined,'shopPreview'),figure=el('div',undefined,'gearDoll');
-    const head=el('img');head.src=$('heroBase').src;head.className='dollHead';head.alt='';
+    const head=el('img');head.src=$('heroBase').src;head.className='dollBase';head.alt='';
     const armor=el('img');armor.src=Game.gearArt('armor',Game.worn(g,'armor'));armor.className='dollArmor';armor.alt='';
     const sword=el('img');sword.src=Game.gearArt('sword',Game.worn(g,'sword'));sword.className='dollSword';sword.alt='';
     figure.append(head,armor,sword);figure.setAttribute('role','img');figure.setAttribute('aria-label','현재 착용 모습');
-    const summary=el('div');summary.append(el('small','YOUR COLLECTION'),el('h3',$('playerName').textContent+'의 장비실'),el('strong','공격 '+Game.attack(g)+' · 최대 체력 '+Game.maxHp(g)),el('p',Game.gear.sword[Game.worn(g,'sword')][0]+' / '+Game.gear.armor[Game.worn(g,'armor')][0]),el('p','구매하면 즉시 착용합니다. 보유한 장비로 외형을 바꿔도 최고 능력치는 유지됩니다.','shopHelp'));
+    const summary=el('div');summary.append(el('small','작은 모험가의 장비함'),el('h3',$('playerName').textContent+'의 장비실'),el('strong','공격 '+Game.attack(g)+' · 최대 체력 '+Game.maxHp(g)),el('p',Game.gear.sword[Game.worn(g,'sword')][0]+' / '+Game.gear.armor[Game.worn(g,'armor')][0]),el('p','구매하면 즉시 착용합니다. 보유한 장비로 외형을 바꿔도 최고 능력치는 유지됩니다.','shopHelp'));
     preview.append(figure,summary);host.append(preview);
     const tabs=el('div',undefined,'gearTabs');tabs.setAttribute('role','group');tabs.setAttribute('aria-label','장비 종류');
     for(const [kind,label]of [['sword','무기'],['armor','방어구']]){
@@ -146,7 +146,7 @@ const Battle=(()=>{
       const [name,price,bonus]=item,card=el('section',undefined,'stock gearCard');card.dataset.tier=tier;card.dataset.kind=kind;
       if(tier===wearing)card.classList.add('equipped');
       const label=el('small',String(tier).padStart(2,'0')+' · '+Game.rarity(tier),'gearRarity');
-      const art=el('img');art.src=Game.gearArt(kind,tier);art.alt=name;art.className='shopGearArt';art.loading='lazy';art.decoding='async';
+      const art=el('img');art.src=Game.gearIcon(kind,tier);art.alt=name;art.className='shopGearArt';art.loading='lazy';art.decoding='async';
       card.append(label,art,el('h3',name),el('strong',stat+' +'+bonus,'gearBonus'));
       const button=el('button');button.type='button';button.dataset.gearAction=kind;button.dataset.tier=tier;
       if(tier<=owned){button.textContent=tier===wearing?'착용 중':'외형 장착';button.disabled=tier===wearing;button.className='outline';button.onclick=()=>equip(kind,tier);card.append(el('p','보유 장비 · 추가 비용 없음'));}

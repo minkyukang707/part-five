@@ -5,7 +5,8 @@ for(const kind of ['sword','armor']){
  assert.equal(Game.gear[kind].length,10);
  for(let tier=0;tier<10;tier++){
   const file=path.join(__dirname,'../site',Game.gearArt(kind,tier));
-  const png=fs.readFileSync(file);assert(png.length>10000);assert.equal(png.readUInt32BE(16)>=512,true,'detailed source art');assert.equal(png[25],6,'RGBA cutout');
+  const png=fs.readFileSync(file);assert.equal(png.readUInt32BE(16),48,'original pixel grid width');assert.equal(png.readUInt32BE(20),44,'original pixel grid height');assert.equal(png[25],6,'RGBA cutout');
+  const icon=fs.readFileSync(path.join(__dirname,'../site',Game.gearIcon(kind,tier)));assert.equal(icon.readUInt32BE(16),32);assert.equal(icon.readUInt32BE(20),32);
   if(!tier)continue;
   const gold=g.gold,hp=g.hp;assert(Game.buy(g,kind));assert.equal(g.gold,gold-Game.gear[kind][tier][1]);assert.equal(g[kind],tier);assert.equal(Game.worn(g,kind),tier);
   if(kind==='armor')assert.equal(g.hp,hp+Game.gear.armor[tier][2]-Game.gear.armor[tier-1][2]);
@@ -19,4 +20,6 @@ for(const kind of ['sword','armor']){
 const poor=Game.fromLegacy({},{});assert.equal(Game.buy(poor,'sword'),false);assert.equal(Game.equipLook(poor,'armor',1),false);
 const down=Game.fromLegacy({},{});down.gold=100;down.hp=0;assert(Game.buy(down,'armor'));assert.equal(down.hp,0,'armor purchase does not revive');assert(Game.revive(down));assert.equal(down.hp,120);
 const max=Game.fromLegacy({},{});max.sword=9;max.armor=9;max.hp=Game.maxHp(max);const hits=Array.from({length:10},()=>Game.answer(max,true).damage);assert.equal(hits[9],hits[8]*2);assert(Game.valid(max));
-console.log('PASS Equipment: 20 detailed RGBA assets, ten tiers, costs/stats, old/new saves, cosmetics, dead-state purchase and max-gear combo.');
+console.log('PASS Equipment: 20 pixel equipment layers and 20 pixel shop icons, ten tiers, costs/stats, old/new saves, cosmetics, dead-state purchase and max-gear combo.');
+
+assert(!fs.existsSync(path.join(__dirname,'../site/arena/gear')),'realistic image directory is removed');

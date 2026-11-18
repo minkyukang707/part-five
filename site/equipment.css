@@ -1,44 +1,43 @@
-/* Smooth layered character art shared by the field, wardrobe and profile. */
-.fighter,.gearDoll,.avatarArt{position:relative;aspect-ratio:2/3;isolation:isolate}
-#battle .fighter{position:absolute;height:88%;width:auto;max-width:none;left:13%;bottom:6%;aspect-ratio:2/3;filter:drop-shadow(0 4px 3px #09131c88)}
-.fighter img,.gearDoll img,.avatarArt img{position:absolute;object-fit:contain;image-rendering:auto;pointer-events:none}
-.fighter #heroBase,.gearDoll .dollHead,.avatarArt img:first-child{inset:0 auto auto 33%;width:34%;height:27%;z-index:2}
-.fighter #heroArmor,.gearDoll .dollArmor,.avatarArt .previewArmor{inset:21% auto auto 0;width:100%;height:79%;z-index:1}
-.fighter #heroSword,.gearDoll .dollSword,.avatarArt .previewSword{inset:-6% auto auto 60%;width:45%;height:75%;object-fit:fill;z-index:3;transform:rotate(8deg);transform-origin:50% 80%}
-.fighter[data-rarity="6"],.fighter[data-rarity="7"]{filter:drop-shadow(0 0 6px #b069b9a0)!important}
-.fighter[data-rarity="8"],.fighter[data-rarity="9"]{filter:drop-shadow(0 0 7px #eac45aaa)!important}
-.portrait img{width:100%;height:100%;object-fit:contain;image-rendering:auto;transform:none}
-.avatarArt{display:block!important;width:105px!important;height:156px!important;margin:0 auto;overflow:visible!important}
-#shopDialog{width:min(900px,94vw);padding:24px;background:var(--surface,#182c39);color:var(--text,#eaf1ed);border:1px solid var(--line);border-radius:22px}
+/* Original 48 x 44 pixel layers: head, hands and equipment share one grid. */
+.fighter img,.gearDoll img,.avatarArt img{image-rendering:pixelated;pointer-events:none}
+#battle .fighter{left:16%;bottom:13%;width:22%;max-width:106px;aspect-ratio:48/44;height:auto;filter:drop-shadow(0 2px 1px #10202490)}
+.gearDoll{position:relative;width:144px;height:132px;isolation:isolate}
+.gearDoll img{position:absolute;inset:0;width:100%;height:100%}
+.gearDoll .dollBase{z-index:0}.gearDoll .dollArmor{z-index:1}.gearDoll .dollSword{z-index:2}
+.portrait img{width:62px;height:57px;image-rendering:pixelated;transform:translate(-11px,-4px)}
+.avatarArt{display:block;position:relative;width:85px;height:78px}
+.avatarArt img{position:absolute;width:100%;height:100%;inset:0;image-rendering:pixelated}
+#shopDialog{width:min(780px,94vw);padding:24px;background:var(--surface,#182c39);color:var(--text,#eaf1ed);border:1px solid var(--line);border-radius:12px}
 #shopDialog .dialogHead{position:sticky;top:-24px;padding:10px 0;background:var(--surface,#182c39);z-index:5}
 #shopDialog .dialogHead h2{color:inherit;font-size:25px}
 #shopDialog .dialogHead button{background:var(--night);color:var(--text);border:1px solid var(--line)}
 #shopDialog .shopBalance{background:linear-gradient(100deg,#2b5148,#234553);border:1px solid #648d78;border-radius:12px;padding:13px 18px;color:#edf7e5}
 #shopGold{color:#ffe2a1;font-size:20px}
-.shopPreview{display:grid;grid-template-columns:145px 1fr;gap:26px;align-items:center;padding:24px;background:radial-gradient(ellipse at 15% 65%,#88b9b322,transparent 50%),var(--night);border:1px solid var(--line);border-radius:17px;margin:20px 0}
-.gearDoll{height:210px;width:140px;filter:drop-shadow(0 7px 7px #0005)}
-.shopPreview small{letter-spacing:3px;font-size:10px;color:var(--accent)}
-.shopPreview h3{font-size:24px;margin:9px 0 16px;color:var(--text)}
+.shopPreview{display:grid;grid-template-columns:144px 1fr;gap:20px;align-items:center;padding:20px;background:var(--night);border:1px solid var(--line);border-radius:9px;margin:20px 0}
+.gearDoll{filter:drop-shadow(0 3px 0 #0002)}
+.shopPreview small{letter-spacing:1px;font-size:12px;color:var(--accent)}
+.shopPreview h3{font-size:22px;margin:9px 0 16px;color:var(--text)}
 .shopPreview strong{color:var(--accent);font-size:17px}
 .shopPreview p{line-height:1.7;font-size:13px;color:var(--soft)}
 .shopHelp{font-size:12px;line-height:1.7;color:var(--soft);margin:12px 0}
 .gearTabs{display:flex;gap:10px}.gearTabs button{flex:1;border:1px solid var(--line);background:var(--night);color:var(--text);padding:12px;border-radius:10px}
 .gearTabs [aria-pressed=true]{background:#3b6f63;color:#fff;border-color:#8dbba8}
 .gearGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-#shopDialog .gearCard{--gear-glow:#a8a690;margin:0;padding:17px;display:flex;flex-direction:column;align-items:stretch;min-width:0;border:1px solid var(--line);border-radius:15px;background:linear-gradient(160deg,color-mix(in srgb,var(--gear-glow) 10%,var(--surface)),var(--night));color:var(--text);overflow:hidden}
+#shopDialog .gearCard{--gear-glow:#a8a690;margin:0;padding:17px;display:flex;flex-direction:column;align-items:stretch;min-width:0;border:1px solid var(--line);border-radius:8px;background:var(--night);color:var(--text);overflow:hidden}
 #shopDialog .gearCard[data-tier="4"]{--gear-glow:#84c9cc}#shopDialog .gearCard[data-tier="5"]{--gear-glow:#78aaff}#shopDialog .gearCard[data-tier="6"]{--gear-glow:#ff8866}#shopDialog .gearCard[data-tier="7"]{--gear-glow:#c99aff}#shopDialog .gearCard[data-tier="8"]{--gear-glow:#7ef0d4}#shopDialog .gearCard[data-tier="9"]{--gear-glow:#ffda74}
 #shopDialog .gearCard.equipped{border-color:var(--gear-glow);box-shadow:inset 0 0 0 1px var(--gear-glow)}
 #shopDialog .gearRarity{color:var(--gear-glow);font-size:11px;font-weight:800;letter-spacing:2px}
-#shopDialog .shopGearArt{width:100%;height:210px;margin:12px auto;object-fit:contain;image-rendering:auto;filter:drop-shadow(0 8px 7px #0006);background:radial-gradient(ellipse,color-mix(in srgb,var(--gear-glow) 14%,transparent),transparent 68%);transition:transform .25s}
-#shopDialog .gearCard:hover .shopGearArt{transform:translateY(-4px) scale(1.025)}
+#shopDialog .shopGearArt{width:96px;height:96px;margin:18px auto;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 3px 0 #0002);background:none;transition:transform .25s}
+#shopDialog .gearCard:hover .shopGearArt{transform:translateY(-3px)}
 #shopDialog .gearCard h3{color:var(--text);font-size:17px;margin:5px 0 9px}
 #shopDialog .gearCard p{color:var(--soft);font-size:12px;line-height:1.6}
 #shopDialog .gearBonus{font-size:14px;color:var(--accent)}
 #shopDialog .gearCard .gearPrice{color:var(--text);font-weight:800;font-size:16px;margin:12px 0}
 #shopDialog .gearCard button{margin-top:auto;width:100%;min-height:39px;white-space:normal;font-size:12px}
+#shopDialog .gearCard button.outline{background:var(--surface);color:var(--text);border:1px solid var(--line)}
 #shopDialog .gearCard button:disabled{opacity:.65}
 #shopNotice{position:sticky;bottom:-24px;background:var(--surface);padding:12px 0;color:var(--accent)}
 [data-theme=light] #shopDialog .gearRarity{color:#72562e}[data-theme=light] #shopDialog .gearCard.equipped{border-color:#4b826a}
-@media(max-width:650px){#shopDialog{padding:17px}.gearGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}#shopDialog .gearCard{padding:12px}#shopDialog .shopGearArt{height:170px}.shopPreview{grid-template-columns:95px 1fr;padding:15px;gap:15px}.gearDoll{width:90px;height:145px}.shopPreview h3{font-size:19px}.shopPreview strong{font-size:14px}}
-@media(max-width:370px){#shopDialog .shopGearArt{height:130px}.shopPreview{grid-template-columns:1fr}.gearDoll{margin:auto;height:185px;width:120px}}
+@media(max-width:650px){#shopDialog{padding:17px}.gearGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}#shopDialog .gearCard{padding:12px}#shopDialog .shopGearArt{width:96px;height:96px}.shopPreview{grid-template-columns:95px 1fr;padding:15px;gap:15px}.gearDoll{width:96px;height:88px}.shopPreview h3{font-size:19px}.shopPreview strong{font-size:14px}}
+@media(max-width:370px){#shopDialog .shopGearArt{width:64px;height:64px}.shopPreview{grid-template-columns:1fr}.gearDoll{margin:auto;width:144px;height:132px}}
 @media(prefers-reduced-motion:reduce){#shopDialog .shopGearArt{transition:none}#shopDialog .gearCard:hover .shopGearArt{transform:none}}

@@ -6,7 +6,8 @@ const Game=(()=>{
     sword:[['연습용 검',0,0],['청동검',20,5],['강철검',70,10],['기사검',160,18],['서리검',350,28],['별빛검',650,42],['홍련 대검',1250,62],['월식도',2400,88],['천공의 창',4500,120],['태양왕의 검',8000,160]],
     armor:[['여행자의 옷',0,0],['가죽 갑옷',20,20],['사슬 갑옷',70,50],['철판 갑옷',160,90],['수호 갑옷',350,150],['별빛 갑옷',650,240],['홍련 갑주',1250,340],['월식 갑주',2400,470],['천공 갑주',4500,630],['태양왕의 갑주',8000,820]]
   };
-  const gearArt=(kind,tier)=>'arena/gear/'+kind+'-'+tier+'.png';
+  const gearArt=(kind,tier)=>(tier<=5?'arena/':'arena/pixel-gear/')+kind+'-'+tier+'.png';
+  const gearIcon=(kind,tier)=>'arena/pixel-gear/'+kind+'-icon-'+tier+'.png';
   const rarity=tier=>['기본','일반','정교','기사','희귀','영웅','전설','신화','천상','왕관'][tier];
   const worn=(g,kind)=>Number.isInteger(g[kind+'Look'])&&g[kind+'Look']>=0&&g[kind+'Look']<=g[kind]?g[kind+'Look']:g[kind];
   function equipLook(g,kind,tier){
@@ -89,6 +90,6 @@ const Game=(()=>{
     g.hp=maxHp(g);g.right=0;g.wrong=0;g.ninthDamage=0;
     g.hpScale=monsterMax(level(g),g.difficulty);g.monsterHp=g.hpScale;return true;
   }
-  return {difficultyNames,gear,gearArt,rarity,worn,equipLook,baseHp,boss,monsterMax,level,maxHp,attack,reward,currentMonster,damage,taunt,fromLegacy,valid,answer,buy,revive};
+  return {difficultyNames,gear,gearArt,gearIcon,rarity,worn,equipLook,baseHp,boss,monsterMax,level,maxHp,attack,reward,currentMonster,damage,taunt,fromLegacy,valid,answer,buy,revive};
 })();
 if(typeof module!=='undefined')module.exports=Game;

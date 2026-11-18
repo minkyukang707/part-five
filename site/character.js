@@ -19,7 +19,7 @@
   }
   function draw() {
     const {name,gender} = saved || fallback;
-    const sprite = gender === 'female' ? 'arena/gear/head-female.png' : 'arena/gear/head-male.png';
+    const sprite = gender === 'female' ? 'arena/knight-female.png' : 'arena/knight.png';
     get('heroBase').src = sprite;
     get('navAvatar').src = sprite;
     get('playerName').textContent = name;
