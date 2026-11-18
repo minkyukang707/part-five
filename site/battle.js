@@ -131,7 +131,8 @@ const Battle=(()=>{
       const name=document.createElement('h3');name.textContent=next?next[0]:current[0];
       const desc=document.createElement('p');
       desc.textContent=next?'구매 즉시 착용 · '+stat+' 영구 +'+(next[2]-current[2]):'최고 단계 장비를 착용 중입니다.';
-      card.append(category,name,desc);
+      const art=document.createElement('img');art.src='arena/'+kind+'-'+(next?tier+1:tier)+'.png';art.alt=next?next[0]:current[0];art.className='shopGearArt';
+      card.append(category,art,name,desc);
       if(next){
         const footer=document.createElement('div');footer.className='stockFoot';
         const diff=document.createElement('span');diff.textContent=g.gold<next[1]?(next[1]-g.gold)+' G 부족':'구매 가능';

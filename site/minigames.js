@@ -11,6 +11,13 @@ const MiniGameStudy=(()=>{
   try{const saved=JSON.parse(localStorage.getItem(key));if(saved?.version===1&&saved.languages&&typeof saved.languages==='object'&&!Array.isArray(saved.languages))store=saved;}catch{}
   const lang=()=>StudyLocale.current(),languageName=()=>StudyLocale.names[lang()];
   const bank=()=>E.words(lang()==='en'?VOCABULARY:LANGUAGE_COURSES[lang()].words);
+  function pick(pool,count){
+    const items=Object.values(window.LearningLog?.summary().data.items||{}).filter(i=>i.language===lang()&&(i.mode==='word'||i.mode==='language-word'));
+    const misses=new Map(items.map(i=>[i.mode==='word'?VOCABULARY[Number(i.key)]?.w:i.key,Math.max(0,i.misses-i.streak)]));
+    const local=store.languages[lang()]?.misses||{};
+    return pool.map(w=>({w,rank:-Math.log(Math.max(Number.MIN_VALUE,Math.random()))/(1+Math.min(5,(misses.get(w.key)||misses.get(w.word)||0)+(local[w.key]||0)))})).sort((a,b)=>a.rank-b.rank).slice(0,count).map(x=>x.w);
+  }
+  function autoNext(){const current=state,feedback=state.feedback;setTimeout(()=>{if(state===current&&state.feedback===feedback&&!host.hidden&&!document.hidden&&!state.finished)next();},state.feedback?.ok?450:1400);}
   function node(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;}
   function button(text,action,cls='outline',value){const b=node('button',text,cls);b.type='button';b.dataset.action=action;if(value!==undefined)b.dataset.value=value;return b;}
   function stats(mode){const s=store.languages[lang()]?.[mode];return s&&Number.isSafeInteger(s.plays)&&s.plays>=0&&Number.isSafeInteger(s.best)&&s.best>=0?s:{plays:0,best:0,stars:0};}
@@ -34,12 +41,12 @@ const MiniGameStudy=(()=>{
     if(!modes[mode])return;stopClock();const pool=bank();
     state={language:lang(),mode,pool,correct:0,attempts:0,feedback:null,finished:false,paused:false,review:[]};
     if(mode==='memory'){
-      const words=E.shuffle(pool).slice(0,6);state.cards=E.shuffle(words.flatMap((w,i)=>[{pair:i,text:w.word,word:w,side:'word'},{pair:i,text:w.meaning,word:w,side:'meaning'}]));state.open=[];state.found=[];
+      const words=pick(pool,6);state.cards=E.shuffle(words.flatMap((w,i)=>[{pair:i,text:w.word,word:w,side:'word'},{pair:i,text:w.meaning,word:w,side:'meaning'}]));state.open=[];state.found=[];
     }else if(mode==='anagram'){
-      state.queue=E.shuffle(pool.filter(w=>{const a=E.letters(w.word);return a.length>=2&&a.length<=10&&new Set(a).size>1;})).slice(0,5);state.round=0;prepareAnagram();
+      state.queue=pick(pool.filter(w=>{const a=E.letters(w.word);return a.length>=2&&a.length<=10&&new Set(a).size>1;}),5);state.round=0;prepareAnagram();
     }else if(mode==='meteor'){
-      state.queue=E.shuffle(pool).slice(0,10);state.round=0;state.lives=3;prepareMeteor();
-    }else{state.board=E.grid(pool);state.found=[];state.selected=null;state.highlight=[];}
+      state.queue=pick(pool,10);state.round=0;state.lives=3;prepareMeteor();
+    }else{state.board=E.grid(pick(pool.filter(w=>E.letters(w.word).length>=2&&E.letters(w.word).length<=7&&!/\s/.test(w.word)),4));state.found=[];state.selected=null;state.highlight=[];}
     render();startClock();ui.play.focus({preventScroll:true});
   }
   function prepareAnagram(){state.tiles=E.tiles(state.queue[state.round].word);state.selected=[];state.feedback=null;state.roundMisses=0;}
@@ -50,9 +57,11 @@ const MiniGameStudy=(()=>{
     state.score=score;state.stars=stars;state.newBest=score>previous.best;
     if(!store.languages[lang()]||typeof store.languages[lang()]!=='object'||Array.isArray(store.languages[lang()]))store.languages[lang()]={};
     store.languages[lang()][state.mode]={plays:previous.plays+1,best:Math.max(previous.best,score),stars:Math.max(Number.isInteger(previous.stars)?Math.min(3,Math.max(0,previous.stars)):0,stars)};
+    state.reward=Math.floor(score/20);window.MiniGameWallet?.award(state.reward);
     save();render();ui.play.focus({preventScroll:true});
   }
-  function note(word){if(!state.review.some(w=>w.key===word.key))state.review.push(word);}
+  function note(word){
+    const stats=store.languages[lang()]??={};const misses=stats.misses??={};misses[word.key]=Math.min(20,(misses[word.key]||0)+1);save();if(!state.review.some(w=>w.key===word.key))state.review.push(word);}
   function memory(index){
     if(state.feedback||state.open.includes(index)||state.found.includes(state.cards[index]?.pair)||!state.cards[index])return;
     state.open.push(index);
@@ -61,7 +70,7 @@ const MiniGameStudy=(()=>{
       if(a.pair===b.pair){state.correct++;state.found.push(a.pair);state.open=[];if(state.found.length===6){finish();return;}}
       else{note(a.word);note(b.word);state.feedback={ok:false,text:'다른 짝이에요. '+a.word.word+' = '+a.word.meaning+' / '+b.word.word+' = '+b.word.meaning};}
     }
-    render();
+    render();if(state.feedback)autoNext();
   }
   function checkAnagram(reveal=false){
     if(state.feedback)return;const word=state.queue[state.round];
@@ -69,7 +78,7 @@ const MiniGameStudy=(()=>{
     const answer=state.selected.map(i=>state.tiles[i].text).join(''),ok=!reveal&&answer===word.word;
     state.attempts++;if(ok)state.correct++;else{state.roundMisses++;note(word);}
     state.feedback={ok,text:ok?'완성했어요! '+word.word+' · '+word.meaning:'정답은 '+word.word+' · '+word.meaning,done:ok||reveal||state.roundMisses>=2};
-    render();
+    render();autoNext();
   }
   function gradeMeteor(choice){
     if(state.feedback||state.paused||state.finished)return;
@@ -78,7 +87,7 @@ const MiniGameStudy=(()=>{
     if(choice!==null&&performance.now()-lastTick>=state.remaining){choice=null;}
     stopClock();const word=state.queue[state.round],ok=choice!==null&&state.options[choice].key===word.key;
     state.attempts++;if(ok)state.correct++;else{state.lives--;note(word);}
-    state.feedback={ok,text:(ok?'별을 잡았어요! ':choice===null?'시간이 끝났어요. ':'다시 기억해 봐요. ')+word.word+' · '+word.meaning};render();
+    state.feedback={ok,text:(ok?'별을 잡았어요! ':choice===null?'시간이 끝났어요. ':'다시 기억해 봐요. ')+word.word+' · '+word.meaning};render();autoNext();
   }
   function selectCell(index){
     if(!Number.isInteger(index)||index<0||index>=state.board.cells.length)return;
@@ -119,11 +128,11 @@ const MiniGameStudy=(()=>{
     }));
     ui.play.hidden=!state;ui.cards.hidden=!!state;ui.play.replaceChildren();ui.back.hidden=!state;
     if(!state)return;
-    ui.play.dataset.game=state.mode;
+    ui.play.dataset.game=state.mode;ui.play.classList.toggle('hasMiss',!!state.feedback&&!state.feedback.ok&&!state.finished);
     const head=node('div',undefined,'arcadePlayHead');head.append(node('h2',modes[state.mode].name),node('span',state.correct+' 성공 · '+state.attempts+' 시도'));ui.play.append(head);
     if(state.finished){
       const result=node('section',undefined,'arcadeResult');
-      result.append(node('div','★'.repeat(state.stars)+'☆'.repeat(3-state.stars),'arcadeStars'),node('h3',state.newBest?'새 최고 기록이에요!':'한 판을 마쳤어요!'),node('strong',state.score+'점'),node('p','오늘 떠올린 단어도 내일의 실력이 됩니다.'));
+      result.append(node('div','★'.repeat(state.stars)+'☆'.repeat(3-state.stars),'arcadeStars'),node('h3',state.newBest?'새 최고 기록이에요!':'한 판을 마쳤어요!'),node('strong',state.score+'점'),node('p','상점 돈 +'+state.reward+' G · 이 언어의 상점에서 사용할 수 있어요.'));
       if(state.review.length){result.append(node('h4','다시 기억할 단어'));for(const w of state.review)result.append(node('p',w.word+' · '+w.meaning,'arcadeReview'));}
       result.append(button('한 번 더','start','primary',state.mode),button('다른 게임','menu'));ui.play.append(result);return;
     }
@@ -158,7 +167,7 @@ const MiniGameStudy=(()=>{
     if(!state||state.finished)return;
     if(a==='pause')pause();else if(a==='resume')resume();else if(a==='next')next();
     else if(a==='card')memory(Number(value));else if(a==='choice')gradeMeteor(Number(value));else if(a==='cell')selectCell(Number(value));
-    else if(a==='tile'&&!state.feedback){state.selected.push(Number(value));render();}
+    else if(a==='tile'&&!state.feedback){state.selected.push(Number(value));if(state.selected.length===state.tiles.length)checkAnagram();else render();}
     else if(a==='undo'){state.selected.pop();render();}else if(a==='clear'){state.selected=[];render();}
     else if(a==='check')checkAnagram();else if(a==='reveal')checkAnagram(true);
     else if(a==='hint'){
@@ -174,7 +183,7 @@ const MiniGameStudy=(()=>{
   function close(){pause();stopClock();}
   function mount(target){
     if(host)return;host=target;host.classList.add('arcadePage');
-    host.innerHTML='<section class="arcadeHero"><div><p data-arcade="language"></p><h1>조금 놀아도,<br>조금 더 기억해요.</h1><p>단어와 가까워지는 네 가지 방법. 기록은 언어별로 저장됩니다.</p></div><span class="arcadeHeroArt" aria-hidden="true">✦<i>あ</i><b>A</b><em>ş</em></span></section><div class="arcadeTop"><span>정답 100점 · 오답 또는 힌트 사용 −15점<br>몬스터 전투와 별도의 미니게임 기록입니다.</span><button type="button" data-action="menu" data-arcade="back" class="outline" hidden>게임 선택으로</button></div><div class="arcadeCards" data-arcade="cards"></div><section data-arcade="play" class="arcadePlay" tabindex="-1" hidden></section><p role="status" data-arcade="storage" hidden>브라우저 저장 공간을 사용할 수 없어 이번 탭에서만 기록됩니다.</p><details class="arcadeSources"><summary>게임 아이디어와 학습 자료</summary><p>단어장 자료로 직접 구현한 게임입니다. 게임 방식은 <a href="https://wordwall.net/features" target="_blank" rel="noopener">Wordwall의 학습 활동</a>과 <a href="https://learnenglish.britishcouncil.org/free-resources/vocabulary/games" target="_blank" rel="noopener">British Council의 어휘 게임</a>을 참고했습니다. 외부 게임 코드나 이미지는 가져오지 않았습니다.</p></details>';
+    host.innerHTML='<section class="arcadeHero"><div><p data-arcade="language"></p><h1>조금 놀아도,<br>조금 더 기억해요.</h1><p>단어와 가까워지는 네 가지 방법. 기록은 언어별로 저장됩니다.</p></div><span class="arcadeHeroArt" aria-hidden="true">✦<i>あ</i><b>A</b><em>ş</em></span></section><div class="arcadeTop"><span>정답 100점 · 오답 또는 힌트 사용 −15점<br>완료 점수 20점당 1 G 지급 · 자주 틀린 단어는 최대 6배 자주 등장합니다.</span><button type="button" data-action="menu" data-arcade="back" class="outline" hidden>게임 선택으로</button></div><div class="arcadeCards" data-arcade="cards"></div><section data-arcade="play" class="arcadePlay" tabindex="-1" hidden></section><p role="status" data-arcade="storage" hidden>브라우저 저장 공간을 사용할 수 없어 이번 탭에서만 기록됩니다.</p><details class="arcadeSources"><summary>게임 아이디어와 학습 자료</summary><p>단어장 자료로 직접 구현한 게임입니다. 게임 방식은 <a href="https://wordwall.net/features" target="_blank" rel="noopener">Wordwall의 학습 활동</a>과 <a href="https://learnenglish.britishcouncil.org/free-resources/vocabulary/games" target="_blank" rel="noopener">British Council의 어휘 게임</a>을 참고했습니다. 외부 게임 코드나 이미지는 가져오지 않았습니다.</p></details>';
     ui=Object.fromEntries([...host.querySelectorAll('[data-arcade]')].map(e=>[e.dataset.arcade,e]));host.addEventListener('click',action);render();
     document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
   }

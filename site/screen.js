@@ -36,6 +36,7 @@
   const battleHome=byId('battle').parentNode;
   const currentGame=()=>StudyLocale.current()==='en'?game:LanguageStudy.getGame();
   const saveBattle=()=>StudyLocale.current()==='en'?save():LanguageStudy.saveBattle();
+  window.MiniGameWallet={award(amount){if(!Number.isSafeInteger(amount)||amount<0)return false;const g=currentGame();g.gold=Math.min(Number.MAX_SAFE_INTEGER,g.gold+amount);saveBattle();Battle.draw(g);return true;}};
   Game.difficultyNames.forEach((name,i)=>byId('difficulty').add(new Option((i+1)+' · '+name,i+1)));
   Battle.draw(game);
   const genres={work:'업무·일상',research:'연구·논문',news:'뉴스·공공'};
