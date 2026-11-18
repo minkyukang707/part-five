@@ -3,6 +3,22 @@ const MiniGameEngine=(()=>{
   const segmenter=typeof Intl.Segmenter==='function'?new Intl.Segmenter(undefined,{granularity:'grapheme'}):null;
   const letters=text=>segmenter?Array.from(segmenter.segment(text.normalize('NFC')),s=>s.segment):Array.from(text.normalize('NFC'));
   const shuffle=(items,rng=Math.random)=>{const out=[...items];for(let i=out.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[out[i],out[j]]=[out[j],out[i]];}return out;};
+  const difficulties=[
+    {name:'입문',multiplier:1,memory:150,anagram:30,meteor:15,search:180},
+    {name:'쉬움',multiplier:1.25,memory:120,anagram:25,meteor:12,search:150},
+    {name:'보통',multiplier:1.5,memory:100,anagram:20,meteor:10,search:120},
+    {name:'어려움',multiplier:2,memory:80,anagram:16,meteor:8,search:90},
+    {name:'도전',multiplier:3,memory:60,anagram:12,meteor:6,search:60}
+  ];
+  const validDifficulty=n=>Number.isInteger(n)&&n>=1&&n<=5;
+  const settings=n=>difficulties[(validDifficulty(n)?n:3)-1];
+  const reward=(score,level)=>Math.floor(Math.max(0,score)*settings(level).multiplier/20);
+  function levelPool(pool,language,level,mode,levels){
+    return pool.filter(w=>{
+      const size=letters(w.word).length;
+      return levels[language]?.[w.key]===level&&(mode!=='anagram'||(size>=2&&size<=10&&new Set(letters(w.word)).size>1))&&(mode!=='search'||(size>=2&&size<=7&&!/\s/.test(w.word)));
+    });
+  }
   function words(rows){
     const seenWords=new Set(),seenMeanings=new Set();
     return rows.flatMap(row=>{
@@ -29,8 +45,9 @@ const MiniGameEngine=(()=>{
   }
   function grid(pool,count=4,size=7,rng=Math.random){
     const cells=Array(size*size).fill(''),placed=[];
+    const candidates=pool.filter(w=>letters(w.word).length>=2&&letters(w.word).length<=size&&!/\s/.test(w.word));
     const directions=[[0,1],[1,0],[1,1],[1,-1],[0,-1],[-1,0],[-1,-1],[-1,1]];
-    for(const word of shuffle(pool.filter(w=>letters(w.word).length>=2&&letters(w.word).length<=size&&!/\s/.test(w.word)),rng)){
+    for(const word of shuffle(candidates,rng)){
       const chars=letters(word.word),starts=shuffle(Array.from({length:size*size},(_,i)=>i),rng);
       let position;
       for(const start of starts){
@@ -46,12 +63,23 @@ const MiniGameEngine=(()=>{
       position.forEach((index,i)=>cells[index]=chars[i]);placed.push({...word,path:position});
       if(placed.length===count)break;
     }
+    // Long words can block each other diagonally. Guaranteed row placement
+    // preserves all selected review words rather than silently dropping one.
+    if(placed.length<count&&candidates.length>=count&&count<=size){
+      cells.fill('');placed.length=0;
+      const rows=shuffle(Array.from({length:size},(_,i)=>i),rng);
+      shuffle(candidates,rng).slice(0,count).forEach((word,i)=>{
+        const chars=letters(word.word),reverse=rng()<.5,start=Math.floor(rng()*(size-chars.length+1));
+        const path=chars.map((_,j)=>rows[i]*size+start+(reverse?chars.length-1-j:j));
+        path.forEach((index,j)=>cells[index]=chars[j]);placed.push({...word,path});
+      });
+    }
     const alphabet=[...new Set(placed.flatMap(w=>letters(w.word)))];
     return {size,words:placed,cells:cells.map(c=>c||alphabet[Math.floor(rng()*alphabet.length)]||'a')};
   }
   function options(word,pool,rng=Math.random){return shuffle([word,...shuffle(pool.filter(w=>w.meaning!==word.meaning),rng).slice(0,2)],rng);}
   const score=(correct,attempts)=>Math.max(0,correct*100-Math.max(0,attempts-correct)*15);
   const stars=(correct,attempts)=>!correct?0:correct/Math.max(attempts,1)>=.9?3:correct/Math.max(attempts,1)>=.65?2:1;
-  return {letters,shuffle,words,tiles,line,grid,options,score,stars};
+  return {letters,shuffle,words,tiles,line,grid,options,score,stars,difficulties,validDifficulty,settings,reward,levelPool};
 })();
 if(typeof module!=='undefined')module.exports=MiniGameEngine;
