@@ -5,7 +5,7 @@ const LanguageStudy=(()=>{
   const languages=Object.keys(courses);
   let host,ui,storageWarning='',voice;
   const natural=value=>Number.isSafeInteger(value)&&value>=0;
-  const blank=()=>({stage:1,set:0,genre:'all',mode:'grammar',reviewOnly:false,sequence:0,grammar:{},words:{},session:null,game:{...Game.fromLegacy({},{}),difficulty:1}});
+  const blank=()=>({stage:1,set:0,genre:'all',mode:'grammar',reviewOnly:false,sequence:0,grammar:{},words:{},retiredWords:{},session:null,game:{...Game.fromLegacy({},{}),difficulty:1}});
   let data={version:1,language:'ja',courses:{}};
 
   function readProgress(raw,course){
@@ -21,10 +21,22 @@ const LanguageStudy=(()=>{
     result.sequence=natural(raw.sequence)?raw.sequence:0;
     for(const [kind,deck] of [['grammar',course.questions],['words',course.words]]){
       for(const item of deck){
-        const entry=raw[kind]?.[item.key];
+        const entry=raw[kind]?.[item.key]||(kind==='words'?raw.retiredWords?.[item.key]:undefined);
         if(entry&&natural(entry.attempts)&&natural(entry.correct)&&entry.correct<=entry.attempts&&typeof entry.lastCorrect==='boolean'){
           result[kind][item.key]={attempts:entry.attempts,correct:entry.correct,lastCorrect:entry.lastCorrect,lastSequence:natural(entry.lastSequence)?entry.lastSequence:0};
+          if(kind==='words'){
+            const changed=entry.meaningRevision?entry.meaningRevision!==item.meaningRevision:item.meaningChanged;
+            result.words[item.key].meaningRevision=item.meaningRevision;
+            result.words[item.key].needsMeaningReview=!!(changed||entry.needsMeaningReview);
+            if(result.words[item.key].needsMeaningReview)result.words[item.key].lastCorrect=false;
+          }
         }
+      }
+    }
+    const activeKeys=new Set(course.words.map(w=>w.key));
+    for(const [key,entry] of Object.entries({...raw.retiredWords,...raw.words}).slice(0,10000)){
+      if(!activeKeys.has(key)&&/^(ja|es|tr)-(lex|dict|w)-[a-f0-9]+$/.test(key)&&entry&&natural(entry.attempts)&&natural(entry.correct)&&entry.correct<=entry.attempts&&typeof entry.lastCorrect==='boolean'){
+        result.retiredWords[key]={attempts:entry.attempts,correct:entry.correct,lastCorrect:entry.lastCorrect,lastSequence:natural(entry.lastSequence)?entry.lastSequence:0};
       }
     }
     const session=raw.session;
@@ -34,7 +46,9 @@ const LanguageStudy=(()=>{
       if(item&&validOptions&&typeof session.answered==='boolean'&&typeof session.attemptId==='string'&&
           (!session.answered||(typeof session.ok==='boolean'&&typeof session.submitted==='string'))){
         result.session={kind:session.kind,key:session.key,options:session.options||[],answered:session.answered,ok:session.ok,submitted:session.submitted||'',attemptId:session.attemptId};
-        if(typeof session.combatReceipt==='string')result.session.combatReceipt=session.combatReceipt.slice(0,200);
+        if(session.kind==='words')result.set=item.set;
+        if(session.kind==='words'&&result.words[item.key]?.needsMeaningReview)result.session=null;
+        if(result.session&&typeof session.combatReceipt==='string')result.session.combatReceipt=session.combatReceipt.slice(0,200);
       }
     }
     return result;
@@ -124,6 +138,7 @@ const LanguageStudy=(()=>{
     const ok=p.mode==='grammar'?value===item.answer:matches(item,value);
     const entry=p[p.mode][item.key]??={attempts:0,correct:0,lastCorrect:false,lastSequence:0};
     entry.attempts++;entry.correct+=Number(ok);entry.lastCorrect=ok;entry.lastSequence=++p.sequence;
+    if(p.mode==='words'){entry.meaningRevision=item.meaningRevision;entry.needsMeaningReview=false;}
     session.answered=true;session.submitted=value;session.ok=ok;
     const outcome=p.mode==='grammar'?Game.answer(p.game,ok):null;
     if(outcome)session.combatReceipt=Battle.message(p.game,outcome);
@@ -156,13 +171,13 @@ const LanguageStudy=(()=>{
   }
   function statistics(language=data.language){
     if(!languages.includes(language))return null;
-    const p=data.courses[language]??=(blank()),course=courses[language],all=[...Object.values(p.grammar),...Object.values(p.words)];
+    const p=data.courses[language]??=(blank()),course=courses[language],all=[...Object.values(p.grammar),...Object.values(p.words),...Object.values(p.retiredWords||{})];
     const total=all.reduce((sum,item)=>sum+item.attempts,0),correct=all.reduce((sum,item)=>sum+item.correct,0);
     const knownGrammar=Object.values(p.grammar).filter(row=>row.lastCorrect).length;
     const knownWords=Object.values(p.words).filter(row=>row.lastCorrect).length;
     const pendingItems=[...course.questions.filter(item=>p.grammar[item.key]?.lastCorrect===false).map(item=>({key:item.key,topic:item.topic,label:item.label,mode:'grammar'})),
       ...course.words.filter(item=>p.words[item.key]?.lastCorrect===false).map(item=>({key:item.key,label:item.word,mode:'words'}))];
-    return {total,correct,knownGrammar,knownWords,pending:pendingItems.length,pendingItems,wordCount:course.words.length,grammarCount:course.questions.length,game:p.game};
+    return {total,correct,knownGrammar,knownWords,pending:pendingItems.length,pendingItems,retiredCount:Object.keys(p.retiredWords||{}).length,wordCount:course.words.length,grammarCount:course.questions.length,game:p.game};
   }
   function summary(){
     const p=progress(),course=currentCourse(),{total,correct,knownGrammar,knownWords}=statistics();
@@ -170,7 +185,7 @@ const LanguageStudy=(()=>{
     ui.progress.textContent='최근 정답 문법 '+knownGrammar+' / '+course.questions.length+' · 단어 '+knownWords+' / '+course.words.length;
     ui.meter.max=course.questions.length+course.words.length;ui.meter.value=knownGrammar+knownWords;
     const missed=Object.values(p[p.mode]).filter(row=>!row.lastCorrect).length;
-    ui.reviewText.textContent='오답만 복습 · '+missed+'개';
+    ui.reviewText.textContent=(p.mode==='words'?'오답·뜻 변경 복습 · ':'오답만 복습 · ')+missed+'개';
     ui.stageMap.replaceChildren(...course.stages.map((label,i)=>{
       const deck=course.questions.filter(q=>q.stage===i+1);
       const good=deck.filter(q=>p.grammar[q.key]?.lastCorrect).length;
@@ -222,7 +237,7 @@ const LanguageStudy=(()=>{
     if(item){
       ui.exercise.dataset.language=data.language;
       ui.label.textContent=isGrammar?(course.genres?.[item.genre]||'일상')+' · '+item.label:'세트 '+(item.set+1)+' · '+(course.words.indexOf(item)%30+1)+' / '+Math.min(30,course.words.length-item.set*30);
-      ui.instruction.textContent=isGrammar?(item.sourceExercise?'원문 의미를 참고하여 원문에서 사용한 표현을 복원하세요.':'한국어 뜻에 맞게 문장을 완성하세요.'):'기억나는 한국어 뜻을 하나 입력하세요.';
+      ui.instruction.textContent=isGrammar?(item.sourceExercise?'한국어 뜻을 참고하여 원문에서 사용한 표현을 복원하세요.':'한국어 뜻에 맞게 문장을 완성하세요.'):p.words[item.key]?.needsMeaningReview?'뜻이 교정된 단어입니다. 기본 뜻을 다시 확인하며 복습해 주세요.':'기억나는 한국어 뜻을 하나 입력하세요.';
       ui.meaning.hidden=!isGrammar;ui.meaning.textContent=isGrammar?item.meaning:'';
       ui.stem.lang=data.language;
       ui.stem.textContent=isGrammar?item.stem.replace('____','＿＿＿'):item.word;
@@ -244,7 +259,8 @@ const LanguageStudy=(()=>{
         ui.verdict.textContent=session.ok?'정답이에요. 한 걸음 더 익혔어요.':'다시 익힐 표현을 찾았어요.';
         ui.solution.textContent=isGrammar?item.stem.replace('____',item.answer):item.word+' · '+item.meanings.join(' / ');
         ui.solution.lang=isGrammar?data.language:'ko';
-        ui.why.textContent=isGrammar?item.why:'입력한 뜻 · '+session.submitted+' — 등록된 기본 뜻을 확인하고 다음 복습에서 다시 떠올려 보세요.';
+        ui.why.textContent=isGrammar?item.why:'입력한 뜻 · '+session.submitted+' — '+(item.source||'자체 기초 단어')+'. 기본 뜻을 확인하고 다시 떠올려 보세요.';
+        if(!isGrammar&&item.sourceUrl){const link=node('a',' 사전 원문 확인 ↗');link.href=item.sourceUrl;link.target='_blank';link.rel='noopener';ui.why.append(link);}
         ui.combatReceipt.textContent=isGrammar?(session.combatReceipt||''):'';
         ui.combatReceipt.hidden=!isGrammar||!session.combatReceipt;
         if(isGrammar&&item.reading){ui.reading.textContent=item.reading;ui.reading.lang=data.language;ui.reading.hidden=false;}
@@ -269,7 +285,7 @@ const LanguageStudy=(()=>{
       '<div class="languageLessonActions"><button type="button" class="outline" data-lang="speak">발음 듣기</button><button type="button" class="primary" data-lang="next" hidden>다음 연습 →</button></div><p class="languageVoiceNote" data-lang="voiceNote"></p></div>'+
       '<div data-lang="empty" class="languageEmpty" hidden><h2 data-lang="emptyTitle"></h2><p data-lang="emptyText"></p><button type="button" class="primary" data-lang="continue">전체 연습으로</button></div></section>'+
       '<div id="languageBattleSlot" class="languageBattleSlot" data-lang="battleSlot"></div>'+
-      '<aside class="languageNotes"><details><summary>문자와 발음 익히기</summary><p data-lang="guide"></p></details><details><summary>과정 범위와 참고 자료</summary><p>자체 문법 문제와 공개 예문의 원문 표현 복원 문제를 함께 제공합니다. 수집 예문은 영어 의미와 한국어 학습 설명을 표시합니다. 다른 표현도 문법적으로 가능한 경우가 있어 원문 복원으로 구분합니다. 단어는 사전의 동일 의미 집합으로 한국어 뜻을 자동 연결했으며 드문 뜻이 포함될 수 있습니다.</p><a href="notices/language-expansion.txt" target="_blank" rel="noopener">확장 자료 출처·이용 조건</a><div data-lang="sources"></div></details></aside>'+
+      '<aside class="languageNotes"><details><summary>문자와 발음 익히기</summary><p data-lang="guide"></p></details><details><summary>과정 범위와 참고 자료</summary><p>자체 문법 문제와 공개 예문의 원문 표현 복원 문제를 함께 제공합니다. 수집 예문은 한국어 의미와 학습 설명을 표시합니다. 의미 힌트는 미리 번역해 저장했으며 자동 번역과 일부 편집 교정을 거쳤습니다. 다른 표현도 문법적으로 가능한 원문 복원형입니다. 단어는 한국어 사전 자료와 대조하고 기본 뜻을 교정했습니다. 사전 근거가 부족해 교체한 단어의 학습 횟수는 누적 기록에 보관합니다. 전체 원어민 감수 자료는 아니므로 번역이나 뜻의 오류가 남을 수 있습니다.</p><a href="notices/language-expansion.txt" target="_blank" rel="noopener">확장 자료 출처·이용 조건</a><div data-lang="sources"></div></details></aside>'+
       '<p class="languageStorage" data-lang="status" role="status"></p>';
     ui=Object.fromEntries([...host.querySelectorAll('[data-lang]')].map(element=>[element.dataset.lang,element]));
     ui.language.replaceChildren(...languages.map(language=>new Option(courses[language].name+' · '+courses[language].native,language)));

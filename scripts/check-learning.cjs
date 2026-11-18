@@ -15,6 +15,7 @@ function harness(seed={},language='en'){
   get('dashboardPage').hidden=true;
   const window={addEventListener:(name,handler)=>{const list=handlers.get(name)||[];list.push(handler);handlers.set(name,list);},dispatchEvent:event=>{events.push(event);for(const handler of handlers.get(event.type)||[])handler(event);}};
   window.StudyLocale={current:()=>language,ready:()=>true,names:{en:'영어',ja:'일본어',es:'스페인어',tr:'터키어'},choose(){},showChooser(){}};
+  window.LANGUAGE_COURSES={ja:{words:[{key:'ja-word-1'}]},es:{words:[]},tr:{words:[]}};
   const ctx=vm.createContext({window,localStorage,structuredClone,Date,CustomEvent:class {constructor(type,init){this.type=type;this.detail=init.detail;}},document:{getElementById:get,createElement:tag=>new Element(tag)},StudyApp:{open:mode=>calls.push(['open',mode]),reviewGrammar:key=>calls.push(['grammar',key]),reviewWord:key=>calls.push(['word',key]),setDifficulty:value=>calls.push(['difficulty',value])},LanguageStudy:{review:(...args)=>calls.push(['language',...args])},ListeningStudy:{review:key=>calls.push(['listening',key])},PersonalStudy:{review:key=>calls.push(['materials',key])}});
   function load(name){vm.runInContext(fs.readFileSync(path.join(site,name),'utf8'),ctx,{filename:name});}
   ctx.StudyLocale=window.StudyLocale;
@@ -73,6 +74,7 @@ const PersonalStudy={mount(){},open(){},close(){}};
 const ListeningStudy={mount(){},open(){},close(){}};
 const LanguageStudy={mount(){},open(){},close(){}};
 const CompetitionStudy={mount(){},open(){},close(){}};
+const MiniGameStudy={mount(){},open(){},close(){}};
 `,routing.ctx);
 routing.ctx.document.body={dataset:{}};
 routing.ctx.document.querySelector=selector=>routing.get(selector);

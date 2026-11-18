@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="workspace.css">
   <link rel="stylesheet" href="materials.css"><link rel="stylesheet" href="languages.css"><link rel="stylesheet" href="listening.css">
   <link rel="stylesheet" href="locale.css"><link rel="stylesheet" href="competition.css">
+  <link rel="stylesheet" href="minigames.css">
   <script src="theme.js"></script>
   <script src="locale.js" defer></script>
   <script src="browser.js" defer></script><script src="progress-reset.js" defer></script><script src="game.js" defer></script>
@@ -23,6 +24,7 @@
   <script src="writing-tasks.js" defer></script><script src="writing-ui.js" defer></script>
   <script src="data.js" defer></script><script src="engine.js" defer></script><script src="battle.js" defer></script><script src="character.js" defer></script><script src="vocabulary.js" defer></script><script src="words.js" defer></script><script src="screen.js" defer></script>
   <script src="competition-config.js" defer></script><script src="competition.js" defer></script>
+  <script src="minigame-engine.js" defer></script><script src="minigames.js" defer></script>
   <script src="workspace.js" defer></script>
 </head>
 <body data-language-ready="false">
@@ -44,12 +46,13 @@
     <button id="themeToggle" type="button" aria-label="화면 테마 변경">라이트</button>
     <button id="profileOpen" type="button" aria-haspopup="dialog"><span class="portrait"><img id="navAvatar" src="arena/knight.png" alt=""></span><span id="profileLabel">캐릭터 설정</span><span class="editMark" aria-hidden="true">✎</span></button>
   </div></header>
-  <nav class="workspaceNav" aria-label="학습 공간"><button data-view="dashboard" id="dashboardTab" aria-pressed="false">나의 성장</button><button data-view="materials" id="materialsTab" aria-pressed="false">내 자료로 공부</button><button data-view="competition" id="competitionTab" aria-pressed="false">PvP · 리더보드</button></nav>
+  <nav class="workspaceNav" aria-label="학습 공간"><button data-view="dashboard" id="dashboardTab" aria-pressed="false">나의 성장</button><button data-view="minigames" id="minigamesTab" aria-pressed="false">미니게임</button><button data-view="materials" id="materialsTab" aria-pressed="false">내 자료로 공부</button><button data-view="competition" id="competitionTab" aria-pressed="false">PvP · 리더보드</button></nav>
   <main id="dashboardPage" class="extensionPage" hidden></main>
   <main id="materialsPage" class="extensionPage" hidden></main>
   <main id="listeningPage" class="extensionPage" hidden></main>
   <main id="languagesPage" class="extensionPage" hidden></main>
   <main id="competitionPage" class="extensionPage" hidden></main>
+  <main id="minigamesPage" class="extensionPage" hidden></main>
   <div id="growthToast" role="status" hidden></div>
   <main id="grammarPage">
     <section class="route" aria-labelledby="chapterName">
@@ -162,7 +165,7 @@
     <div class="shopBalance">보유 골드 <strong id="shopGold"></strong></div>
     <div id="merch"></div><p id="shopNotice" role="status"></p>
   </dialog>
-  <dialog id="resetDialog" aria-labelledby="resetTitle"><h2 id="resetTitle">진도를 처음부터 시작할까요?</h2><p>영어·외국어·Listening·내 자료 학습 진도, 성장 분석, 몬스터·체력·골드·장비와 Writing 피드백 비교 기록을 초기화합니다. 내려받은 문제와 업로드한 자료 원문은 보관합니다.</p><p>공개 PvP 기록은 PvP 화면의 ‘공개 경기 기록 삭제’에서 정리할 수 있어요.</p>
+  <dialog id="resetDialog" aria-labelledby="resetTitle"><h2 id="resetTitle">진도를 처음부터 시작할까요?</h2><p>영어·외국어·Listening·내 자료 학습 진도, 성장 분석, 미니게임 기록, 몬스터·체력·골드·장비와 Writing 피드백 비교 기록을 초기화합니다. 내려받은 문제와 업로드한 자료 원문은 보관합니다.</p><p>공개 PvP 기록은 PvP 화면의 ‘공개 경기 기록 삭제’에서 정리할 수 있어요.</p>
     <label class="resetDrafts"><input id="eraseDrafts" type="checkbox"> 직접 쓴 Writing 초안도 삭제</label>
     <div class="dialogActions"><button class="outline" data-close="resetDialog" autofocus>취소</button><button id="resetConfirm" class="danger">진도 초기화</button></div><p id="resetStatus" role="status"></p>
   </dialog>

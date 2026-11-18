@@ -1,6 +1,6 @@
 'use strict';
 (()=>{
-  const modules={dashboard:LearningDashboard,materials:PersonalStudy,listening:ListeningStudy,languages:LanguageStudy,competition:CompetitionStudy};
+  const modules={dashboard:LearningDashboard,materials:PersonalStudy,listening:ListeningStudy,languages:LanguageStudy,competition:CompetitionStudy,minigames:MiniGameStudy};
   for(const [name,study] of Object.entries(modules))study.mount(document.getElementById(name+'Page'));
   document.querySelectorAll('[data-view]').forEach(button=>button.onclick=()=>StudyApp.open(button.dataset.view));
   window.addEventListener('partfive:page',({detail:{mode}})=>{

@@ -18,6 +18,7 @@ const LearningDashboard=(()=>{
     return items.filter(i=>i.misses&&i.streak<2).sort((a,b)=>(b.misses/Math.max(b.attempts,1)*5+Math.log2(b.misses+1)-b.streak)-(a.misses/Math.max(a.attempts,1)*5+Math.log2(a.misses+1)-a.streak));
   }
   const frequent=items=>items.filter(i=>i.misses).sort((a,b)=>b.misses-a.misses||b.misses/b.attempts-a.misses/a.attempts);
+  const reviewable=item=>item.mode!=='language-word'||window.LANGUAGE_COURSES?.[item.language]?.words.some(w=>w.key===item.key);
   function weakList(host,items,empty){
     host.replaceChildren();
     if(!items.length){host.append(element('p',empty,'muted'));return;}
@@ -48,13 +49,13 @@ const LearningDashboard=(()=>{
     $('dashRepairs').textContent=repairs.toLocaleString();
     $('dashToday').textContent=today.attempts.toLocaleString();
     $('dashStorage').hidden=storageOK;
-    const outstanding=ranked(items),known=english?Object.values(words.marks||{}).filter(v=>v==='known').length:course.knownWords;
+    const outstanding=ranked(items.filter(reviewable)),known=english?Object.values(words.marks||{}).filter(v=>v==='known').length:course.knownWords;
     $('growthHeadline').textContent=repairs?'틀렸던 내용을 '+repairs+'번 다시 맞혔어요.':today.attempts?'오늘 '+today.attempts+'번, 기억을 꺼내 보았어요.':'오늘의 첫 문제부터 시작해 볼까요?';
     $('growthLanguage').textContent=names[language]+' 성장 기록';
     $('growthSubtitle').textContent=names[language]+' 단어 '+known.toLocaleString()+' / '+(english?'3,000':course.wordCount)+'개 학습 · '+(english?'문법 복습 '+(g.recovered||0)+'유형 완료':'문법 '+course.knownGrammar+' / '+course.grammarCount+'문항 최근 정답');
     $('dashAttemptLabel').textContent=english?'채점한 문제·단어·받아쓰기':'채점한 문법·단어';
     weakList($('grammarWeak'),frequent(items.filter(i=>i.mode==='grammar'||i.mode==='language-grammar')),'문법 문제를 풀면 유형별 오답이 표시됩니다.');
-    weakList($('wordWeak'),frequent(items.filter(i=>i.mode==='word'||i.mode==='language-word'||i.mode==='materials')),'단어를 입력하고 채점하면 헷갈리는 단어가 모입니다.');
+    weakList($('wordWeak'),frequent(items.filter(i=>(i.mode==='word'||i.mode==='language-word'||i.mode==='materials')&&reviewable(i))),'단어를 입력하고 채점하면 헷갈리는 단어가 모입니다.');
     const queue=$('reviewPlan');queue.replaceChildren();
     const priorities=outstanding.slice(0,3);
     if(priorities.length){

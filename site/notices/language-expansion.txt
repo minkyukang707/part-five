@@ -1,29 +1,49 @@
-Foreign-language expansion, 2026-11-18
+Foreign-language learning material — revised 2026-11-18
 
-Sentence sources
+Sentences
 Tatoeba contributors, distributed by ManyThings Anki bilingual exports.
 https://www.manythings.org/anki/
 https://tatoeba.org/en/downloads
 CC BY 2.0 FR, https://creativecommons.org/licenses/by/2.0/fr/
-Every imported exercise retains the contributing usernames and sentence IDs in its explanation.
-Changes: theme classification, expression selection, blanking, answer choices, Korean study notes.
-These are original-expression reconstruction exercises. Other expressions can be grammatically valid.
-The English sentence is the supplied meaning aid. Korean grammar notes are application-authored.
+Every imported exercise retains contributor usernames and sentence IDs in its explanation.
+Changes: theme classification, expression selection, blanking, answer choices, Korean notes and meaning hints.
+These are original-expression reconstruction exercises; other answers can be grammatically possible.
 
-Vocabulary sources
-Extended Open Multilingual Wordnet, Wiktionary-derived Korean, Japanese, Spanish and Turkish lemma tables.
+Korean meaning hints
+The English reference meaning is retained as sourceMeaning for traceability, not shown as the question hint.
+6,516 imported exercises use 6,263 distinct saved Korean translations, with additional editorial corrections.
+Translations were prepared locally using Helsinki-NLP / OPUS-MT eng-kor:
+https://huggingface.co/Helsinki-NLP/opus-mt-tc-big-en-ko
+Original Marian release: opusTCv20210807-sepvoc_transformer-big_2022-07-28, CC BY 4.0.
+https://github.com/Helsinki-NLP/OPUS-MT-train
+Tiedemann and Thottingal (2020), OPUS-MT – Building open translation services for the World.
+No GPT, translation API, or model download is used by learners. Only the resulting text is shipped.
+Checks include coverage, broken text, negative clauses, selected idioms and sample review.
+These checks do not amount to exhaustive professional/native-speaker review; errors can remain.
+
+Revised vocabulary
+Korean Wiktionary contributors, structured extraction by Wiktextract / Kaikki:
+https://ko.wiktionary.org/
+https://kaikki.org/kowiktionary/rawdata.html
+https://github.com/tatuylonen/wiktextract
+Source dump: 2026-11-01, extraction: 2026-11-02. Wiktionary content is under its CC BY-SA terms.
+Per-entry Korean Wiktionary source links are included where used.
+Changes: entry matching, short-gloss selection, removal of metadata/unsuitable senses, frequency ranking,
+editorial corrections, and grouping into 30-entry sets. Derived glosses remain under the source share-alike terms.
+The original 6,000 entries were compared against direct Korean entries; unsupported automatic alignments
+were replaced with sourced vocabulary. Original authored beginner entries and explicit corrections are retained.
+The review counts, changed meanings, removed entries and replacements are in vocabulary-review.json.
+There are still exactly 2,000 entries per language. Retired attempts are archived rather than transferred to new words.
+
+Historical expansion source
+The preceding vocabulary used Extended OMW / Wiktionary Korean-Japanese-Spanish-Turkish synset alignment.
 https://omwn.org/
-https://github.com/omwn/omw-data
 https://github.com/nltk/nltk_data/blob/gh-pages/packages/corpora/extended_omw.zip
-Original table headers specify CC BY-SA and Wiktionary, http://wiktionary.org/.
-The imported vocabulary alignment remains available under the source CC BY-SA terms.
-Changes: shared WordNet synset alignment to Korean, deduplication, ranking by corpus occurrence,
-selection of 2,000 distinct entries per language including the original 60 entries, and 30-entry sets.
-Synset alignment is automatic and can contain rare senses or imperfect Korean equivalents.
-Selected common meanings are editorially corrected in scripts/language-meaning-overrides.json.
-Entries and sentence classifications have structural validation and sample review, not exhaustive native-speaker review.
+Original headers specify CC BY-SA and Wiktionary. This provenance remains relevant to retained entries.
 
 Rebuild
-scripts/build-language-expansion.py takes a directory with extended.zip, jpn.zip, spa.zip and tur.zip,
-and reads the original courses from languages-data.js using Node.js (an optional second argument supplies a JSON snapshot).
-Requires Python 3 and Node.js 24, with no third-party packages. The original 60 word IDs and 48 exercise IDs are retained.
+scripts/build-language-expansion.py uses local extended.zip, jpn.zip, spa.zip and tur.zip plus Node.js 24.
+When reviewed data exists, it runs scripts/apply-language-review.cjs, which applies the saved
+language-ko-hints.json, language-hint-overrides.json and language-reviewed-words.json.
+New source sentences without a Korean translation fail validation rather than silently showing an English hint.
+The default site build does not translate or recollect material. Translation models are not in this repository.

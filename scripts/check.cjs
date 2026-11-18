@@ -28,11 +28,11 @@ for(const code of ['ja','es','tr']){
   for(const kind of ['questions','words'])for(const original of originalLanguages[code][kind])assert(course[kind].some(q=>q.key===original.key),'preserve saved ID '+original.key);
   for(const genre of ['daily','travel','school','sport','food','work','health','culture'])assert(course.questions.filter(q=>q.genre===genre).length>=100,code+' '+genre);
   assert(new Set(course.questions.map(q=>q.topic)).size>=30);
-  for(const [index,w] of course.words.entries()){assert(w.meanings.length>0);assert.equal(w.set,Math.floor(index/30));}
+  for(const [index,w] of course.words.entries()){assert(w.meanings.length>0);assert(w.meanings.every(m=>/[가-힣]/.test(m)));assert(w.reviewed);assert.equal(w.set,Math.floor(index/30));}
   assert.equal(course.words.filter(w=>w.set===66).length,20);
   const imported=course.questions.filter(q=>q.sourceExercise);
   assert.equal(new Set(imported.map(q=>q.stem.replace('____',q.answer))).size,imported.length);
-  for(const q of course.questions){assert(q.why&&q.meaning);assert(q.options.includes(q.answer));assert.equal(new Set(q.options.map(s=>s.toLowerCase())).size,4);assert.equal(q.stem.split('____').length,2);if(q.sourceExercise)assert(q.why.includes('tatoeba.org #'));}
+  for(const q of course.questions){assert(q.why&&q.meaning);assert(q.options.includes(q.answer));assert.equal(new Set(q.options.map(s=>s.toLowerCase())).size,4);assert.equal(q.stem.split('____').length,2);if(q.sourceExercise){assert(q.why.includes('tatoeba.org #'));assert(q.meaning.startsWith('문장 뜻 · '));assert(/[가-힣]/.test(q.meaning));assert(!/[▁�◇◆]/.test(q.meaning));assert(!q.meaning.includes('원문 의미(영어)'));}}
   console.log(code+': '+course.questions.length+' questions / '+course.words.length+' words / 67 sets; OK');
 }
 assert(languages.tr.words.find(w=>w.word==='ama').meanings.includes('하지만'));
@@ -43,3 +43,5 @@ assert.equal(songs.length,3);assert(songs.every(s=>s.lines.length===4&&s.license
 assert.equal(fs.readdirSync(path.join(__dirname,'../site/arena/scenes')).filter(n=>n.endsWith('.webp')).length,40);
 console.log('3 introductory language courses, 12 licensed song excerpts and 40 battle backgrounds; OK');
 require('./check-learning.cjs');
+require('./check-minigames.cjs');
+require('./check-language-review.cjs');

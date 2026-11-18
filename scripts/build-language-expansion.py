@@ -171,3 +171,5 @@ for code,iso in [('ja','jpn'),('es','spa'),('tr','tur')]:
 text='const LANGUAGE_EXPANSION='+json.dumps(expanded,ensure_ascii=False,separators=(',',':'))+';\n'
 text+="if(typeof LANGUAGE_COURSES!=='undefined')for(const [code,data] of Object.entries(LANGUAGE_EXPANSION))Object.assign(LANGUAGE_COURSES[code],data);\nif(typeof module!=='undefined')module.exports=LANGUAGE_EXPANSION;\n"
 (out/'languages-expansion.js').write_text(text,encoding='utf-8')
+if (Path(__file__).parent/'language-ko-hints.json').exists():
+ subprocess.run(['node',str(Path(__file__).parent/'apply-language-review.cjs')],check=True)
