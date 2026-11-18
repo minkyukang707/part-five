@@ -1,0 +1,52 @@
+.materialsPage {display:grid;grid-template-columns:minmax(280px,.8fr) minmax(0,1.2fr);align-items:start;gap:18px}
+.materialsPage .sheet {min-width:0;background:var(--surface,#fffdf7);color:var(--text,#20343b);border-color:var(--line,#c8d1c7)}
+.materialsPage .sheethead h1,.materialsPage .sheethead h2 {color:var(--text,#20343b)}
+.materialIntro,.materialMuted {font-size:12px;color:var(--soft,#506575);line-height:1.6}
+.materialIntro {margin:12px 0 16px}
+.materialFields {display:grid;grid-template-columns:minmax(0,1fr) 110px;gap:12px}
+.materialFields label,.materialFileLabel,.materialPasteLabel {display:block;font-size:13px;font-weight:700}
+.materialsPage input,.materialsPage textarea,.materialsPage select {width:100%;border:1px solid var(--line,#9caea4);border-radius:6px;background:var(--surface,#fffdf7);color:var(--text,#203b3c);padding:9px;font:inherit;min-width:0}
+.materialFields input,.materialFields select,.materialFileLabel input {margin:5px 0 0}
+.materialFileLabel {margin:15px 0 4px}
+.materialFileLabel input {font-size:12px;padding:7px}
+.materialPasteLabel {margin:14px 0 5px}
+#materialText {resize:vertical;min-height:112px;font-size:13px;line-height:1.6}
+.materialActions,.materialStudyNav {display:flex;align-items:center;justify-content:flex-end;gap:8px;margin:12px 0;flex-wrap:wrap}
+.materialStudyNav {justify-content:flex-start}
+.materialStudyNav button {font-size:12px;padding:5px 9px}
+#materialMode {margin-right:auto;color:var(--soft,#506575);font-size:12px}
+#materialStatus {font-size:12px;color:var(--accent,#3c7166);margin:12px 0}
+#materialStatus[data-kind=warning] {color:var(--text,#9d4f2a)}
+#materialShelf {display:grid;gap:8px;margin-top:16px;max-height:390px;overflow:auto}
+.materialSource {display:flex;gap:6px;align-items:center;border:1px solid #c2cec3;border-radius:7px;padding:7px;background:#eef1e8}
+.materialSelect {flex:1;min-width:0;display:grid;gap:4px;text-align:left;padding:4px;border:0;background:transparent;color:#294a43}
+.materialSelect strong {font-size:13px;overflow-wrap:anywhere}
+.materialSelect small {font-size:11px;color:#577066}
+.materialSelect[aria-pressed=true] strong::before {content:'● ';color:#387b69}
+.materialDelete {font-size:11px;background:transparent;border:0;color:#8a594b;padding:6px;flex-shrink:0}
+.materialDeleteConfirm p {font-size:12px;margin:0 0 7px}.materialDeleteConfirm button {font-size:12px;padding:5px 10px;margin-right:7px}
+#materialSourceTitle {overflow-wrap:anywhere}
+.materialsPage .entry {max-width:none}
+.materialsPage .entry input {flex:1;width:0;min-width:0}
+.materialsPage .entry button {flex:none;white-space:nowrap}
+#materialProgress {white-space:nowrap}
+#materialSentence {font:25px/1.55 var(--serif,Georgia,serif);overflow-wrap:anywhere;margin:18px 0 10px}
+#materialSentence:lang(ja) {font-family:system-ui,sans-serif;font-size:23px}
+.materialBlank {color:#537e6e;white-space:nowrap}
+#materialCue {font-size:12px;color:var(--soft,#5c7365);margin:0 0 14px}
+#materialAnswerForm .entry {max-width:none}
+#materialAnswer {font-size:17px}
+#materialFeedback {padding:14px;background:#e9f2e6;color:#294538;border:1px solid #a7c0a5;border-radius:8px;margin:16px 0}
+#materialFeedback p {margin:7px 0;font-size:13px;line-height:1.7}
+#materialFeedback .materialQuotation {font:18px/1.55 var(--serif,Georgia,serif);color:#315045}
+#materialFeedback.materialMiss {background:#fbefdf;border-color:#d6b798}
+#materialNext {display:block;margin:0 0 12px auto}
+.materialDetails {border-top:1px solid var(--rule,#d6d8cf);margin-top:18px;padding-top:13px;font-size:13px}
+.materialDetails summary {cursor:pointer;font-weight:700}
+#materialKeywords {display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.materialWord {font-size:12px;background:#e7ece1;color:#35584c;border:1px solid #bacbb9;border-radius:6px;padding:4px 8px}
+#materialOriginalText {white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.8;font-family:inherit;max-height:400px;overflow:auto;padding:12px;background:var(--surface,#f0f0e6);color:var(--text,#20343b);border:1px solid var(--line,#cad1c7);border-radius:6px}
+#materialDone h2 {font-size:20px}#materialSummary {font-size:14px;color:var(--soft,#4a685d)}
+.materialsPage button:disabled,.materialsPage input:disabled,.materialsPage textarea:disabled {opacity:.6;cursor:default}
+@media(max-width:900px){.materialsPage{grid-template-columns:minmax(0,1fr)}#materialShelf{max-height:230px}}
+@media(max-width:420px){.materialFields{grid-template-columns:minmax(0,1fr) 95px}.materialActions .primary{font-size:12px;padding:9px}#materialSentence{font-size:22px}.materialStudyNav{gap:5px}}

@@ -15,7 +15,8 @@ const template=fs.readFileSync(path.join(__dirname,'sw-template.js'),'utf8');
 const digest=crypto.createHash('sha256').update(template);
 for(const file of files){digest.update(file);digest.update(fs.readFileSync(path.join(site,file)));}
 const worker=template.replace('__RELEASE__',digest.digest('hex').slice(0,16))
-  .replace('/*ASSETS*/[]',JSON.stringify(files.filter(f=>!f.endsWith('.wasm'))));
+  .replace('/*ASSETS*/[]',JSON.stringify(files.filter(f=>!f.endsWith('.wasm'))))
+  .replace('/*PRECACHE*/[]',JSON.stringify(files.filter(f=>!f.endsWith('.wasm')&&!f.startsWith('vendor/pdfjs/'))));
 fs.writeFileSync(path.join(dist,'sw.js'),worker);
 fs.writeFileSync(path.join(dist,'.nojekyll'),'');
 console.log('Built '+files.length+' application assets.');

@@ -87,6 +87,7 @@ const WordStudy=(()=>{
     const word=current(),ok=answer!=='모름'&&matches(VOCABULARY[word],answer);
     data.result={word,answer,ok,counter:$('wordCounter').textContent,wasReview:!!data.review};
     data.marks[word]=ok?'known':'again';
+    LearningLog.record({mode:'word',language:'en',key:String(word),label:VOCABULARY[word].w,correct:ok});
     if(data.review){if(++data.review.i>=data.review.words.length)data.review=null;}
     else data.cursor[data.set]=Math.min(size,cursor()+1);
     save();draw();focusCard();
@@ -102,5 +103,10 @@ const WordStudy=(()=>{
   $('nextSet').onclick=()=>{if(data.set<sets-1)select(data.set+1);};
   $('redoSet').onclick=()=>{data.cursor[data.set]=0;select(data.set);};
   $('repeatMissed').onclick=()=>{const words=indices().filter(i=>data.marks[i]==='again');if(words.length){data.review={set:data.set,words,i:0};clearEntry();save();draw();focusCard();}};
-  return {draw,focusCard,matches};
+  function reviewWord(index){
+    if(!Number.isInteger(index)||index<0||index>=VOCABULARY.length)return;
+    data.set=Math.floor(index/size);data.review={set:data.set,words:[index],i:0};
+    clearEntry();save();draw();focusCard();
+  }
+  return {draw,focusCard,matches,reviewWord};
 })();

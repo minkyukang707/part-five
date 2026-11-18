@@ -1,0 +1,60 @@
+Battle backgrounds generated using the built-in ImageGen tool. WebP copies resized for web delivery.
+01-moss.webp
+Original polished 16-bit pixel-art RPG battle background. Landscape 2.4:1. ancient moss woodland, warm morning sun rays, old stone bridge in distant background, verdant green. Crisp intentional pixel clusters and atmospheric layered depth. Single coherent scene. Unobstructed level foreground path at 80 percent height, large space at left and right for two game sprites added later. No characters, no creatures, no writing, no UI, no panels, no frames.
+
+02-coral.webp
+Original polished 16-bit pixel-art RPG battle background. Landscape 2.4:1. magical underwater coral city with luminous anemones, teal sea and coral pink, flat sandy sea floor. Crisp intentional pixel clusters and atmospheric layered depth. Single coherent scene. Unobstructed level foreground path at 80 percent height, large space at left and right for two game sprites added later. No characters, no creatures, no writing, no UI, no panels, no frames.
+
+03-volcano.webp
+Original polished 16-bit pixel-art RPG battle background. Landscape 2.4:1. volcanic basalt valley, distant flowing lava and ember sky, dark stone foreground. Crisp intentional pixel clusters and atmospheric layered depth. Single coherent scene. Unobstructed level foreground path at 80 percent height, large space at left and right for two game sprites added later. No characters, no creatures, no writing, no UI, no panels, no frames.
+
+04-meadow.webp
+Original polished 16-bit pixel-art RPG battle background. Landscape 2.4:1. sunflower meadow with distant windmill, honey afternoon light, grassy foreground trail. Crisp intentional pixel clusters and atmospheric layered depth. Single coherent scene. Unobstructed level foreground path at 80 percent height, large space at left and right for two game sprites added later. No characters, no creatures, no writing, no UI, no panels, no frames.
+
+05-crystal.webp
+Original polished 16-bit pixel-art RPG battle background. Landscape 2.4:1. amethyst crystal cave with blue bioluminescent pools, dark violet stone path. Crisp intentional pixel clusters and atmospheric layered depth. Single coherent scene. Unobstructed level foreground path at 80 percent height, large space at left and right for two game sprites added later. No characters, no creatures, no writing, no UI, no panels, no frames.
+
+06-snow.webp
+Original polished 16-bit pixel-art RPG battle background. Landscape 2.4:1. snow-covered mountain pass, glacial blue peaks, golden sunrise, snowy path. Crisp intentional pixel clusters and atmospheric layered depth. Single coherent scene. Unobstructed level foreground path at 80 percent height, large space at left and right for two game sprites added later. No characters, no creatures, no writing, no UI, no panels, no frames.
+
+07-swamp.webp
+Original polished 16-bit pixel-art RPG battle background. Landscape 2.4:1. moonlit mangrove marsh with wisps and lily pools, emerald mist, dry mossy path foreground. Crisp intentional pixel clusters and atmospheric layered depth. Single coherent scene. Unobstructed level foreground path at 80 percent height, large space at left and right for two game sprites added later. No characters, no creatures, no writing, no UI, no panels, no frames.
+
+08-wind.webp
+Original polished 16-bit pixel-art RPG battle background. Landscape 2.4:1. cloudy windswept highland, distant ruined tower, silver blue sky, short grassy trail. Crisp intentional pixel clusters and atmospheric layered depth. Single coherent scene. Unobstructed level foreground path at 80 percent height, large space at left and right for two game sprites added later. No characters, no creatures, no writing, no UI, no panels, no frames.
+
+09-desert.webp
+Original polished 16-bit pixel-art RPG battle background. Landscape 2.4:1. ochre desert with faraway sandstone temple, red sunset sky, flat sandy path. Crisp intentional pixel clusters and atmospheric layered depth. Single coherent scene. Unobstructed level foreground path at 80 percent height, large space at left and right for two game sprites added later. No characters, no creatures, no writing, no UI, no panels, no frames.
+
+10-sky.webp
+Original polished 16-bit pixel-art RPG battle background. Landscape 2.4:1. floating garden island above soft white clouds, pastel turquoise and gold, stone promenade. Crisp intentional pixel clusters and atmospheric layered depth. Single coherent scene. Unobstructed level foreground path at 80 percent height, large space at left and right for two game sprites added later. No characters, no creatures, no writing, no UI, no panels, no frames.
+
+11-bamboo.webp
+Original polished 16-bit pixel-art RPG battle background. Landscape 2.4:1. Japanese bamboo woodland with small red shrine in distance, warm lanterns, green moss trail. Crisp intentional pixel clusters and atmospheric layered depth. Single coherent scene. Unobstructed level foreground path at 80 percent height, large space at left and right for two game sprites added later. No characters, no creatures, no writing, no UI, no panels, no frames.
+
+12-autumn.webp
+Original polished 16-bit pixel-art RPG battle background. Landscape 2.4:1. maple orchard in scarlet autumn, winding river and tiny stone mill, leaf-strewn level path. Crisp intentional pixel clusters and atmospheric layered depth. Single coherent scene. Unobstructed level foreground path at 80 percent height, large space at left and right for two game sprites added later. No characters, no creatures, no writing, no UI, no panels, no frames.
+
+13-coast.webp
+Original polished 16-bit pixel-art RPG battle background. Landscape 2.4:1. sunlit Mediterranean coastal village far across a blue bay, bougainvillea in edges, pale sandstone path. Crisp intentional pixel clusters and atmospheric layered depth. Single coherent scene. Unobstructed level foreground path at 80 percent height, large space at left and right for two game sprites added later. No characters, no creatures, no writing, no UI, no panels, no frames.
+
+14-canyon.webp
+Original polished 16-bit pixel-art RPG battle background. Landscape 2.4:1. deep orange desert canyon under brilliant blue sky, natural arches distant, flat rocky ledge. Crisp intentional pixel clusters and atmospheric layered depth. Single coherent scene. Unobstructed level foreground path at 80 percent height, large space at left and right for two game sprites added later. No characters, no creatures, no writing, no UI, no panels, no frames.
+
+15-terraces.webp
+Original polished 16-bit pixel-art RPG battle background. Landscape 2.4:1. snow white limestone travertine terraces with blue thermal pools, golden haze, smooth pale path. Crisp intentional pixel clusters and atmospheric layered depth. Single coherent scene. Unobstructed level foreground path at 80 percent height, large space at left and right for two game sprites added later. No characters, no creatures, no writing, no UI, no panels, no frames.
+
+16-ruins.webp
+Original polished 16-bit pixel-art RPG battle background. Landscape 2.4:1. ancient library ruins in forest, arches and weathered open-air shelves, deep turquoise twilight. Crisp intentional pixel clusters and atmospheric layered depth. Single coherent scene. Unobstructed level foreground path at 80 percent height, large space at left and right for two game sprites added later. No characters, no creatures, no writing, no UI, no panels, no frames.
+
+17-rain.webp
+Original polished 16-bit pixel-art RPG battle background. Landscape 2.4:1. rainy mountain bamboo garden, wet stone lanterns, silver mist, level cobblestone ground. Crisp intentional pixel clusters and atmospheric layered depth. Single coherent scene. Unobstructed level foreground path at 80 percent height, large space at left and right for two game sprites added later. No characters, no creatures, no writing, no UI, no panels, no frames.
+
+18-aurora.webp
+Original polished 16-bit pixel-art RPG battle background. Landscape 2.4:1. frozen northern lake with aurora ribbons, indigo night, snowy foreground shore. Crisp intentional pixel clusters and atmospheric layered depth. Single coherent scene. Unobstructed level foreground path at 80 percent height, large space at left and right for two game sprites added later. No characters, no creatures, no writing, no UI, no panels, no frames.
+
+19-stars.webp
+Original polished 16-bit pixel-art RPG battle background. Landscape 2.4:1. fantasy observatory above starlit clouds, distant brass telescope dome, pale stone walkway. Crisp intentional pixel clusters and atmospheric layered depth. Single coherent scene. Unobstructed level foreground path at 80 percent height, large space at left and right for two game sprites added later. No characters, no creatures, no writing, no UI, no panels, no frames.
+
+20-castle.webp
+Original polished 16-bit pixel-art RPG battle background. Landscape 2.4:1. golden fantasy castle courtyard, faraway towers and banners, sunset rose light, stone foreground. Crisp intentional pixel clusters and atmospheric layered depth. Single coherent scene. Unobstructed level foreground path at 80 percent height, large space at left and right for two game sprites added later. No characters, no creatures, no writing, no UI, no panels, no frames.

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; frame-src https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'">
   <meta name="description" content="Part 5 영어 문법 문제로 몬스터와 대결하고, 3,000개 단어와 영작을 연습하세요. 학습 진도는 이 브라우저에 저장됩니다.">
   <title>Part Five · 영어 문법 연습</title>
   <link rel="icon" href="icon.png"><link rel="stylesheet" href="study.css">
@@ -11,16 +11,30 @@
   <link rel="stylesheet" href="writing.css">
   <link rel="stylesheet" href="game.css">
   <link rel="stylesheet" href="expedition.css">
+  <link rel="stylesheet" href="workspace.css">
+  <link rel="stylesheet" href="materials.css"><link rel="stylesheet" href="languages.css"><link rel="stylesheet" href="listening.css">
+  <script src="theme.js"></script>
   <script src="browser.js" defer></script><script src="progress-reset.js" defer></script><script src="game.js" defer></script>
+  <script src="learning.js" defer></script><script src="dashboard.js" defer></script>
+  <script src="languages-data.js" defer></script><script src="languages.js" defer></script>
+  <script src="materials.js" defer></script><script src="listening-data.js" defer></script><script src="listening.js" defer></script>
   <script src="writing-tasks.js" defer></script><script src="writing-ui.js" defer></script>
   <script src="data.js" defer></script><script src="engine.js" defer></script><script src="battle.js" defer></script><script src="character.js" defer></script><script src="vocabulary.js" defer></script><script src="words.js" defer></script><script src="screen.js" defer></script>
+  <script src="workspace.js" defer></script>
 </head>
 <body>
   <header><div class="bar">
     <div class="brand"><img src="icon.png" alt=""><span lang="en">Part Five</span></div>
-    <nav aria-label="학습 모드"><div class="navGroup" role="group" aria-label="게임 모드"><small>게임 모드</small><button id="studyTab" aria-pressed="true">문제 풀기</button><button id="reviewTab" aria-pressed="false">오답 복습</button></div><div class="navGroup" role="group" aria-label="공부 모드"><small>공부 모드</small><button id="wordsTab" aria-pressed="false">단어 공부</button><button id="writingTab" aria-pressed="false">Writing</button></div></nav>
+    <nav aria-label="영어 학습"><div class="navGroup" role="group" aria-label="게임 모드"><small>영어</small><button id="studyTab" aria-pressed="true">문제 풀기</button><button id="reviewTab" aria-pressed="false">오답 복습</button></div><div class="navGroup" role="group" aria-label="공부 모드"><button id="wordsTab" aria-pressed="false">단어 공부</button><button id="writingTab" aria-pressed="false">Writing</button></div></nav>
+    <button id="themeToggle" type="button" aria-label="화면 테마 변경">라이트</button>
     <button id="profileOpen" type="button" aria-haspopup="dialog"><span class="portrait"><img id="navAvatar" src="arena/knight.png" alt=""></span><span id="profileLabel">캐릭터 설정</span><span class="editMark" aria-hidden="true">✎</span></button>
   </div></header>
+  <nav class="workspaceNav" aria-label="학습 공간"><button data-view="dashboard" id="dashboardTab" aria-pressed="false">나의 성장</button><button data-view="materials" id="materialsTab" aria-pressed="false">내 자료로 공부</button><button data-view="listening" id="listeningTab" aria-pressed="false">Listening</button><button data-view="languages" id="languagesTab" aria-pressed="false">일본어 · 스페인어 · 터키어</button></nav>
+  <main id="dashboardPage" class="extensionPage" hidden></main>
+  <main id="materialsPage" class="extensionPage" hidden></main>
+  <main id="listeningPage" class="extensionPage" hidden></main>
+  <main id="languagesPage" class="extensionPage" hidden></main>
+  <div id="growthToast" role="status" hidden></div>
   <main id="grammarPage">
     <section class="route" aria-labelledby="chapterName">
       <div class="routeTitle"><span id="chapterNumber"></span><h1 id="chapterName"></h1></div>
@@ -132,7 +146,7 @@
     <div class="shopBalance">보유 골드 <strong id="shopGold"></strong></div>
     <div id="merch"></div><p id="shopNotice" role="status"></p>
   </dialog>
-  <dialog id="resetDialog" aria-labelledby="resetTitle"><h2 id="resetTitle">진도를 처음부터 시작할까요?</h2><p>문제풀이 기록과 오답, 몬스터·캐릭터·골드·장비, 단어 학습 진도와 Writing 피드백 비교 기록을 초기화합니다. 내려받은 문제는 보관합니다.</p>
+  <dialog id="resetDialog" aria-labelledby="resetTitle"><h2 id="resetTitle">진도를 처음부터 시작할까요?</h2><p>영어·외국어·Listening·내 자료 학습 진도, 성장 분석, 몬스터·체력·골드·장비와 Writing 피드백 비교 기록을 초기화합니다. 내려받은 문제와 업로드한 자료 원문은 보관합니다.</p>
     <label class="resetDrafts"><input id="eraseDrafts" type="checkbox"> 직접 쓴 Writing 초안도 삭제</label>
     <div class="dialogActions"><button class="outline" data-close="resetDialog" autofocus>취소</button><button id="resetConfirm" class="danger">진도 초기화</button></div><p id="resetStatus" role="status"></p>
   </dialog>

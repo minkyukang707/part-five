@@ -36,7 +36,7 @@
   Game.difficultyNames.forEach((name,i)=>byId('difficulty').add(new Option((i+1)+' · '+name,i+1)));
   Battle.draw(game);
   const genres={work:'업무·일상',research:'연구·논문',news:'뉴스·공공'};
-  let q, review=false, previousReview=null,activeSync=false,lastCheck=0,onlyOnline=false;
+  let q, review=false, previousReview=null,activeSync=false,lastCheck=0,onlyOnline=false,activeMode='grammar';
   const letters='ABCD';
   const text = (id,value) => { byId(id).textContent=value; };
   const auto=byId('autoSync');
@@ -68,8 +68,10 @@
   auto.onchange=()=>{try{localStorage.setItem('partfive.auto-sync',auto.checked?'on':'off');}catch{}if(auto.checked)automatic();};
   window.addEventListener('online',()=>automatic());
   function page(mode){
+    activeMode=mode;
     const words=mode==='words',writing=mode==='writing',grammar=mode==='grammar';
     byId('wordPage').hidden=!words;byId('grammarPage').hidden=!grammar;byId('writingPage').hidden=!writing;
+    for(const name of ['dashboard','materials','listening','languages'])byId(name+'Page').hidden=mode!==name;
     try{localStorage.setItem('partfive.tab',mode);}catch{}
     byId('wordsTab').setAttribute('aria-pressed',String(words));
     byId('writingTab').setAttribute('aria-pressed',String(writing));
@@ -77,6 +79,7 @@
     byId('reviewTab').setAttribute('aria-pressed',String(grammar && review));
     if(words){WordStudy.draw();WordStudy.focusCard();}
     if(writing)WritingStudy.open();
+    window.dispatchEvent(new CustomEvent('partfive:page',{detail:{mode}}));
     window.scrollTo(0,0);
   }
   function save() {
@@ -117,17 +120,17 @@
     byId('genreRow').hidden=review;
     engine.state.session={q,review,onlyOnline,genre:byId('genre').value};
     save();
-    byId('studyTab').setAttribute('aria-pressed',String(!review));
-    byId('reviewTab').setAttribute('aria-pressed',String(review));
+    byId('studyTab').setAttribute('aria-pressed',String(activeMode==='grammar'&&!review));
+    byId('reviewTab').setAttribute('aria-pressed',String(activeMode==='grammar'&&review));
     text('title',review ? '오답 복습' : onlyOnline ? '받은 문장 연습' : '문장 완성');
     text('counter',q ? '문제 '+String(engine.state.total+(q.selected===null?1:0)).padStart(3,'0') : '');
     byId('empty').hidden=!!q; byId('quiz').hidden=!q;
     drawStats();
-    window.scrollTo(0,0);
+    if(activeMode==='grammar')window.scrollTo(0,0);
     if (!q) {
       text('emptyTitle',!review?'이 주제로 받은 문장이 아직 없어요.':engine.state.recovered ? '복습을 마쳤어요.' : '아직 복습할 유형이 없어요.');
       byId('empty').querySelector('p').textContent=review?'틀린 유형이 생기면 이곳에서 다른 문장으로 다시 풀 수 있어요.':'다른 주제를 고르거나 새 문장을 받아 보세요.';
-      byId('back').focus({preventScroll:true});
+      if(activeMode==='grammar')byId('back').focus({preventScroll:true});
       return;
     }
     text('instruction',(review ? engine.labels.get(q.topic)+' · 다른 문장으로 복습' : genres[q.genre]+' · 문장 완성')+(q.tier?' · 문항 난도 '+q.tier+'/5':''));
@@ -141,7 +144,7 @@
       b.append(letter,word); b.disabled=game.hp===0; b.addEventListener('click',()=>answer(i)); return b;
     }));
     byId('hint').hidden=game.hp===0;byId('downHint').hidden=game.hp!==0; byId('feedback').hidden=true; byId('actions').hidden=true;
-    byId('stem').focus({preventScroll:true});
+    if(activeMode==='grammar')byId('stem').focus({preventScroll:true});
     if(q.selected!==null)paintAnswer(q.selected,false);
   }
   function answer(index) {
@@ -149,6 +152,7 @@
     const outcome=Game.answer(game,q.options[index]===q.answer);
     if(outcome)q.combatReceipt=Battle.message(game,outcome);
     save();
+    LearningLog.record({id:'grammar:'+engine.state.total+':'+q.key,mode:'grammar',language:'en',key:q.topic,label:engine.labels.get(q.topic),correct:q.options[index]===q.answer,difficulty:game.difficulty});
     Battle.draw(game,outcome);
     paintAnswer(index,true);
     if(outcome?.kind==='kill'||Game.taunt(game.wrong)||game.hp===0)byId('field').scrollIntoView({block:'nearest'});
@@ -205,9 +209,23 @@
   byId('openShop').onclick=()=>{Battle.shop(game,buy);text('shopNotice','');byId('shopDialog').showModal();};
   byId('resetOpen').onclick=()=>{byId('profileDialog').close();byId('eraseDrafts').checked=false;text('resetStatus','');byId('resetDialog').showModal();};
   document.querySelectorAll('button[data-close]').forEach(b=>{b.onclick=()=>byId(b.dataset.close).close();});
-  byId('resetConfirm').onclick=()=>{
-    try{ProgressReset.apply(byId('eraseDrafts').checked);location.reload();}
-    catch{text('resetStatus','진도를 초기화하지 못했어요. 다시 시도하세요.');}
+  byId('resetConfirm').onclick=async()=>{
+    byId('resetConfirm').disabled=true;
+    try{await PersonalStudy.resetProgress();ProgressReset.apply(byId('eraseDrafts').checked);location.reload();}
+    catch{text('resetStatus','진도를 초기화하지 못했어요. 다시 시도하세요.');byId('resetConfirm').disabled=false;}
+  };
+  window.StudyApp={
+    open:page,
+    reviewGrammar(topic){
+      page('grammar');
+      if(!Object.hasOwn(engine.state.pending,topic)){
+        const p=engine.pool.find(item=>item.pattern.topic===topic);
+        if(p)engine.state.pending[topic]=p.pattern.id;
+      }
+      start(true,topic);
+    },
+    reviewWord(index){page('words');WordStudy.reviewWord(index);},
+    setDifficulty(n){page('grammar');byId('difficulty').value=n;byId('difficulty').dispatchEvent(new Event('change'));},
   };
   document.addEventListener('keydown',e=>{
     if (byId('grammarPage').hidden || document.querySelector('dialog[open]') || e.target.matches('select,input') || e.ctrlKey || e.altKey || e.metaKey || e.shiftKey || e.repeat || !q || q.selected!==null) return;

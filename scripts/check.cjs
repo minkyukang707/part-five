@@ -18,3 +18,15 @@ const hits=Array.from({length:11},()=>data.game.answer(hero,true).damage);
 assert.deepEqual(hits,[10,10,15,20,25,30,35,40,45,90,95]);
 assert.deepEqual([...fs.readFileSync(path.join(__dirname,'../site/vendor/harper/harper.wasm')).subarray(0,4)],[0,97,115,109]);
 console.log(manifest.count+' downloaded exercises, '+data.engine.pool.length+' total variants, '+data.words+' words; OK');
+const languages=require('../site/languages-data.js');
+for(const code of ['ja','es','tr']){
+  const course=languages[code];
+  assert.equal(course.words.length,60);assert.equal(course.questions.length,48);
+  assert.equal(new Set(course.questions.map(q=>q.key)).size,48);
+  for(const q of course.questions){assert(q.why&&q.meaning);assert(q.options.includes(q.answer));assert.equal(new Set(q.options).size,4);}
+}
+const songs=require('../site/listening-data.js').LISTENING_SONGS;
+assert.equal(songs.length,3);assert(songs.every(s=>s.lines.length===4&&s.license.includes('Attribution')));
+assert.equal(fs.readdirSync(path.join(__dirname,'../site/arena/scenes')).filter(n=>n.endsWith('.webp')).length,20);
+console.log('3 introductory language courses, 12 licensed song excerpts and 20 battle backgrounds; OK');
+require('./check-learning.cjs');

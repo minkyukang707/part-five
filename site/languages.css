@@ -1,0 +1,94 @@
+#languagesPage.languageStudy {
+  display:grid;grid-template-columns:minmax(0,1.8fr) minmax(280px,1fr);
+  grid-template-areas:"heading heading" "lesson overview" "lesson stages" "lesson notes" "status status";
+  grid-template-rows:auto auto auto 1fr auto;gap:16px;align-items:start;align-content:start;color:var(--text,#eaf1f4);
+}
+#languagesPage.languageStudy>* {min-width:0;width:100%}
+.languageHeader {grid-area:heading;display:flex;align-items:center;justify-content:space-between;gap:20px;padding-bottom:9px;border-bottom:1px solid var(--line,#36495a)}
+.languageHeader h1 {margin:3px 0;font-size:clamp(26px,3vw,38px);letter-spacing:-.05em}
+.languageHeader p {margin:4px 0;color:var(--soft,#b9cbd7);font-size:13px}
+.languageHeader .languageEyebrow {color:var(--accent,#f2c578);font-size:12px;font-weight:700}
+.languageHeader label,.languageFilters label {display:grid;gap:5px;font-size:12px;color:var(--soft,#b9cbd7)}
+.languageStudy select {font:inherit;font-size:14px;background:var(--surface,#1c2d3c);color:var(--text,#eaf1f4);border:1px solid var(--line,#36495a);border-radius:7px;padding:9px 12px;max-width:100%}
+.languageOverview {grid-area:overview;display:grid;grid-template-columns:1fr;gap:5px;background:var(--surface,#1c2d3c);border:1px solid var(--line,#36495a);border-radius:12px;padding:17px 20px}
+.languageOverview strong {font:650 24px/1.2 system-ui,sans-serif}
+.languageOverview p {font-size:13px;color:var(--soft,#b9cbd7);margin:6px 0}
+.languageOverview progress {margin:12px 0 2px;height:7px}
+.languageStages {grid-area:stages;display:grid;grid-template-columns:1fr;gap:7px}
+.languageStage {display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;text-align:left;padding:12px;background:var(--surface,#1c2d3c);color:var(--text,#eaf1f4);border:1px solid var(--line,#36495a);border-radius:9px}
+.languageStage strong {font-size:13px;white-space:nowrap}
+.languageStage span {font-size:12px;line-height:1.45;word-break:keep-all}
+.languageStage small {font-variant-numeric:tabular-nums;color:var(--soft,#b9cbd7)}
+.languageStage[aria-pressed=true] {border-color:var(--accent,#f2c578);box-shadow:inset 0 3px var(--accent,#f2c578)}
+.languageLesson {grid-area:lesson;background:var(--surface,#1c2d3c);color:var(--text,#eaf1f4);border:1px solid var(--line,#36495a);border-radius:14px;padding:clamp(20px,2.4vw,36px);min-width:0}
+.languageToolbar {display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--line,#36495a)}
+.languageTabs {display:flex;gap:7px}
+.languageTabs button {border:1px solid var(--line,#36495a);background:transparent;color:var(--text,#eaf1f4);border-radius:7px;padding:8px 12px;font-weight:700}
+.languageTabs button[aria-pressed=true] {background:var(--accent,#f2c578);color:#152c30;border-color:transparent}
+:root[data-theme=light] .languageTabs button[aria-pressed=true] {color:#fffdf7}
+.languageReview {display:flex;align-items:center;gap:6px;font-size:13px;color:var(--soft,#b9cbd7)}
+.languageFilters {margin:16px 0 20px}
+.languageFilters label {max-width:310px}
+.languageTopic {font-size:12px;color:var(--accent,#f2c578);font-weight:700;margin:0 0 7px}
+.languageInstruction {font-size:13px;color:var(--soft,#b9cbd7);margin:4px 0}
+.languageMeaning {margin:12px 0 5px;font-size:16px;line-height:1.55}
+.languageLesson .languageStem {font:500 clamp(24px,3vw,38px)/1.5 system-ui,sans-serif;margin:8px 0 20px;overflow-wrap:anywhere;letter-spacing:-.015em}
+.languageOptions {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.languageOption {min-height:56px;display:flex;align-items:center;text-align:left;gap:12px;border:1px solid var(--line,#36495a);border-radius:8px;background:transparent;color:var(--text,#eaf1f4);font-size:19px;padding:10px 14px;overflow-wrap:anywhere}
+.languageOption:not(:disabled):hover {border-color:var(--accent,#f2c578);background:#95beb713}
+.languageLetter {display:grid;place-items:center;flex:none;width:25px;height:25px;border:1px solid var(--line,#36495a);border-radius:4px;font:600 11px/1 system-ui,sans-serif;color:var(--soft,#b9cbd7)}
+.languageOption.correct {border-color:#63b693;background:#60c69b20}
+.languageOption.incorrect {border-color:#d49671;background:#c7826920}
+.languageOption:disabled {cursor:default}
+.languageStudy form[data-lang=answerForm] {display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap}
+.languageInputLabel {display:grid;gap:6px;flex:1;min-width:170px;font-size:13px;color:var(--soft,#b9cbd7)}
+.languageInputLabel input {border:1px solid var(--line,#36495a);border-radius:7px;padding:12px;background:var(--surface,#1c2d3c);color:var(--text,#eaf1f4);font:inherit;font-size:17px;min-width:0;width:100%}
+.languageInputLabel input::placeholder {color:var(--soft,#b9cbd7);font-size:13px}
+.languageStudy [data-lang=inputNote] {width:100%;font-size:13px;color:#d59771;margin:0}
+.languageFeedback {background:#60c69b12;border:1px solid #6eaf9266;border-radius:9px;padding:15px 18px;margin-top:20px}
+.languageFeedback.missed {background:#c7826910;border-color:#c98d6766}
+.languageFeedback strong {color:var(--text,#eaf1f4)}
+.languageFeedback p {color:var(--soft,#b9cbd7);font-size:14px;margin:7px 0 0;line-height:1.7}
+.languageFeedback .languageSolution {font-size:21px;color:var(--text,#eaf1f4);overflow-wrap:anywhere}
+.languageReading {font:15px/1.6 system-ui,sans-serif;letter-spacing:.02em;color:var(--soft,#b9cbd7);margin:12px 0}
+.languageLessonActions {display:flex;justify-content:space-between;gap:10px;margin-top:18px;flex-wrap:wrap}
+.languageStudy .outline {background:transparent;border-color:var(--line,#36495a);color:var(--text,#eaf1f4)}
+.languageStudy .outline:disabled {opacity:.6;cursor:default}
+.languageVoiceNote {font-size:12px;color:var(--soft,#b9cbd7);margin:8px 0 0}
+.languageNotes {grid-area:notes;display:grid;grid-template-columns:1fr;gap:12px}
+.languageNotes details {border:1px solid var(--line,#36495a);border-radius:9px;background:var(--surface,#1c2d3c);padding:13px 16px;font-size:13px}
+.languageNotes summary {cursor:pointer;font-weight:700}
+.languageNotes p {color:var(--soft,#b9cbd7);line-height:1.75;margin:10px 0 0}
+.languageNotes [data-lang=sources] {display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px}
+.languageNotes a {color:var(--accent,#f2c578)}
+.languageEmpty {padding:28px 0;line-height:1.7}
+.languageEmpty p {color:var(--soft,#b9cbd7);margin:8px 0 15px}
+.languageStorage {grid-area:status;font-size:12px;color:#d59771;margin:0}
+.languageStorage:empty {display:none}
+@media(max-width:900px) {
+  #languagesPage.languageStudy {
+    grid-template-columns:minmax(0,1fr);grid-template-rows:auto;
+    grid-template-areas:"heading" "overview" "lesson" "stages" "notes" "status";
+    align-items:stretch;
+  }
+  .languageOverview {grid-template-columns:1fr 1fr;gap:20px}
+  .languageStages {grid-template-columns:repeat(5,minmax(0,1fr))}
+  .languageStage {display:flex;flex-direction:column;align-items:flex-start;gap:5px}
+  .languageNotes {grid-template-columns:1fr 1fr}
+}
+@media(max-width:650px) {
+  .languageHeader {align-items:flex-start;gap:12px;flex-direction:column}
+  .languageHeader label {width:100%}
+  .languageOverview {padding:14px;gap:12px;grid-template-columns:1fr}
+  .languageStages {gap:5px}
+  .languageStage {padding:9px 6px}
+  .languageStage strong {font-size:12px}
+  .languageStage span {font-size:10px;min-height:30px}
+  .languageStage small {font-size:10px}
+  .languageLesson {padding:16px}
+  .languageOptions {gap:7px}
+  .languageOption {font-size:17px;gap:8px;padding:10px;min-height:53px}
+  .languageNotes {grid-template-columns:1fr}
+  .languageLesson .languageStem {font-size:25px}
+  .languageStudy form[data-lang=answerForm] .primary {padding-inline:12px}
+}

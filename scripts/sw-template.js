@@ -3,6 +3,7 @@ const scope=self.registration.scope;
 const prefix='part-five-app:'+new URL(scope).pathname+':';
 const cacheName=prefix+'__RELEASE__';
 const assets=/*ASSETS*/[];
+const precache=/*PRECACHE*/[];
 const wasm=new URL('vendor/harper/harper.wasm',scope).href;
 const known=new Set(assets.map(file=>new URL(file,scope).href));
 self.addEventListener('message',event=>{
@@ -18,8 +19,8 @@ self.addEventListener('install',event=>{
   event.waitUntil((async()=>{
     const cache=await caches.open(cacheName);
     // Batches keep the first visit responsive on mobile connections.
-    for(let i=0;i<assets.length;i+=12){
-      await cache.addAll(assets.slice(i,i+12).map(file=>new Request(new URL(file,scope),{cache:'reload'})));
+    for(let i=0;i<precache.length;i+=12){
+      await cache.addAll(precache.slice(i,i+12).map(file=>new Request(new URL(file,scope),{cache:'reload'})));
     }
     await self.skipWaiting();
   })());

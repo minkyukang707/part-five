@@ -6,6 +6,7 @@ const Battle=(()=>{
   const horns=['ear_round','antenna_small','horn_large'];
   const regions=['이끼숲','산호초','잿빛 골짜기','햇살 초원','별빛 동굴','눈꽃 고개','달빛 습지','바람 언덕','호박빛 사막','구름 정원'];
   const names=['북슬이','물방울','도토리뿔','통통발','눈동이','방울귀','반달뿔','솜털이','둥근발','군주'];
+  const scenes=['moss','coral','volcano','meadow','crystal','snow','swamp','wind','desert','sky','bamboo','autumn','coast','canyon','terraces','ruins','rain','aurora','stars','castle'];
   let painted=0,timer,actionAnimations=[];
   function appearance(lv){
     const n=lv-1,color=colors[n%6],shape=shapes[(Math.floor(n/6)+n)%6];
@@ -53,6 +54,12 @@ const Battle=(()=>{
     return '다음 정답의 피해 '+Game.damage(Game.attack(g),g.right+1,g.ninthDamage,g.tenthBase);
   }
   function enemyHud(g,lv,hp){
+    const index=(lv-1)%scenes.length;
+    const scene='arena/scenes/'+String(index+1).padStart(2,'0')+'-'+scenes[index]+'.webp';
+    if($('field').dataset.scene!==scene){
+      $('field').dataset.scene=scene;
+      $('field').style.backgroundImage='url("'+scene+'")';
+    }
     if(painted!==lv)appearance(lv);
     const max=Game.monsterMax(lv,g.difficulty);
     $('battle').classList.toggle('boss',Game.boss(lv));
@@ -92,6 +99,15 @@ const Battle=(()=>{
     const phrase=g.kills===100?'':Game.taunt(g.wrong);
     $('taunt').textContent=phrase;$('taunt').hidden=!phrase;
     const motion=!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(event&&motion){
+      const attacker=event.kind==='miss'?$('enemySprite'):$('hero'),direction=event.kind==='miss'?-1:1;
+      animate(attacker,[{translate:'0 0'},{translate:direction*16+'px -4px',offset:.4},{translate:'0 0'}],{duration:330,easing:'ease-out'});
+      const number=document.createElement('b');
+      number.className='floatingHit '+(event.kind==='miss'?'heroLoss':'');
+      number.textContent='−'+(event.kind==='miss'?10:event.damage);
+      $('battleFx').append(number);
+      animate(number,[{opacity:0,translate:'0 5px',scale:.7},{opacity:1,translate:'0 -8px',scale:1.2,offset:.25},{opacity:0,translate:'0 -30px',scale:1}],{duration:760,fill:'forwards'});
+    }
     if(killed){
       $('killFlag').textContent=g.kills===100?'마지막 보스 격파':Game.boss(lv)?'보스 격파':'처치!';$('killFlag').hidden=false;
       if(motion)split();else $('creature').style.visibility='hidden';

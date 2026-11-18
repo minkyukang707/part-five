@@ -1,0 +1,69 @@
+#listeningPage {display:block;color:var(--pale)}
+.listenHeading,.listenSongHead,.listenQuestionHead,.listenNavigation,.listenProgressLabel {display:flex;align-items:center;justify-content:space-between;gap:12px}
+.listenHeading {margin-bottom:20px}
+.listenHeading p {color:var(--gold);margin:0 0 4px;font-size:12px}
+.listenHeading h1 {font-size:30px;margin:0}
+.listenHeading>span,.listenSongHead>span {color:var(--mist);font-size:12px}
+.listenLayout {display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:18px;align-items:start}
+.listenMedia,.listenPractice,.listenCustom,.listenLegal {min-width:0;border:1px solid var(--line);border-radius:13px;padding:22px;background:var(--panel)}
+.listenMedia label,.listenPractice label,.listenCustom label {display:block;font-size:13px;margin:0 0 6px;color:var(--mist)}
+.listenMedia select,.listenRange input,.listenCustom input:not([type=checkbox]),.listenCustom textarea,.listenPractice textarea {width:100%;min-width:0;border:1px solid #647a87;border-radius:7px;padding:10px;background:#132432;color:#f5f4ed;font:inherit}
+.listenMedia select {margin-bottom:16px}
+.listenSongHead {flex-wrap:wrap}
+.listenSongHead h2,.listenQuestionHead h2 {font-size:20px;margin:0}
+#listenDescription,.listenPractice>p,.listenRange p {font-size:13px;color:var(--mist);line-height:1.6}
+.listenPlayer {margin:15px 0 12px;aspect-ratio:16/9;border:1px solid var(--line);border-radius:9px;background:#101f2b;display:grid;place-items:center;overflow:hidden}
+.listenPlayer:empty::before {content:"▶";font-size:45px;color:var(--gold);opacity:.85}
+.listenPlayer iframe {width:100%;height:100%;border:0}
+.listenPlayerActions {display:flex;align-items:center;flex-wrap:wrap;gap:12px}
+#listeningPage a {color:#9bd4e5;text-underline-offset:3px}
+#listeningPage .outline {background:#2a4150;border-color:#5d7584;color:#e9f0ed}
+#listenOriginal {font-size:12px}
+#listenPlayerStatus,#listenCredit,.listenLegal p,#listenSaveStatus,#listenPracticeStatus {font-size:12px;line-height:1.65;color:var(--mist);overflow-wrap:anywhere}
+.listenRange {margin-top:15px}
+.listenRange summary,.listenHint summary,.listenCustom summary,.listenLegal summary {cursor:pointer;font-weight:700}
+.listenRange>div {display:flex;gap:14px}
+.listenRange label {display:flex;align-items:center;gap:7px;white-space:nowrap}
+.listenRange input {width:85px;padding:6px}
+.listenPractice textarea {resize:vertical;min-height:110px;font-family:var(--serif);font-size:20px;line-height:1.6;margin:0 0 12px}
+.listenPractice textarea:disabled {opacity:.75}
+#listenCheck:disabled {opacity:.6;cursor:default}
+.listenQuestionHead>span {white-space:nowrap;color:var(--gold);font-size:13px}
+.listenHint {font-size:13px;margin:15px 0;color:var(--mist)}
+.listenHint p {line-height:1.6}
+.listenFeedback {border:1px solid #b29159;background:#59452a30;border-radius:9px;padding:15px;margin:16px 0}
+.listenFeedback.success {border-color:#609c83;background:#36675130}
+#listenVerdict {color:#f3d699;font-size:14px}
+.listenFeedback.success #listenVerdict {color:#b7e1bd}
+#listenAnswer {font:20px/1.6 var(--serif);color:var(--pale)}
+#listenMissing,#listenExtra,#listenTip {font-size:12px;color:var(--mist);line-height:1.7}
+#listenMissing:empty,#listenExtra:empty,#listenSaveStatus:empty,#listenPracticeStatus:empty {display:none}
+.listenNavigation {margin:20px 0}
+.listenProgressLabel {font-size:12px;color:var(--mist)}
+.listenProgressLabel button {border:0;background:none;color:var(--gold);text-decoration:underline;text-underline-offset:3px}
+.listenCustom,.listenLegal {margin-top:18px;font-size:13px}
+.listenCustom form {max-width:750px;margin:18px 0 0}
+.listenCustom label {margin-top:13px}
+.listenCustom .listenRights {display:flex;align-items:start;gap:7px}
+.listenRights input {margin-top:4px}
+#listenDelete {margin-top:10px}
+:root[data-theme=light] #listeningPage {color:#213744}
+:root[data-theme=light] .listenMedia,:root[data-theme=light] .listenPractice,:root[data-theme=light] .listenCustom,:root[data-theme=light] .listenLegal {background:#fffef8;border-color:#bccdc8}
+:root[data-theme=light] #listeningPage label,:root[data-theme=light] #listenDescription,:root[data-theme=light] .listenPractice>p,:root[data-theme=light] #listenPlayerStatus,:root[data-theme=light] #listenCredit,:root[data-theme=light] .listenLegal p,:root[data-theme=light] .listenHint,:root[data-theme=light] .listenRange p,:root[data-theme=light] #listenTip,:root[data-theme=light] #listenMissing,:root[data-theme=light] #listenExtra {color:#4a635f}
+:root[data-theme=light] #listeningPage a {color:#20645b}
+:root[data-theme=light] #listeningPage .outline {background:#f6f9f2;border-color:#a4bcb0;color:#285346}
+:root[data-theme=light] .listenHeading>span,:root[data-theme=light] .listenSongHead>span,:root[data-theme=light] .listenProgressLabel {color:#526b65}
+:root[data-theme=light] #listenVerdict {color:#795b21}
+:root[data-theme=light] .listenFeedback.success #listenVerdict {color:#27634e}
+:root[data-theme=light] #listenAnswer {color:#213744}
+:root[data-theme=light] .listenMedia select,:root[data-theme=light] .listenRange input,:root[data-theme=light] .listenCustom input:not([type=checkbox]),:root[data-theme=light] .listenCustom textarea,:root[data-theme=light] .listenPractice textarea {background:#fffef9;color:#213744;border-color:#9ab5ab}
+@media(max-width:760px){
+  .listenLayout {grid-template-columns:1fr}
+  .listenMedia,.listenPractice,.listenCustom,.listenLegal {padding:16px}
+  .listenHeading {align-items:flex-end}
+  .listenHeading>span {font-size:11px;text-align:right;white-space:nowrap}
+}
+@media(prefers-reduced-motion:no-preference){
+  .listenFeedback {animation:listenAppear .3s ease-out both}
+  @keyframes listenAppear {from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+}
