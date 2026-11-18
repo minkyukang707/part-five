@@ -2,6 +2,8 @@
 
 GitHub Pages는 공부 화면과 파일을 전달합니다. 서로 다른 사용자의 초대, 서버 시각, 답안, 점수를 공유하려면 별도의 서버와 데이터베이스가 필요합니다. 영어·일본어·스페인어·터키어 공부 자체와 언어 선택은 기존 정적 사이트에서 계속 동작합니다.
 
+공유 서버는 [Part Five Arena](https://part-five-arena.hummingpixie16.chatgpt.site)에 배포되어 있으며 API 기본 경로는 `/api`입니다. Sites의 Cloudflare Worker와 D1을 사용합니다. GitHub Pages 배포는 화면을 갱신합니다. 이 폴더의 서버 코드를 수정한 경우에는 연결된 Sites 프로젝트 `appgprj_6afd0205227081918486242121a061f2`에도 새 버전을 배포해야 합니다.
+
 ## 실행
 
 Node 24 이상에서 외부 패키지 없이 로컬 검증할 수 있습니다.

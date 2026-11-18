@@ -60,6 +60,7 @@
     document.title='Part Five · '+StudyLocale.names[language];
     for(const id of ['reviewTab','listeningTab','writingTab','materialsTab'])document.getElementById(id).hidden=!english;
     if(!english)LanguageStudy.setLanguage(language,'grammar');
+    Battle.draw(english?StudyApp.englishStats().game:LanguageStudy.getGame());
     const invitation=new URLSearchParams(location.search);
     StudyApp.open(invitation.has('room')&&invitation.get('language')===language?'competition':'dashboard');
   });
