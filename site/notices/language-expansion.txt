@@ -1,0 +1,29 @@
+Foreign-language expansion, 2026-11-18
+
+Sentence sources
+Tatoeba contributors, distributed by ManyThings Anki bilingual exports.
+https://www.manythings.org/anki/
+https://tatoeba.org/en/downloads
+CC BY 2.0 FR, https://creativecommons.org/licenses/by/2.0/fr/
+Every imported exercise retains the contributing usernames and sentence IDs in its explanation.
+Changes: theme classification, expression selection, blanking, answer choices, Korean study notes.
+These are original-expression reconstruction exercises. Other expressions can be grammatically valid.
+The English sentence is the supplied meaning aid. Korean grammar notes are application-authored.
+
+Vocabulary sources
+Extended Open Multilingual Wordnet, Wiktionary-derived Korean, Japanese, Spanish and Turkish lemma tables.
+https://omwn.org/
+https://github.com/omwn/omw-data
+https://github.com/nltk/nltk_data/blob/gh-pages/packages/corpora/extended_omw.zip
+Original table headers specify CC BY-SA and Wiktionary, http://wiktionary.org/.
+The imported vocabulary alignment remains available under the source CC BY-SA terms.
+Changes: shared WordNet synset alignment to Korean, deduplication, ranking by corpus occurrence,
+selection of 2,000 distinct entries per language including the original 60 entries, and 30-entry sets.
+Synset alignment is automatic and can contain rare senses or imperfect Korean equivalents.
+Selected common meanings are editorially corrected in scripts/language-meaning-overrides.json.
+Entries and sentence classifications have structural validation and sample review, not exhaustive native-speaker review.
+
+Rebuild
+scripts/build-language-expansion.py takes a directory with extended.zip, jpn.zip, spa.zip and tur.zip,
+and reads the original courses from languages-data.js using Node.js (an optional second argument supplies a JSON snapshot).
+Requires Python 3 and Node.js 24, with no third-party packages. The original 60 word IDs and 48 exercise IDs are retained.

@@ -296,4 +296,8 @@ const LANGUAGE_COURSES = (() => {
   ]));
 })();
 if(typeof window!=='undefined')window.LANGUAGE_COURSES=LANGUAGE_COURSES;
-if(typeof module!=='undefined')module.exports=LANGUAGE_COURSES;
+if(typeof module!=='undefined'){
+  const expansion=require('./languages-expansion.js');
+  for(const [code,data] of Object.entries(expansion))Object.assign(LANGUAGE_COURSES[code],data);
+  module.exports=LANGUAGE_COURSES;
+}
