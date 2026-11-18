@@ -27,6 +27,6 @@ for(const code of ['ja','es','tr']){
 }
 const songs=require('../site/listening-data.js').LISTENING_SONGS;
 assert.equal(songs.length,3);assert(songs.every(s=>s.lines.length===4&&s.license.includes('Attribution')));
-assert.equal(fs.readdirSync(path.join(__dirname,'../site/arena/scenes')).filter(n=>n.endsWith('.webp')).length,20);
-console.log('3 introductory language courses, 12 licensed song excerpts and 20 battle backgrounds; OK');
+assert.equal(fs.readdirSync(path.join(__dirname,'../site/arena/scenes')).filter(n=>n.endsWith('.webp')).length,40);
+console.log('3 introductory language courses, 12 licensed song excerpts and 40 battle backgrounds; OK');
 require('./check-learning.cjs');

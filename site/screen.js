@@ -33,10 +33,13 @@
     engine.state.game=Game.fromLegacy(engine.state,legacyWords);
   }
   const game=engine.state.game;
+  const battleHome=byId('battle').parentNode;
+  const currentGame=()=>StudyLocale.current()==='en'?game:LanguageStudy.getGame();
+  const saveBattle=()=>StudyLocale.current()==='en'?save():LanguageStudy.saveBattle();
   Game.difficultyNames.forEach((name,i)=>byId('difficulty').add(new Option((i+1)+' · '+name,i+1)));
   Battle.draw(game);
   const genres={work:'업무·일상',research:'연구·논문',news:'뉴스·공공'};
-  let q, review=false, previousReview=null,activeSync=false,lastCheck=0,onlyOnline=false,activeMode='grammar';
+  let q, review=false, previousReview=null,activeSync=false,lastCheck=0,onlyOnline=false,activeMode='selection';
   const letters='ABCD';
   const text = (id,value) => { byId(id).textContent=value; };
   const auto=byId('autoSync');
@@ -68,15 +71,22 @@
   auto.onchange=()=>{try{localStorage.setItem('partfive.auto-sync',auto.checked?'on':'off');}catch{}if(auto.checked)automatic();};
   window.addEventListener('online',()=>automatic());
   function page(mode){
+    const english=StudyLocale.current()==='en';
+    const requested=mode;
+    if(!english&&['grammar','words'].includes(mode))mode='languages';
+    if(!english&&['writing','listening','materials'].includes(mode))mode='dashboard';
+    if(english&&mode==='languages')mode='grammar';
     activeMode=mode;
     const words=mode==='words',writing=mode==='writing',grammar=mode==='grammar';
     byId('wordPage').hidden=!words;byId('grammarPage').hidden=!grammar;byId('writingPage').hidden=!writing;
-    for(const name of ['dashboard','materials','listening','languages'])byId(name+'Page').hidden=mode!==name;
+    for(const name of ['dashboard','materials','listening','languages','competition'])byId(name+'Page').hidden=mode!==name;
     try{localStorage.setItem('partfive.tab',mode);}catch{}
     byId('wordsTab').setAttribute('aria-pressed',String(words));
     byId('writingTab').setAttribute('aria-pressed',String(writing));
     byId('studyTab').setAttribute('aria-pressed',String(grammar && !review));
     byId('reviewTab').setAttribute('aria-pressed',String(grammar && review));
+    if(!english&&mode==='languages'&&['grammar','words'].includes(requested))LanguageStudy.setMode(requested==='words'?'words':'grammar');
+    if(grammar){battleHome.insertBefore(byId('battle'),battleHome.querySelector('.records'));Battle.draw(game);}
     if(words){WordStudy.draw();WordStudy.focusCard();}
     if(writing)WritingStudy.open();
     window.dispatchEvent(new CustomEvent('partfive:page',{detail:{mode}}));
@@ -181,8 +191,8 @@
     if(focus)byId('next').focus({preventScroll:true});
     if (focus && byId('actions').getBoundingClientRect().bottom>window.innerHeight) byId('actions').scrollIntoView({block:'nearest'});
   }
-  byId('studyTab').onclick=()=>{ page('grammar');if (review || onlyOnline) start(false); };
-  byId('reviewTab').onclick=()=>{ page('grammar');if (!review) start(true); };
+  byId('studyTab').onclick=()=>{ page('grammar');if (StudyLocale.current()==='en'&&(review || onlyOnline)) start(false); };
+  byId('reviewTab').onclick=()=>{ if(StudyLocale.current()!=='en')return;page('grammar');if (!review) start(true); };
   byId('wordsTab').onclick=()=>page('words');
   byId('writingTab').onclick=()=>page('writing');
   byId('genre').onchange=()=>start(false,null,onlyOnline);
@@ -192,21 +202,25 @@
   byId('difficulty').onchange=()=>{
     const n=Number(byId('difficulty').value);
     if(!Number.isInteger(n)||n<1||n>5)return;
+    if(StudyLocale.current()!=='en'){LanguageStudy.setDifficulty(n);return;}
     game.difficulty=n;save();Battle.draw(game);
     if(!q||q.selected===null)start(review,q?.topic,onlyOnline);
   };
   byId('reviveHere').onclick=byId('revive').onclick=()=>{
-    if(!Game.revive(game))return;
-    save();Battle.draw(game,null,'체력을 회복했어요. 같은 몬스터에 다시 도전합니다.');
+    const active=currentGame();
+    if(!Game.revive(active))return;
+    saveBattle();Battle.draw(active,null,'체력을 회복했어요. 같은 몬스터에 다시 도전합니다.');
+    if(StudyLocale.current()!=='en'){LanguageStudy.open();return;}
     byId('downHint').hidden=true;
     if(q?.selected===null){byId('hint').hidden=false;Array.from(byId('choices').children).forEach(b=>{b.disabled=false;});}
   };
   function buy(kind){
-    if(!Game.buy(game,kind))return;
-    save();Battle.draw(game);Battle.shop(game,buy);
-    text('shopNotice',Game.gear[kind][game[kind]][0]+' 착용 완료 · '+(kind==='sword'?'공격력 '+Game.attack(game):'최대 체력 '+Game.maxHp(game)));
+    const active=currentGame();
+    if(!Game.buy(active,kind))return;
+    saveBattle();Battle.draw(active);Battle.shop(active,buy);
+    text('shopNotice',Game.gear[kind][active[kind]][0]+' 착용 완료 · '+(kind==='sword'?'공격력 '+Game.attack(active):'최대 체력 '+Game.maxHp(active)));
   }
-  byId('openShop').onclick=()=>{Battle.shop(game,buy);text('shopNotice','');byId('shopDialog').showModal();};
+  byId('openShop').onclick=()=>{Battle.shop(currentGame(),buy);text('shopNotice','');byId('shopDialog').showModal();};
   byId('resetOpen').onclick=()=>{byId('profileDialog').close();byId('eraseDrafts').checked=false;text('resetStatus','');byId('resetDialog').showModal();};
   document.querySelectorAll('button[data-close]').forEach(b=>{b.onclick=()=>byId(b.dataset.close).close();});
   byId('resetConfirm').onclick=async()=>{
@@ -216,6 +230,8 @@
   };
   window.StudyApp={
     open:page,
+    mode:()=>activeMode,
+    englishStats:()=>({total:engine.state.total,correct:engine.state.correct,game}),
     reviewGrammar(topic){
       page('grammar');
       if(!Object.hasOwn(engine.state.pending,topic)){
@@ -241,7 +257,6 @@
     if(old && topicIds.has(old.topic) && typeof old.stem==='string' && Array.isArray(old.options) && old.options.length===4 && old.options.includes(old.answer) && (old.selected===null || [0,1,2,3].includes(old.selected))){
       start(!!s.review,old.topic,!!s.onlyOnline,old);
     }else start(!!s?.review,null,!!s?.onlyOnline);
-    try{const tab=localStorage.getItem('partfive.tab');if(tab==='words'||tab==='writing')page(tab);}catch{}
     automatic();
   }
   void initialize();

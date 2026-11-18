@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; frame-src https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'">
-  <meta name="description" content="Part 5 영어 문법 문제로 몬스터와 대결하고, 3,000개 단어와 영작을 연습하세요. 학습 진도는 이 브라우저에 저장됩니다.">
-  <title>Part Five · 영어 문법 연습</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self' https://part-five-arena.hummingpixie16.chatgpt.site; frame-src https://www.youtube-nocookie.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="description" content="영어, 일본어, 스페인어, 터키어를 공부하며 몬스터와 대결하세요. 언어별 학습 진도와 90초 PvP를 제공합니다.">
+  <title>Part Five · 나의 언어 여행</title>
   <link rel="icon" href="icon.png"><link rel="stylesheet" href="study.css">
   <link rel="stylesheet" href="practice.css">
   <link rel="stylesheet" href="writing.css">
@@ -13,27 +13,43 @@
   <link rel="stylesheet" href="expedition.css">
   <link rel="stylesheet" href="workspace.css">
   <link rel="stylesheet" href="materials.css"><link rel="stylesheet" href="languages.css"><link rel="stylesheet" href="listening.css">
+  <link rel="stylesheet" href="locale.css"><link rel="stylesheet" href="competition.css">
   <script src="theme.js"></script>
+  <script src="locale.js" defer></script>
   <script src="browser.js" defer></script><script src="progress-reset.js" defer></script><script src="game.js" defer></script>
   <script src="learning.js" defer></script><script src="dashboard.js" defer></script>
   <script src="languages-data.js" defer></script><script src="languages.js" defer></script>
   <script src="materials.js" defer></script><script src="listening-data.js" defer></script><script src="listening.js" defer></script>
   <script src="writing-tasks.js" defer></script><script src="writing-ui.js" defer></script>
   <script src="data.js" defer></script><script src="engine.js" defer></script><script src="battle.js" defer></script><script src="character.js" defer></script><script src="vocabulary.js" defer></script><script src="words.js" defer></script><script src="screen.js" defer></script>
+  <script src="competition-config.js" defer></script><script src="competition.js" defer></script>
   <script src="workspace.js" defer></script>
 </head>
-<body>
-  <header><div class="bar">
+<body data-language-ready="false">
+  <main id="languageSelectPage">
+    <div class="welcomeTop"><div class="brand"><img src="icon.png" alt=""><span lang="en">Part Five</span></div><button id="welcomeTheme" type="button">화면 테마 변경</button></div>
+    <section class="welcomeIntro"><p>하루 한 걸음, 나의 언어 여행</p><h1>오늘은 어떤 언어를<br>공부할까요?</h1><p>언어마다 나의 실력과 원정이 차곡차곡 쌓여요.</p></section>
+    <div class="languageCards">
+      <button class="languageCard" data-language="en"><img src="arena/scenes/35-new-york.webp" alt="" loading="lazy"><span class="languageCardBody"><span lang="en">English</span><strong>영어</strong><small>문법 · 단어 · Listening · Writing</small><span class="languageResume" data-language-progress="en"></span></span><span class="languageEnter" aria-hidden="true">↗</span></button>
+      <button class="languageCard" data-language="ja"><img src="arena/scenes/29-kyoto.webp" alt="" loading="lazy"><span class="languageCardBody"><span lang="ja">日本語</span><strong>일본어</strong><small>입문 문법 · 단어</small><span class="languageResume" data-language-progress="ja"></span></span><span class="languageEnter" aria-hidden="true">↗</span></button>
+      <button class="languageCard" data-language="es"><img src="arena/scenes/31-barcelona.webp" alt="" loading="lazy"><span class="languageCardBody"><span lang="es">Español</span><strong>스페인어</strong><small>입문 문법 · 단어</small><span class="languageResume" data-language-progress="es"></span></span><span class="languageEnter" aria-hidden="true">↗</span></button>
+      <button class="languageCard" data-language="tr"><img src="arena/scenes/30-cappadocia.webp" alt="" loading="lazy"><span class="languageCardBody"><span lang="tr">Türkçe</span><strong>터키어</strong><small>입문 문법 · 단어</small><span class="languageResume" data-language-progress="tr"></span></span><span class="languageEnter" aria-hidden="true">↗</span></button>
+    </div>
+    <p class="welcomeFoot">학습 언어는 언제든 바꿀 수 있어요. 친구와 같은 언어로 90초 PvP에도 도전해 보세요.</p>
+  </main>
+  <header class="appHeader"><div class="bar">
     <div class="brand"><img src="icon.png" alt=""><span lang="en">Part Five</span></div>
-    <nav aria-label="영어 학습"><div class="navGroup" role="group" aria-label="게임 모드"><small>영어</small><button id="studyTab" aria-pressed="true">문제 풀기</button><button id="reviewTab" aria-pressed="false">오답 복습</button></div><div class="navGroup" role="group" aria-label="공부 모드"><button id="wordsTab" aria-pressed="false">단어 공부</button><button id="writingTab" aria-pressed="false">Writing</button></div></nav>
+    <button id="chooseLanguage" type="button"><span id="activeLanguage">영어</span><small>언어 변경⌄</small></button>
+    <nav id="studyNavigation" aria-label="영어 학습"><div class="navGroup" role="group" aria-label="게임 모드"><button id="studyTab" aria-pressed="true">문제 풀기</button><button id="reviewTab" aria-pressed="false">오답 복습</button></div><div class="navGroup" role="group" aria-label="공부 모드"><button id="wordsTab" aria-pressed="false">단어 공부</button><button id="listeningTab" data-view="listening" aria-pressed="false">Listening</button><button id="writingTab" aria-pressed="false">Writing</button></div></nav>
     <button id="themeToggle" type="button" aria-label="화면 테마 변경">라이트</button>
     <button id="profileOpen" type="button" aria-haspopup="dialog"><span class="portrait"><img id="navAvatar" src="arena/knight.png" alt=""></span><span id="profileLabel">캐릭터 설정</span><span class="editMark" aria-hidden="true">✎</span></button>
   </div></header>
-  <nav class="workspaceNav" aria-label="학습 공간"><button data-view="dashboard" id="dashboardTab" aria-pressed="false">나의 성장</button><button data-view="materials" id="materialsTab" aria-pressed="false">내 자료로 공부</button><button data-view="listening" id="listeningTab" aria-pressed="false">Listening</button><button data-view="languages" id="languagesTab" aria-pressed="false">일본어 · 스페인어 · 터키어</button></nav>
+  <nav class="workspaceNav" aria-label="학습 공간"><button data-view="dashboard" id="dashboardTab" aria-pressed="false">나의 성장</button><button data-view="materials" id="materialsTab" aria-pressed="false">내 자료로 공부</button><button data-view="competition" id="competitionTab" aria-pressed="false">PvP · 리더보드</button></nav>
   <main id="dashboardPage" class="extensionPage" hidden></main>
   <main id="materialsPage" class="extensionPage" hidden></main>
   <main id="listeningPage" class="extensionPage" hidden></main>
   <main id="languagesPage" class="extensionPage" hidden></main>
+  <main id="competitionPage" class="extensionPage" hidden></main>
   <div id="growthToast" role="status" hidden></div>
   <main id="grammarPage">
     <section class="route" aria-labelledby="chapterName">

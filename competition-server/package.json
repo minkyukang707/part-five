@@ -1,0 +1,1 @@
+{"name":"part-five-arena-api","private":true,"type":"module","scripts":{"start":"node local.mjs","test":"node --test arena.test.mjs","build:bank":"node build-bank.cjs"},"engines":{"node":">=24.0.0"}}

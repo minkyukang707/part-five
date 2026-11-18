@@ -30,7 +30,7 @@ jobs:
           ref: main
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
       - run: node scripts/refresh.cjs
       - run: node scripts/check.cjs
       - id: save
@@ -54,9 +54,10 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: '24'
       - run: node scripts/check.cjs
       - run: node scripts/build.cjs
+      - run: node --test competition-server/arena.test.mjs
       - uses: actions/upload-pages-artifact@v4
         with:
           path: dist

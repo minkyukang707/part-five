@@ -6,7 +6,7 @@ const Battle=(()=>{
   const horns=['ear_round','antenna_small','horn_large'];
   const regions=['이끼숲','산호초','잿빛 골짜기','햇살 초원','별빛 동굴','눈꽃 고개','달빛 습지','바람 언덕','호박빛 사막','구름 정원'];
   const names=['북슬이','물방울','도토리뿔','통통발','눈동이','방울귀','반달뿔','솜털이','둥근발','군주'];
-  const scenes=['moss','coral','volcano','meadow','crystal','snow','swamp','wind','desert','sky','bamboo','autumn','coast','canyon','terraces','ruins','rain','aurora','stars','castle'];
+  const scenes=['moss','coral','volcano','meadow','crystal','snow','swamp','wind','desert','sky','bamboo','autumn','coast','canyon','terraces','ruins','rain','aurora','stars','castle','paris','rome','petra','taj-mahal','great-wall','machu-picchu','giza','angkor-wat','kyoto','cappadocia','barcelona','santorini','skogafoss','grand-canyon','new-york','sydney','rio','venice','seoul','matterhorn'];
   let painted=0,timer,actionAnimations=[];
   function appearance(lv){
     const n=lv-1,color=colors[n%6],shape=shapes[(Math.floor(n/6)+n)%6];

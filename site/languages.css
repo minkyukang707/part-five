@@ -4,6 +4,19 @@
   grid-template-rows:auto auto auto 1fr auto;gap:16px;align-items:start;align-content:start;color:var(--text,#eaf1f4);
 }
 #languagesPage.languageStudy>* {min-width:0;width:100%}
+#languagesPage.languageStudy[data-mode=grammar] {
+  grid-template-columns:minmax(0,1.25fr) minmax(340px,1fr);
+  grid-template-areas:"heading heading" "lesson battle" "overview stages" "notes notes" "status status";
+  grid-template-rows:auto auto auto auto auto;
+}
+.languageBattleSlot {grid-area:battle;min-width:0}
+#languageBattleSlot #battle {
+  margin:0;padding:16px 18px 12px;border:1px solid #4a6068;
+  background:linear-gradient(148deg,#213646,#192a3a 76%);color:#eaf1f4;border-radius:14px;display:block;
+}
+:root[data-theme=light] #languageBattleSlot #battle {background:linear-gradient(145deg,#eff6ee,#dfe9e2);color:#25453d;border-color:#a3bbb1}
+.languageStudy[data-mode=grammar] .languageOverview {align-self:stretch;align-content:center}
+.languageStudy[data-mode=grammar] .languageNotes {grid-template-columns:1fr 1fr}
 .languageHeader {grid-area:heading;display:flex;align-items:center;justify-content:space-between;gap:20px;padding-bottom:9px;border-bottom:1px solid var(--line,#36495a)}
 .languageHeader h1 {margin:3px 0;font-size:clamp(26px,3vw,38px);letter-spacing:-.05em}
 .languageHeader p {margin:4px 0;color:var(--soft,#b9cbd7);font-size:13px}
@@ -35,6 +48,7 @@
 .languageLesson .languageStem {font:500 clamp(24px,3vw,38px)/1.5 system-ui,sans-serif;margin:8px 0 20px;overflow-wrap:anywhere;letter-spacing:-.015em}
 .languageOptions {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
 .languageOption {min-height:56px;display:flex;align-items:center;text-align:left;gap:12px;border:1px solid var(--line,#36495a);border-radius:8px;background:transparent;color:var(--text,#eaf1f4);font-size:19px;padding:10px 14px;overflow-wrap:anywhere}
+.languageStudy .languageOption {font-size:19px}
 .languageOption:not(:disabled):hover {border-color:var(--accent,#f2c578);background:#95beb713}
 .languageLetter {display:grid;place-items:center;flex:none;width:25px;height:25px;border:1px solid var(--line,#36495a);border-radius:4px;font:600 11px/1 system-ui,sans-serif;color:var(--soft,#b9cbd7)}
 .languageOption.correct {border-color:#63b693;background:#60c69b20}
@@ -65,6 +79,9 @@
 .languageEmpty p {color:var(--soft,#b9cbd7);margin:8px 0 15px}
 .languageStorage {grid-area:status;font-size:12px;color:#d59771;margin:0}
 .languageStorage:empty {display:none}
+.languageDown {margin:0 0 18px;padding:15px;border:1px solid #c98d6766;border-radius:9px;background:#c7826910}
+.languageDown p {font-size:13px;color:var(--soft,#b9cbd7);margin:5px 0 12px}
+.languageFeedback .languageCombatReceipt {font-size:12px;color:var(--accent,#f2c578);font-weight:700}
 @media(max-width:900px) {
   #languagesPage.languageStudy {
     grid-template-columns:minmax(0,1fr);grid-template-rows:auto;
@@ -75,6 +92,10 @@
   .languageStages {grid-template-columns:repeat(5,minmax(0,1fr))}
   .languageStage {display:flex;flex-direction:column;align-items:flex-start;gap:5px}
   .languageNotes {grid-template-columns:1fr 1fr}
+  #languagesPage.languageStudy[data-mode=grammar] {
+    grid-template-columns:minmax(0,1fr);grid-template-rows:auto;
+    grid-template-areas:"heading" "battle" "lesson" "overview" "stages" "notes" "status";
+  }
 }
 @media(max-width:650px) {
   .languageHeader {align-items:flex-start;gap:12px;flex-direction:column}
@@ -88,7 +109,10 @@
   .languageLesson {padding:16px}
   .languageOptions {gap:7px}
   .languageOption {font-size:17px;gap:8px;padding:10px;min-height:53px}
+  .languageStudy .languageOption {font-size:17px}
   .languageNotes {grid-template-columns:1fr}
+  .languageStudy[data-mode=grammar] .languageNotes {grid-template-columns:1fr}
+  #languageBattleSlot #battle {padding:12px}
   .languageLesson .languageStem {font-size:25px}
   .languageStudy form[data-lang=answerForm] .primary {padding-inline:12px}
 }

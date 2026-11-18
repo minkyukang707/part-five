@@ -7,15 +7,18 @@ class Element {
   replaceChildren(...children){this.children=children;}
   setAttribute(name,value){this.attributes[name]=String(value);}
 }
-function harness(seed={}){
+function harness(seed={},language='en'){
   const entries=new Map(Object.entries(seed).map(([key,value])=>[key,JSON.stringify(value)]));
   const localStorage={getItem:key=>entries.get(key)??null,setItem:(key,value)=>entries.set(key,String(value)),removeItem:key=>entries.delete(key)};
   const elements=new Map(),events=[],handlers=new Map(),calls=[];
   const get=id=>{if(!elements.has(id))elements.set(id,new Element());return elements.get(id);};
   get('dashboardPage').hidden=true;
   const window={addEventListener:(name,handler)=>{const list=handlers.get(name)||[];list.push(handler);handlers.set(name,list);},dispatchEvent:event=>{events.push(event);for(const handler of handlers.get(event.type)||[])handler(event);}};
+  window.StudyLocale={current:()=>language,ready:()=>true,names:{en:'영어',ja:'일본어',es:'스페인어',tr:'터키어'},choose(){},showChooser(){}};
   const ctx=vm.createContext({window,localStorage,structuredClone,Date,CustomEvent:class {constructor(type,init){this.type=type;this.detail=init.detail;}},document:{getElementById:get,createElement:tag=>new Element(tag)},StudyApp:{open:mode=>calls.push(['open',mode]),reviewGrammar:key=>calls.push(['grammar',key]),reviewWord:key=>calls.push(['word',key]),setDifficulty:value=>calls.push(['difficulty',value])},LanguageStudy:{review:(...args)=>calls.push(['language',...args])},ListeningStudy:{review:key=>calls.push(['listening',key])},PersonalStudy:{review:key=>calls.push(['materials',key])}});
   function load(name){vm.runInContext(fs.readFileSync(path.join(site,name),'utf8'),ctx,{filename:name});}
+  ctx.StudyLocale=window.StudyLocale;
+  ctx.LanguageStudy.statistics=()=>({total:0,correct:0,knownWords:0,knownGrammar:0,wordCount:60,grammarCount:48,game:{kills:0,difficulty:1}});
   load('learning.js');load('dashboard.js');
   vm.runInContext('LearningDashboard.mount(document.getElementById("dashboardPage"))',ctx);
   return {ctx,entries,localStorage,events,calls,get,log:window.LearningLog,draw:()=>vm.runInContext('LearningDashboard.open()',ctx)};
@@ -43,7 +46,7 @@ const reloaded=harness({'partfive.progress.v1':{total:105,correct:73},'partfive.
 assert.equal(reloaded.get('dashAttempts').textContent,'105','reload does not rebaseline and double count new grammar');
 reloaded.log.reset();reloaded.draw();assert.equal(reloaded.get('dashAttempts').textContent,'0');
 for(const [mode,language,key,expected] of [['word','en','9',['word',9]],['language-word','ja','ja-word-1',['language','ja','ja-word-1']],['listening','en','coffee.0',['listening','coffee.0']],['materials','es','doc:1',['materials','doc:1']]]){
-  const route=harness();route.log.record({mode,language,key,correct:false});route.draw();route.get('reviewPlan').children[0].onclick();assert.deepEqual(route.calls.pop(),expected);
+  const route=harness({},language);route.log.record({mode,language,key,correct:false});route.draw();route.get('reviewPlan').children[0].onclick();assert.deepEqual(route.calls.pop(),expected);
 }
 const topic=harness();
 topic.log.record({mode:'language-grammar',language:'ja',key:'j-1',topic:'particles',label:'조사',correct:false});
@@ -69,7 +72,13 @@ vm.runInContext(`
 const PersonalStudy={mount(){},open(){},close(){}};
 const ListeningStudy={mount(){},open(){},close(){}};
 const LanguageStudy={mount(){},open(){},close(){}};
+const CompetitionStudy={mount(){},open(){},close(){}};
 `,routing.ctx);
+routing.ctx.document.body={dataset:{}};
+routing.ctx.document.querySelector=selector=>routing.get(selector);
+routing.ctx.window.scrollTo=()=>{};
+routing.ctx.StudyApp.englishStats=()=>({total:0,game:{kills:0}});
+vm.runInContext('LanguageStudy.statistics=()=>({total:0,game:{kills:0}})',routing.ctx);
 routing.ctx.document.documentElement={dataset:{theme:'dark'}};
 routing.ctx.document.querySelectorAll=()=>[];
 routing.ctx.setTimeout=()=>1;routing.ctx.clearTimeout=()=>{};
@@ -89,3 +98,16 @@ const recovered=harness({'partfive.progress.v1':{total:-1,correct:99},'partfive.
 assert.equal(recovered.get('dashAttempts').textContent,'80','legacy baseline should fall back to valid backup when primary totals are invalid');
 console.log('PASS Learning: legacy baseline, idempotent attempts, recoveries, topic aggregation, review navigation, recommendation thresholds/isolation, recent history retention.');
 console.log('PASS Workspace: extension route ARIA, theme persistence, reset/initialization regression guards.');
+const isolated=harness();
+isolated.log.record({id:'english-1',mode:'grammar',language:'en',key:'relative',label:'영어 관계절',correct:false,difficulty:3});
+isolated.log.record({id:'japanese-1',mode:'language-grammar',language:'ja',key:'j-1',topic:'particles',label:'일본어 조사',correct:true,difficulty:1});
+isolated.draw();
+assert.equal(isolated.get('dashAttempts').textContent,'1');
+assert.equal(isolated.get('dashToday').textContent,'1');
+assert.equal(isolated.get('dashAccuracy').textContent,'0%');
+isolated.ctx.window.StudyLocale.current=()=> 'ja';isolated.draw();
+assert.equal(isolated.get('dashAttempts').textContent,'1');
+assert.equal(isolated.get('dashToday').textContent,'1');
+assert.equal(isolated.get('dashAccuracy').textContent,'100%');
+assert.equal(isolated.get('grammarWeak').children[0].tagName,'p','another language mistake stays out of the current dashboard');
+console.log('PASS Language isolation: totals, daily activity, accuracy and mistake priorities.');

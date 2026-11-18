@@ -1,0 +1,33 @@
+body[data-language-ready=false] > :is(.appHeader,.workspaceNav,main:not(#languageSelectPage),#growthToast) {display:none!important}
+#languageSelectPage {display:block;max-width:1320px;margin:auto;padding:30px clamp(20px,5vw,70px) 45px;color:var(--text)}
+#languageSelectPage[hidden] {display:none}
+.welcomeTop {display:flex;align-items:center;justify-content:space-between;gap:12px}
+.welcomeTop button {background:var(--surface);border:1px solid var(--line);color:var(--soft);font-size:12px;border-radius:8px;padding:9px 12px}
+.welcomeIntro {margin:45px 0 28px}
+.welcomeIntro h1 {font-size:clamp(32px,4.5vw,56px);font-weight:750;letter-spacing:-.055em;line-height:1.2;margin:12px 0 18px}
+.welcomeIntro p {font-size:14px;color:var(--soft)}
+.welcomeIntro p:first-child {color:var(--accent);font-weight:700;font-size:12px;letter-spacing:.08em}
+.languageCards {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.languageCard {position:relative;min-width:0;min-height:232px;padding:25px;text-align:left;border:1px solid #76899180;border-radius:16px;overflow:hidden;background:#172c35;color:#fff;isolation:isolate;transition:translate .25s,border-color .25s}
+.languageCard:hover {translate:0 -4px;border-color:#c5e4bf}
+.languageCard:focus-visible {outline:3px solid var(--accent);outline-offset:4px}
+.languageCard img {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:.7;transition:scale .6s}
+.languageCard:hover img {scale:1.04}
+.languageCard::after {content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#101c2bea 0%,#101c2b80 55%,#101c2b12 100%)}
+.languageCardBody {display:flex;flex-direction:column;align-items:flex-start;gap:7px}
+.languageCardBody > span:first-child {font-size:16px;color:#d8e6dc}
+.languageCard strong {font-size:30px;line-height:1.2;letter-spacing:-.04em}
+.languageCard small {font-size:12px;color:#e0e7e5;margin-top:6px}
+.languageResume {font-size:11px;color:#d1e2d1;margin-top:28px}
+.languageEnter {position:absolute;right:22px;bottom:22px;font-size:25px;color:#f7f4d5}
+.welcomeFoot {margin-top:22px;color:var(--soft);font-size:12px;line-height:1.6}
+#chooseLanguage {flex-shrink:0;background:transparent;border:1px solid var(--line);border-radius:8px;color:var(--text);display:flex;flex-direction:column;align-items:start;gap:3px;padding:7px 10px}
+#chooseLanguage > span {font-weight:750;font-size:13px}
+#chooseLanguage small {font-size:9px;color:var(--soft)}
+.bar {flex-wrap:wrap}
+.bar nav {flex:1}
+.bar nav .navGroup {flex-wrap:wrap}
+[data-language=ja] #growthHeadline,[data-language=es] #growthHeadline,[data-language=tr] #growthHeadline {font-size:clamp(24px,3vw,38px)}
+[data-theme=light] #battle {background:linear-gradient(145deg,#eff6ee,#dfe9e2);color:#25453d;border-color:#a3bbb1}
+@media(max-width:1000px){.appHeader .brand{font-size:23px}.bar nav{order:5;flex-basis:100%;justify-content:flex-start}.bar{gap:12px}#profileOpen{margin-left:0}#themeToggle{margin-left:auto}}
+@media(max-width:600px){#languageSelectPage{padding:22px 18px 30px}.welcomeIntro{margin:32px 0 24px}.languageCards{grid-template-columns:1fr;gap:13px}.languageCard{min-height:195px;padding:22px}.languageResume{margin-top:20px}.welcomeTop .brand{font-size:26px}.bar nav{overflow-x:auto;flex-wrap:nowrap}.bar nav .navGroup{flex-wrap:nowrap}#chooseLanguage{padding:5px 8px}.bar #profileOpen{max-width:100px}.appHeader .brand{font-size:20px}.bar nav button{white-space:nowrap}.appHeader .brand img{width:25px;height:25px}}

@@ -5,9 +5,10 @@ const LearningLog=(()=>{
   const validCount=n=>Number.isSafeInteger(n)&&n>=0;
   const grammar=['partfive.progress.v1','partfive.progress.v1.backup'].map(k=>read(k,null))
     .find(s=>s&&validCount(s.total)&&validCount(s.correct)&&s.correct<=s.total)||{total:0,correct:0};
-  const fresh=()=>({version:1,started:Date.now(),baseline:{total:grammar.total||0,correct:grammar.correct||0},items:{},days:{},recent:[],ids:[]});
+  const fresh=()=>({version:1,started:Date.now(),languageStarted:Date.now(),baseline:{total:grammar.total||0,correct:grammar.correct||0},items:{},days:{},languageDays:{},recent:[],ids:[]});
   let data=read(key,null);
   if(data?.version!==1||!data.items||!data.days||!data.baseline||!validCount(data.baseline.total)||!validCount(data.baseline.correct)||data.baseline.correct>data.baseline.total||!Array.isArray(data.recent)||!Array.isArray(data.ids))data=fresh();
+  if(!data.languageDays){data.languageDays={};data.languageStarted=Date.now();}
   let storageOK=true;
   function dayKey(date=new Date()){
     return [date.getFullYear(),String(date.getMonth()+1).padStart(2,'0'),String(date.getDate()).padStart(2,'0')].join('-');
@@ -32,6 +33,10 @@ const LearningLog=(()=>{
     data.items[id]=item;
     const date=dayKey(),daily=data.days[date]||{attempts:0,correct:0};
     daily.attempts++;daily.correct+=Number(event.correct);data.days[date]=daily;
+    const languageDays=data.languageDays[language]??={};
+    const languageDay=languageDays[date]??={attempts:0,correct:0};
+    languageDay.attempts++;languageDay.correct+=Number(event.correct);
+    for(const d of Object.keys(languageDays).sort().slice(0,-366))delete languageDays[d];
     const recent={mode:event.mode,language,key:String(event.key),correct:event.correct,at:now,difficulty:item.difficulty};
     data.recent.push(recent);data.recent=data.recent.slice(-300);
     if(event.id){data.ids.push(event.id);data.ids=data.ids.slice(-300);}
