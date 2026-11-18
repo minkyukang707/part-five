@@ -45,3 +45,4 @@ console.log('3 introductory language courses, 12 licensed song excerpts and 40 b
 require('./check-learning.cjs');
 require('./check-minigames.cjs');
 require('./check-language-review.cjs');
+require('./check-equipment.cjs');

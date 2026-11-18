@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="workspace.css">
   <link rel="stylesheet" href="materials.css"><link rel="stylesheet" href="languages.css"><link rel="stylesheet" href="listening.css">
   <link rel="stylesheet" href="locale.css"><link rel="stylesheet" href="competition.css">
-  <link rel="stylesheet" href="minigames.css">
+  <link rel="stylesheet" href="minigames.css"><link rel="stylesheet" href="equipment.css">
   <script src="theme.js"></script>
   <script src="locale.js" defer></script>
   <script src="browser.js" defer></script><script src="progress-reset.js" defer></script><script src="game.js" defer></script>
@@ -44,7 +44,7 @@
     <button id="chooseLanguage" type="button"><span id="activeLanguage">영어</span><small>언어 변경⌄</small></button>
     <nav id="studyNavigation" aria-label="영어 학습"><div class="navGroup" role="group" aria-label="게임 모드"><button id="studyTab" aria-pressed="true">문제 풀기</button><button id="reviewTab" aria-pressed="false">오답 복습</button></div><div class="navGroup" role="group" aria-label="공부 모드"><button id="wordsTab" aria-pressed="false">단어 공부</button><button id="listeningTab" data-view="listening" aria-pressed="false">Listening</button><button id="writingTab" aria-pressed="false">Writing</button></div></nav>
     <button id="themeToggle" type="button" aria-label="화면 테마 변경">라이트</button>
-    <button id="profileOpen" type="button" aria-haspopup="dialog"><span class="portrait"><img id="navAvatar" src="arena/knight.png" alt=""></span><span id="profileLabel">캐릭터 설정</span><span class="editMark" aria-hidden="true">✎</span></button>
+    <button id="profileOpen" type="button" aria-haspopup="dialog"><span class="portrait"><img id="navAvatar" src="arena/gear/head-male.png" alt=""></span><span id="profileLabel">캐릭터 설정</span><span class="editMark" aria-hidden="true">✎</span></button>
   </div></header>
   <nav class="workspaceNav" aria-label="학습 공간"><button data-view="dashboard" id="dashboardTab" aria-pressed="false">나의 성장</button><button data-view="minigames" id="minigamesTab" aria-pressed="false">미니게임</button><button data-view="materials" id="materialsTab" aria-pressed="false">내 자료로 공부</button><button data-view="competition" id="competitionTab" aria-pressed="false">PvP · 리더보드</button></nav>
   <main id="dashboardPage" class="extensionPage" hidden></main>
@@ -78,7 +78,7 @@
       <section id="battle" aria-label="몬스터 전투">
         <div class="battleTop"><strong>몬스터 전투</strong><span id="battleLevel"></span></div>
         <div id="field" class="field">
-          <div id="hero" class="fighter" role="img" aria-label="플레이어 루미"><img id="heroBase" src="arena/knight.png" alt=""><img id="heroArmor" src="arena/armor-0.png" alt=""><img id="heroSword" src="arena/sword-0.png" alt=""></div>
+          <div id="hero" class="fighter" role="img" aria-label="플레이어 루미"><img id="heroBase" src="arena/gear/head-male.png" alt=""><img id="heroArmor" src="arena/gear/armor-0.png" alt=""><img id="heroSword" src="arena/gear/sword-0.png" alt=""></div>
           <div id="enemySprite" class="enemySprite"><div id="creature" class="creature" aria-hidden="true"></div></div>
           <div id="battleFx" aria-hidden="true"></div><div id="taunt" role="status" hidden></div><div id="killFlag" hidden></div>
         </div>
@@ -152,8 +152,8 @@
     <div class="dialogHead"><h2 id="profileTitle">내 캐릭터</h2><button type="button" class="outline" data-close="profileDialog">닫기</button></div>
     <form id="profileForm">
       <fieldset><legend>캐릭터 성별</legend><div class="avatarChoices">
-        <label><input type="radio" name="gender" value="male" checked><span class="avatarArt"><img src="arena/knight.png" alt=""><img class="previewArmor" alt=""><img class="previewSword" alt=""></span><span>남자 기사</span></label>
-        <label><input type="radio" name="gender" value="female"><span class="avatarArt"><img src="arena/knight-female.png" alt=""><img class="previewArmor" alt=""><img class="previewSword" alt=""></span><span>여자 기사</span></label>
+        <label><input type="radio" name="gender" value="male" checked><span class="avatarArt"><img src="arena/gear/head-male.png" alt=""><img class="previewArmor" alt=""><img class="previewSword" alt=""></span><span>남자 기사</span></label>
+        <label><input type="radio" name="gender" value="female"><span class="avatarArt"><img src="arena/gear/head-female.png" alt=""><img class="previewArmor" alt=""><img class="previewSword" alt=""></span><span>여자 기사</span></label>
       </div></fieldset>
       <label class="nameLabel" for="heroNameInput">캐릭터 이름 <small>최대 16자</small></label>
       <input id="heroNameInput" type="text" maxlength="16" required autocomplete="off" placeholder="이름 입력" dir="auto">

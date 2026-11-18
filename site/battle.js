@@ -91,7 +91,9 @@ const Battle=(()=>{
     const killed=event?.kind==='kill',lv=killed?event.level:Game.level(g);
     enemyHud(g,lv,killed?0:Game.currentMonster(g));
     const max=Game.maxHp(g);$('playerHp').textContent=g.hp+' / '+max+' HP';$('playerBar').max=max;$('playerBar').value=g.hp;
-    $('heroSword').src='arena/sword-'+g.sword+'.png';$('heroArmor').src='arena/armor-'+g.armor+'.png';
+    $('heroSword').src=Game.gearArt('sword',Game.worn(g,'sword'));$('heroArmor').src=Game.gearArt('armor',Game.worn(g,'armor'));
+    $('hero').dataset.rarity=Math.max(Game.worn(g,'sword'),Game.worn(g,'armor'));
+    $('hero').setAttribute('aria-label',$('playerName').textContent+' · '+Game.gear.sword[Game.worn(g,'sword')][0]+' · '+Game.gear.armor[Game.worn(g,'armor')][0]);
     $('hero').classList.toggle('down',g.hp===0);
     $('power').textContent='공격 '+Game.attack(g);$('chain').textContent=g.wrong?'연속 오답 '+g.wrong:'연속 정답 '+g.right;
     $('wallet').textContent=g.gold.toLocaleString()+' G';$('difficulty').value=g.difficulty;
@@ -122,27 +124,39 @@ const Battle=(()=>{
       animate(target,[{translate:'0 0'},{translate:'5px 0',opacity:.65},{translate:'-4px 0'},{translate:'0 0'}],{duration:260});
     }
   }
-  function shop(g,buy){
+  let shopKind='sword';
+  const el=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};
+  function shop(g,buy,equip){
     $('shopGold').textContent=g.gold.toLocaleString()+' G';
-    $('merch').replaceChildren(...Object.entries(Game.gear).map(([kind,tiers])=>{
-      const tier=g[kind],current=tiers[tier],next=tiers[tier+1],stat=kind==='sword'?'공격력':'최대 체력';
-      const card=document.createElement('section');card.className='stock';
-      const category=document.createElement('small');category.textContent=(kind==='sword'?'무기':'방어구')+' · 착용 중 '+current[0];
-      const name=document.createElement('h3');name.textContent=next?next[0]:current[0];
-      const desc=document.createElement('p');
-      desc.textContent=next?'구매 즉시 착용 · '+stat+' 영구 +'+(next[2]-current[2]):'최고 단계 장비를 착용 중입니다.';
-      const art=document.createElement('img');art.src='arena/'+kind+'-'+(next?tier+1:tier)+'.png';art.alt=next?next[0]:current[0];art.className='shopGearArt';
-      card.append(category,art,name,desc);
-      if(next){
-        const footer=document.createElement('div');footer.className='stockFoot';
-        const diff=document.createElement('span');diff.textContent=g.gold<next[1]?(next[1]-g.gold)+' G 부족':'구매 가능';
-        const button=document.createElement('button');button.type='button';button.className='primary';button.id='buy-'+kind;
-        button.textContent='구매 · '+next[1]+' G';button.disabled=g.gold<next[1];
-        button.onclick=e=>{if(e.detail<=1&&g[kind]===tier)buy(kind);};
-        footer.append(diff,button);card.append(footer);
+    const host=$('merch');host.replaceChildren();
+    const preview=el('section',undefined,'shopPreview'),figure=el('div',undefined,'gearDoll');
+    const head=el('img');head.src=$('heroBase').src;head.className='dollHead';head.alt='';
+    const armor=el('img');armor.src=Game.gearArt('armor',Game.worn(g,'armor'));armor.className='dollArmor';armor.alt='';
+    const sword=el('img');sword.src=Game.gearArt('sword',Game.worn(g,'sword'));sword.className='dollSword';sword.alt='';
+    figure.append(head,armor,sword);figure.setAttribute('role','img');figure.setAttribute('aria-label','현재 착용 모습');
+    const summary=el('div');summary.append(el('small','YOUR COLLECTION'),el('h3',$('playerName').textContent+'의 장비실'),el('strong','공격 '+Game.attack(g)+' · 최대 체력 '+Game.maxHp(g)),el('p',Game.gear.sword[Game.worn(g,'sword')][0]+' / '+Game.gear.armor[Game.worn(g,'armor')][0]),el('p','구매하면 즉시 착용합니다. 보유한 장비로 외형을 바꿔도 최고 능력치는 유지됩니다.','shopHelp'));
+    preview.append(figure,summary);host.append(preview);
+    const tabs=el('div',undefined,'gearTabs');tabs.setAttribute('role','group');tabs.setAttribute('aria-label','장비 종류');
+    for(const [kind,label]of [['sword','무기'],['armor','방어구']]){
+      const tab=el('button',label+' '+(g[kind]+1)+' / '+Game.gear[kind].length);tab.type='button';tab.dataset.gearTab=kind;tab.setAttribute('aria-pressed',String(shopKind===kind));tab.onclick=()=>{shopKind=kind;shop(g,buy,equip);host.querySelector('[data-gear-tab='+kind+']').focus();};tabs.append(tab);
+    }
+    host.append(tabs,el('p','각 종류는 순서대로 구매합니다. 표시 가격은 해당 단계의 구매 비용입니다.','shopHelp'));
+    const grid=el('div',undefined,'gearGrid'),kind=shopKind,tiers=Game.gear[kind],owned=g[kind],wearing=Game.worn(g,kind),stat=kind==='sword'?'공격력':'최대 체력';
+    tiers.forEach((item,tier)=>{
+      const [name,price,bonus]=item,card=el('section',undefined,'stock gearCard');card.dataset.tier=tier;card.dataset.kind=kind;
+      if(tier===wearing)card.classList.add('equipped');
+      const label=el('small',String(tier).padStart(2,'0')+' · '+Game.rarity(tier),'gearRarity');
+      const art=el('img');art.src=Game.gearArt(kind,tier);art.alt=name;art.className='shopGearArt';art.loading='lazy';art.decoding='async';
+      card.append(label,art,el('h3',name),el('strong',stat+' +'+bonus,'gearBonus'));
+      const button=el('button');button.type='button';button.dataset.gearAction=kind;button.dataset.tier=tier;
+      if(tier<=owned){button.textContent=tier===wearing?'착용 중':'외형 장착';button.disabled=tier===wearing;button.className='outline';button.onclick=()=>equip(kind,tier);card.append(el('p','보유 장비 · 추가 비용 없음'));}
+      else{
+        card.append(el('p',price.toLocaleString()+' G','gearPrice'));
+        if(tier===owned+1){button.id='buy-'+kind;button.textContent=g.gold>=price?'구매하고 장착':(price-g.gold).toLocaleString()+' G 부족';button.disabled=g.gold<price;button.className='primary';button.onclick=e=>{if(e.detail<=1&&g[kind]===owned)buy(kind);};card.append(el('p','지금 구매하면 '+stat+' +'+(bonus-tiers[owned][2])));}
+        else{button.textContent=tiers[tier-1][0]+' 구매 후';button.disabled=true;button.className='outline';}
       }
-      return card;
-    }));
+      card.append(button);grid.append(card);
+    });host.append(grid);
   }
   return {draw,shop,message};
 })();

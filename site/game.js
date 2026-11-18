@@ -3,9 +3,16 @@ const Game=(()=>{
   const difficultyNames=['입문','쉬움','보통','어려움','도전'];
   const factors=[.7,.85,1,1.25,1.55];
   const gear={
-    sword:[['연습용 검',0,0],['청동검',20,5],['강철검',70,10],['기사검',160,18],['서리검',350,28],['별빛검',650,42]],
-    armor:[['여행자의 옷',0,0],['가죽 갑옷',20,20],['사슬 갑옷',70,50],['철판 갑옷',160,90],['수호 갑옷',350,150],['별빛 갑옷',650,240]]
+    sword:[['연습용 검',0,0],['청동검',20,5],['강철검',70,10],['기사검',160,18],['서리검',350,28],['별빛검',650,42],['홍련 대검',1250,62],['월식도',2400,88],['천공의 창',4500,120],['태양왕의 검',8000,160]],
+    armor:[['여행자의 옷',0,0],['가죽 갑옷',20,20],['사슬 갑옷',70,50],['철판 갑옷',160,90],['수호 갑옷',350,150],['별빛 갑옷',650,240],['홍련 갑주',1250,340],['월식 갑주',2400,470],['천공 갑주',4500,630],['태양왕의 갑주',8000,820]]
   };
+  const gearArt=(kind,tier)=>'arena/gear/'+kind+'-'+tier+'.png';
+  const rarity=tier=>['기본','일반','정교','기사','희귀','영웅','전설','신화','천상','왕관'][tier];
+  const worn=(g,kind)=>Number.isInteger(g[kind+'Look'])&&g[kind+'Look']>=0&&g[kind+'Look']<=g[kind]?g[kind+'Look']:g[kind];
+  function equipLook(g,kind,tier){
+    if(!Object.hasOwn(gear,kind)||!Number.isInteger(tier)||tier<0||tier>g[kind])return false;
+    g[kind+'Look']=tier;return true;
+  }
   function baseHp(level){return 10*(3+Math.ceil(100*Math.expm1((level-1)*Math.log1p(.01))-1e-9));}
   const boss=level=>level%10===0;
   function monsterMax(level,difficulty){
@@ -46,7 +53,7 @@ const Game=(()=>{
   }
   function valid(g){
     const range=(n,min,max)=>Number.isSafeInteger(n)&&n>=min&&n<=max;
-    return g?.version===1 && range(g.difficulty,1,5) && range(g.kills,0,100) && range(g.sword,0,5) && range(g.armor,0,5) &&
+    return g?.version===1 && range(g.difficulty,1,5) && range(g.kills,0,100) && range(g.sword,0,gear.sword.length-1) && range(g.armor,0,gear.armor.length-1) &&
       range(g.gold,0,Number.MAX_SAFE_INTEGER) && range(g.right,0,Number.MAX_SAFE_INTEGER) && range(g.wrong,0,Number.MAX_SAFE_INTEGER) &&
       !(g.right&&g.wrong) && range(g.ninthDamage,0,1000) && range(g.hp,0,maxHp(g)) && range(g.hpScale,1,10000) &&
       range(g.monsterHp,g.kills===100?0:1,g.kills===100?0:g.hpScale);
@@ -73,7 +80,7 @@ const Game=(()=>{
     if(!Object.hasOwn(gear,kind))return false;
     const tier=g[kind],next=gear[kind][tier+1];
     if(!next||g.gold<next[1])return false;
-    g.gold-=next[1];g[kind]++;
+    g.gold-=next[1];g[kind]++;g[kind+'Look']=g[kind];
     if(kind==='armor'&&g.hp>0)g.hp+=next[2]-gear.armor[tier][2];
     return true;
   }
@@ -82,6 +89,6 @@ const Game=(()=>{
     g.hp=maxHp(g);g.right=0;g.wrong=0;g.ninthDamage=0;
     g.hpScale=monsterMax(level(g),g.difficulty);g.monsterHp=g.hpScale;return true;
   }
-  return {difficultyNames,gear,baseHp,boss,monsterMax,level,maxHp,attack,reward,currentMonster,damage,taunt,fromLegacy,valid,answer,buy,revive};
+  return {difficultyNames,gear,gearArt,rarity,worn,equipLook,baseHp,boss,monsterMax,level,maxHp,attack,reward,currentMonster,damage,taunt,fromLegacy,valid,answer,buy,revive};
 })();
 if(typeof module!=='undefined')module.exports=Game;

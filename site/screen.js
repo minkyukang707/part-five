@@ -215,13 +215,18 @@
     byId('downHint').hidden=true;
     if(q?.selected===null){byId('hint').hidden=false;Array.from(byId('choices').children).forEach(b=>{b.disabled=false;});}
   };
+  function equip(kind,tier){
+    const active=currentGame();if(!Game.equipLook(active,kind,tier))return;
+    saveBattle();Battle.draw(active);Battle.shop(active,buy,equip);
+    text('shopNotice',Game.gear[kind][tier][0]+' 외형 착용 · 최고 능력치는 유지됩니다.');
+  }
   function buy(kind){
     const active=currentGame();
     if(!Game.buy(active,kind))return;
-    saveBattle();Battle.draw(active);Battle.shop(active,buy);
+    saveBattle();Battle.draw(active);Battle.shop(active,buy,equip);
     text('shopNotice',Game.gear[kind][active[kind]][0]+' 착용 완료 · '+(kind==='sword'?'공격력 '+Game.attack(active):'최대 체력 '+Game.maxHp(active)));
   }
-  byId('openShop').onclick=()=>{Battle.shop(currentGame(),buy);text('shopNotice','');byId('shopDialog').showModal();};
+  byId('openShop').onclick=()=>{Battle.shop(currentGame(),buy,equip);text('shopNotice','');byId('shopDialog').showModal();};
   byId('resetOpen').onclick=()=>{byId('profileDialog').close();byId('eraseDrafts').checked=false;text('resetStatus','');byId('resetDialog').showModal();};
   document.querySelectorAll('button[data-close]').forEach(b=>{b.onclick=()=>byId(b.dataset.close).close();});
   byId('resetConfirm').onclick=async()=>{
