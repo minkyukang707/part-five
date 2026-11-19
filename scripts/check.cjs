@@ -46,3 +46,4 @@ require('./check-learning.cjs');
 require('./check-minigames.cjs');
 require('./check-language-review.cjs');
 require('./check-equipment.cjs');
+require('./check-foundations.cjs');

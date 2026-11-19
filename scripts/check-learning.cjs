@@ -75,6 +75,7 @@ const ListeningStudy={mount(){},open(){},close(){}};
 const LanguageStudy={mount(){},open(){},close(){}};
 const CompetitionStudy={mount(){},open(){},close(){}};
 const MiniGameStudy={mount(){},open(){},close(){}};
+const GrammarStudy={mount(){},open(){},close(){}};
 `,routing.ctx);
 routing.ctx.document.body={dataset:{}};
 routing.ctx.document.querySelector=selector=>routing.get(selector);

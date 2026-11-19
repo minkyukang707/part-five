@@ -1,6 +1,6 @@
 'use strict';
 (()=>{
-  const modules={dashboard:LearningDashboard,materials:PersonalStudy,listening:ListeningStudy,languages:LanguageStudy,competition:CompetitionStudy,minigames:MiniGameStudy};
+  const modules={dashboard:LearningDashboard,materials:PersonalStudy,listening:ListeningStudy,languages:LanguageStudy,competition:CompetitionStudy,minigames:MiniGameStudy,foundations:GrammarStudy};
   for(const [name,study] of Object.entries(modules))study.mount(document.getElementById(name+'Page'));
   document.querySelectorAll('[data-view]').forEach(button=>button.onclick=()=>StudyApp.open(button.dataset.view));
   window.addEventListener('partfive:page',({detail:{mode}})=>{
@@ -59,6 +59,7 @@
     document.getElementById('studyNavigation').setAttribute('aria-label',StudyLocale.names[language]+' 학습');
     document.title='Part Five · '+StudyLocale.names[language];
     for(const id of ['reviewTab','listeningTab','writingTab','materialsTab'])document.getElementById(id).hidden=!english;
+    document.getElementById('foundationsTab').hidden=english;
     if(!english)LanguageStudy.setLanguage(language,'grammar');
     Battle.draw(english?StudyApp.englishStats().game:LanguageStudy.getGame());
     const invitation=new URLSearchParams(location.search);

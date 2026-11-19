@@ -2,6 +2,7 @@
 const WordStudy=(()=>{
   const $=id=>document.getElementById(id);
   const key='partfive.vocabulary.v1';
+  const preview=WordPreview.create();
   const size=30,sets=VOCABULARY.length/size;
   const clamp=(n,max)=>Number.isInteger(n)&&n>=0&&n<max?n:0;
   let data={set:0,marks:{},cursor:{},review:null,result:null};
@@ -39,6 +40,7 @@ const WordStudy=(()=>{
     }));
     $('wordCounter').textContent=result?result.counter:done?'30 / 30':review?'복습 '+(review.i+1)+' / '+review.words.length:(index+1)+' / '+size;
     if(done){
+      preview.hide();
       $('wordFinishTitle').textContent=(data.set+1)+'세트 학습을 마쳤어요.';
       $('wordSummary').textContent=again.length?'다시 볼 단어 '+again.length+'개를 골라 복습할 수 있어요.':'이 세트의 30개 단어를 모두 외웠어요.';
       $('repeatMissed').hidden=!again.length;$('nextSet').hidden=data.set===sets-1;
@@ -48,7 +50,8 @@ const WordStudy=(()=>{
     $('wordSetLabel').textContent='세트 '+String(data.set+1).padStart(2,'0')+((result?result.wasReview:review)?' · 복습':'');
     $('wordPos').textContent=card.pos;$('headword').textContent=card.w;
     $('wordForm').hidden=!!result;$('wordDetails').hidden=!result;
-    if(!result)return;
+    if(!result){preview.bind($('wordPreview'),$('wordForm'),String(current()),[card.main,...card.sub].join(' / '));return;}
+    preview.hide();
     $('wordVerdict').textContent=(result.ok?'정답이에요!':'등록된 뜻과 달라 복습 목록에 담았어요.')+'  내 답 · '+result.answer;
     $('wordVerdict').classList.toggle('missed',!result.ok);
     $('wordMain').textContent=card.main;
@@ -81,7 +84,7 @@ const WordStudy=(()=>{
   }
   function submit(event){
     event.preventDefault();
-    if(data.result || (!data.review && cursor()===size))return;
+    if(data.result || !preview.ready() || (!data.review && cursor()===size))return;
     const answer=$('wordInput').value.trim();
     if(!/[가-힣]/u.test(answer)){$('inputNote').textContent='한국어 뜻을 입력해 주세요.';$('wordInput').focus();return;}
     const word=current(),ok=answer!=='모름'&&matches(VOCABULARY[word],answer);
@@ -92,8 +95,8 @@ const WordStudy=(()=>{
     else data.cursor[data.set]=Math.min(size,cursor()+1);
     save();draw();focusCard();
   }
-  function focusCard(){const id=$('flash').hidden?($('repeatMissed').hidden?'redoSet':'repeatMissed'):data.result?'wordNext':'wordInput';$(id).focus({preventScroll:true});}
-  function clearEntry(){data.result=null;$('wordInput').value='';$('inputNote').textContent='';}
+  function focusCard(){if(!$('flash').hidden&&!data.result){preview.focus();return;}const id=$('flash').hidden?($('repeatMissed').hidden?'redoSet':'repeatMissed'):'wordNext';$(id).focus({preventScroll:true});}
+  function clearEntry(){preview.reset();data.result=null;$('wordInput').value='';$('inputNote').textContent='';}
   function select(n){data.set=n;data.review=null;clearEntry();save();draw();focusCard();}
   for(let i=0;i<sets;i++)$('setSelect').add(new Option('세트 '+String(i+1).padStart(2,'0')+'   ·   '+(i*size+1)+'–'+((i+1)*size),i));
   $('setSelect').onchange=e=>select(Number(e.target.value));

@@ -10,6 +10,7 @@ const LearningDashboard=(()=>{
   function navigate(item){
     if(item.mode==='grammar')StudyApp.reviewGrammar(item.key);
     else if(item.mode==='word')StudyApp.reviewWord(Number(item.key));
+    else if(item.mode==='grammar-study'){StudyApp.open('foundations');GrammarStudy.review(item.language,item.key);}
     else if(item.mode.startsWith('language-')){StudyApp.open('languages');LanguageStudy.review(item.language,item.key);}
     else if(item.mode==='listening'){StudyApp.open('listening');ListeningStudy.review(item.key);}
     else {StudyApp.open('materials');PersonalStudy.review?.(item.key);}
@@ -54,7 +55,7 @@ const LearningDashboard=(()=>{
     $('growthLanguage').textContent=names[language]+' 성장 기록';
     $('growthSubtitle').textContent=names[language]+' 단어 '+known.toLocaleString()+' / '+(english?'3,000':course.wordCount)+'개 학습 · '+(english?'문법 복습 '+(g.recovered||0)+'유형 완료':'문법 '+course.knownGrammar+' / '+course.grammarCount+'문항 최근 정답');
     $('dashAttemptLabel').textContent=english?'채점한 문제·단어·받아쓰기':'채점한 문법·단어';
-    weakList($('grammarWeak'),frequent(items.filter(i=>i.mode==='grammar'||i.mode==='language-grammar')),'문법 문제를 풀면 유형별 오답이 표시됩니다.');
+    weakList($('grammarWeak'),frequent(items.filter(i=>i.mode==='grammar'||i.mode==='language-grammar'||i.mode==='grammar-study')),'문법 문제를 풀면 유형별 오답이 표시됩니다.');
     weakList($('wordWeak'),frequent(items.filter(i=>(i.mode==='word'||i.mode==='language-word'||i.mode==='materials')&&reviewable(i))),'단어를 입력하고 채점하면 헷갈리는 단어가 모입니다.');
     const queue=$('reviewPlan');queue.replaceChildren();
     const priorities=outstanding.slice(0,3);

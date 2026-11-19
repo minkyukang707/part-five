@@ -1,0 +1,21 @@
+Japanese reading subset
+
+This product uses JMdict readings from the Electronic Dictionary Research and
+Development Group (EDRDG). Copyright James William BREEN and EDRDG.
+Source: https://www.edrdg.org/pub/Nihongo/JMdict_e.gz (retrieved 2026-11-19).
+Project/documentation: https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project
+Licence: https://www.edrdg.org/edrdg/licence.html
+Creative Commons Attribution-ShareAlike 4.0:
+https://creativecommons.org/licenses/by-sa/4.0/
+
+Changes: selected one spelling-compatible reading for each vocabulary entry,
+retained authored starter readings, and added contextual reading overrides.
+Multiple pronunciations can exist; one common reading is shown for study.
+Derived reading data in japanese-readings.js is distributed under CC BY-SA 4.0.
+Korean pronunciation is a programmatic approximate reading aid, not IPA and not
+a representation of pitch accent. Kana guidance and lesson examples are authored
+for this app. Curriculum references are linked in the grammar study screen.
+
+Maintenance: obtain the current official JMdict_e.gz and run
+python -X utf8 scripts/build-japanese-readings.py PATH/TO/JMdict_e.gz
+when refreshing vocabulary/readings. Review contextual homographs before release.

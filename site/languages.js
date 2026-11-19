@@ -3,6 +3,7 @@ const LanguageStudy=(()=>{
   const storageKey='partfive.languages.v1';
   const courses=window.LANGUAGE_COURSES;
   const languages=Object.keys(courses);
+  const preview=WordPreview.create();
   let host,ui,storageWarning='',voice;
   const natural=value=>Number.isSafeInteger(value)&&value>=0;
   const blank=()=>({stage:1,set:0,genre:'all',mode:'grammar',reviewOnly:false,sequence:0,grammar:{},words:{},retiredWords:{},session:null,game:{...Game.fromLegacy({},{}),difficulty:1}});
@@ -126,7 +127,7 @@ const LanguageStudy=(()=>{
   }
   function submit(submitted){
     const p=progress(),session=p.session,item=current();
-    if(!session||session.answered||!item)return;
+    if(!session||session.answered||!item||(p.mode==='words'&&!preview.ready()))return;
     if(p.mode==='grammar'&&p.game.hp===0){render();ui.reviveHere.focus({preventScroll:true});return;}
     const value=submitted.trim();
     if(p.mode==='words'&&!/[가-힣]/u.test(value)){
@@ -237,8 +238,8 @@ const LanguageStudy=(()=>{
     if(item){
       ui.exercise.dataset.language=data.language;
       ui.label.textContent=isGrammar?(course.genres?.[item.genre]||'일상')+' · '+item.label:'세트 '+(item.set+1)+' · '+(course.words.indexOf(item)%30+1)+' / '+Math.min(30,course.words.length-item.set*30);
-      ui.instruction.textContent=isGrammar?(item.sourceExercise?'한국어 뜻을 참고하여 원문에서 사용한 표현을 복원하세요.':'한국어 뜻에 맞게 문장을 완성하세요.'):p.words[item.key]?.needsMeaningReview?'뜻이 교정된 단어입니다. 기본 뜻을 다시 확인하며 복습해 주세요.':'기억나는 한국어 뜻을 하나 입력하세요.';
-      ui.meaning.hidden=!isGrammar;ui.meaning.textContent=isGrammar?item.meaning:'';
+      ui.instruction.textContent=isGrammar?(item.sourceExercise?'한국어 뜻을 참고하여 원문에서 사용한 표현을 복원하세요.':'한국어 뜻에 맞게 문장을 완성하세요.'):p.words[item.key]?.needsMeaningReview?'뜻이 교정된 단어입니다. 기본 뜻을 다시 확인하며 복습해 주세요.':'뜻을 먼저 익히고, 가려지면 기억나는 뜻을 입력하세요.';
+      ui.meaning.hidden=!isGrammar;ui.meaning.textContent=isGrammar?item.meaning.replace(/^문장\s*뜻\s*[:：·]?\s*/u,''):'';
       ui.stem.lang=data.language;
       ui.stem.textContent=isGrammar?item.stem.replace('____','＿＿＿'):item.word;
       ui.choices.replaceChildren();
@@ -251,6 +252,8 @@ const LanguageStudy=(()=>{
           if(session.answered&&choice===session.submitted&&!session.ok)button.classList.add('incorrect');
           button.addEventListener('click',()=>submit(choice));ui.choices.append(button);
         });
+      }else if(data.language==='ja'){
+        ui.reading.textContent=JapaneseReading.describe(item.word)||'이 단어의 읽기는 사전 원문에서 확인해 주세요.';ui.reading.lang='ko';ui.reading.hidden=false;
       }else if(item.reading){
         ui.reading.textContent=item.reading;ui.reading.lang=data.language;ui.reading.hidden=false;
       }
@@ -266,6 +269,8 @@ const LanguageStudy=(()=>{
         if(isGrammar&&item.reading){ui.reading.textContent=item.reading;ui.reading.lang=data.language;ui.reading.hidden=false;}
       }
     }
+    if(item&&!isGrammar&&!session.answered)preview.bind(ui.preview,ui.answerForm,data.language+':'+session.attemptId,item.meanings.join(' / '));else preview.hide();
+    ui.kana.hidden=data.language!=='ja';
     summary();updateVoice();ui.status.textContent=storageWarning;
   }
   function mount(target){
@@ -280,14 +285,15 @@ const LanguageStudy=(()=>{
       '<div class="languageFilters"><label data-lang="stageLabel">문법 단계<select data-lang="stage" aria-label="문법 단계"></select></label><label data-lang="genreLabel">문장 주제<select data-lang="genre" aria-label="문장 주제"></select></label><label data-lang="setLabel">단어 세트<select data-lang="set" aria-label="단어 세트"></select></label></div>'+
       '<div data-lang="down" class="languageDown" role="status" hidden><strong>체력을 모두 사용했어요.</strong><p>체력을 회복하면 같은 몬스터와 다시 도전할 수 있어요. 학습 기록은 그대로 유지됩니다.</p><button type="button" class="primary" data-lang="reviveHere">체력 회복하고 재도전</button></div>'+
       '<div data-lang="exercise"><p class="languageTopic" data-lang="label"></p><p class="languageInstruction" data-lang="instruction"></p><p class="languageMeaning" data-lang="meaning"></p><h2 class="languageStem" data-lang="stem"></h2>'+
-      '<div class="languageOptions" data-lang="choices"></div><form data-lang="answerForm"><label class="languageInputLabel">한국어 뜻<input type="text" data-lang="answer" maxlength="100" autocomplete="off" placeholder="뜻이 기억나지 않으면 모름" required></label><button class="primary" type="submit">채점하기</button><p data-lang="inputNote" role="status"></p></form>'+
+      '<div class="languageOptions" data-lang="choices"></div><section data-lang="preview" hidden></section><form data-lang="answerForm"><label class="languageInputLabel">한국어 뜻<input type="text" data-lang="answer" maxlength="100" autocomplete="off" placeholder="뜻이 기억나지 않으면 모름" required></label><button class="primary" type="submit">채점하기</button><p data-lang="inputNote" role="status"></p></form>'+
       '<section class="languageFeedback" data-lang="feedback" aria-live="polite" hidden><strong data-lang="verdict"></strong><p class="languageSolution" data-lang="solution"></p><p data-lang="why"></p><p data-lang="combatReceipt" class="languageCombatReceipt" hidden></p></section><p class="languageReading" data-lang="reading" hidden></p>'+
       '<div class="languageLessonActions"><button type="button" class="outline" data-lang="speak">발음 듣기</button><button type="button" class="primary" data-lang="next" hidden>다음 연습 →</button></div><p class="languageVoiceNote" data-lang="voiceNote"></p></div>'+
       '<div data-lang="empty" class="languageEmpty" hidden><h2 data-lang="emptyTitle"></h2><p data-lang="emptyText"></p><button type="button" class="primary" data-lang="continue">전체 연습으로</button></div></section>'+
       '<div id="languageBattleSlot" class="languageBattleSlot" data-lang="battleSlot"></div>'+
       '<aside class="languageNotes"><details><summary>문자와 발음 익히기</summary><p data-lang="guide"></p></details><details><summary>과정 범위와 참고 자료</summary><p>자체 문법 문제와 공개 예문의 원문 표현 복원 문제를 함께 제공합니다. 수집 예문은 한국어 의미와 학습 설명을 표시합니다. 의미 힌트는 미리 번역해 저장했으며 자동 번역과 일부 편집 교정을 거쳤습니다. 다른 표현도 문법적으로 가능한 원문 복원형입니다. 단어는 한국어 사전 자료와 대조하고 기본 뜻을 교정했습니다. 사전 근거가 부족해 교체한 단어의 학습 횟수는 누적 기록에 보관합니다. 전체 원어민 감수 자료는 아니므로 번역이나 뜻의 오류가 남을 수 있습니다.</p><a href="notices/language-expansion.txt" target="_blank" rel="noopener">확장 자료 출처·이용 조건</a><div data-lang="sources"></div></details></aside>'+
-      '<p class="languageStorage" data-lang="status" role="status"></p>';
+      '<div data-lang="kana" hidden></div><p class="languageStorage" data-lang="status" role="status"></p>';
     ui=Object.fromEntries([...host.querySelectorAll('[data-lang]')].map(element=>[element.dataset.lang,element]));
+    JapaneseReading.guide(ui.kana);
     ui.language.replaceChildren(...languages.map(language=>new Option(courses[language].name+' · '+courses[language].native,language)));
     ui.language.addEventListener('change',()=>setLanguage(ui.language.value));
     for(const mode of ['grammar','words']){

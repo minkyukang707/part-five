@@ -77,10 +77,11 @@
     if(!english&&['grammar','words'].includes(mode))mode='languages';
     if(!english&&['writing','listening','materials'].includes(mode))mode='dashboard';
     if(english&&mode==='languages')mode='grammar';
+    if(english&&mode==='foundations')mode='dashboard';
     activeMode=mode;
     const words=mode==='words',writing=mode==='writing',grammar=mode==='grammar';
     byId('wordPage').hidden=!words;byId('grammarPage').hidden=!grammar;byId('writingPage').hidden=!writing;
-    for(const name of ['dashboard','materials','listening','languages','competition','minigames'])byId(name+'Page').hidden=mode!==name;
+    for(const name of ['dashboard','materials','listening','languages','competition','minigames','foundations'])byId(name+'Page').hidden=mode!==name;
     try{localStorage.setItem('partfive.tab',mode);}catch{}
     byId('wordsTab').setAttribute('aria-pressed',String(words));
     byId('writingTab').setAttribute('aria-pressed',String(writing));
