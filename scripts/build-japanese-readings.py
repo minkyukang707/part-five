@@ -23,7 +23,7 @@ for entry in ET.fromstring(source).findall('entry'):
   priority=bool(reading.findall('re_pri'))
   for word in (compatible|{kana})&targets:
    lookup.setdefault(word,[]).append((not priority,kana))
-overrides={'お支払い':'おしはらい','今日':'きょう','明日':'あした','昨日':'きのう','私':'わたし','日本':'にほん','一日':'いちにち','人気':'にんき','何':'なに','上手':'じょうず','下手':'へた','生物':'せいぶつ','市場':'しじょう','大人':'おとな'}
+overrides={'何時':'なんじ','お支払い':'おしはらい','今日':'きょう','明日':'あした','昨日':'きのう','私':'わたし','日本':'にほん','一日':'いちにち','人気':'にんき','何':'なに','上手':'じょうず','下手':'へた','生物':'せいぶつ','市場':'しじょう','大人':'おとな'}
 result={};missing=[]
 for w in words:
  word=w['word']
