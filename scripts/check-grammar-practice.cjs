@@ -3,14 +3,16 @@ const site=path.resolve(__dirname,'../site'),ctx=vm.createContext({crypto:crypto
 const run=file=>vm.runInContext(fs.readFileSync(path.join(site,file),'utf8'),ctx,{filename:file});
 for(const f of ['grammar-courses.js','grammar-ja.js','grammar-es.js','grammar-tr.js'])run(f);
 const originals=JSON.parse(vm.runInContext('JSON.stringify(GRAMMAR_COURSES)',ctx));
-for(const f of ['grammar-expand.js','grammar-ja-expanded.js','grammar-es-expanded.js','grammar-tr-expanded.js','grammar-engine.js'])run(f);
+for(const f of ['grammar-expand.js','grammar-ja-expanded.js','grammar-es-expanded.js','grammar-tr-expanded.js'])run(f);
+const beforeAdditions=JSON.parse(vm.runInContext('JSON.stringify(GRAMMAR_COURSES)',ctx));
+for(const f of ['grammar-forms.js','grammar-morphology.js','grammar-engine.js'])run(f);
 const {courses,E}=vm.runInContext('({courses:GRAMMAR_COURSES,E:GrammarPractice})',ctx);
 const copy=x=>JSON.parse(JSON.stringify(x)),ko=s=>typeof s==='string'&&/[가-힣]/.test(s);
 let total=0,questionCount=0;
 for(const [code,course] of Object.entries(courses)){
   assert.equal(Object.keys(course.levels).join(','),'A1,A2,B1,B2,C1,C2');
   for(const [level,lessons] of Object.entries(course.levels)){
-    assert.equal(lessons.length,12);
+    assert.equal(lessons.length,['A1','A2','B1'].includes(level)?14:12);
     for(const [i,l] of lessons.entries()){
       const id=code+' '+level+'-'+i;
       for(const field of ['title','pattern','explanation','example','translation','pitfall'])assert(l[field],id+' '+field);
@@ -19,7 +21,7 @@ for(const [code,course] of Object.entries(courses)){
       assert.equal(l.steps.length,3);assert(l.steps.every(ko),id+' construction notes');
       assert(l.examples.length>=3);assert(l.examples.every(ex=>ex.sentence&&ko(ex.translation)),id+' example translations');
       assert(l.references.length>=2&&l.references.every(ref=>/^https:\/\//.test(ref.url)&&ref.label),id+' sources');
-      assert.equal(l.practice.length,i<4?4:3);
+      assert.equal(l.practice.length,l.morphology?6:i<4?4:3);
       assert.equal(new Set(l.practice.map(q=>q.question)).size,l.practice.length,id+' distinct exercises');
       assert.equal(new Set(l.practice.map(q=>q.id)).size,l.practice.length);
       assert.equal(new Set(l.practice.slice(0,3).map(q=>q.question.replace('___',q.options[q.answer]))).size,3,id+' different sentences');
@@ -35,7 +37,11 @@ for(const [code,course] of Object.entries(courses)){
     }
   }
 }
-assert.equal(total,216);assert.equal(questionCount,720);
+assert.equal(total,234);assert.equal(questionCount,828);
+for(const [code,oldCourse] of Object.entries(beforeAdditions))for(const [level,units] of Object.entries(oldCourse.levels))for(const [index,u] of units.entries()){
+  assert.equal(courses[code].levels[level][index].title,u.title,'original 72 lesson IDs remain stable');
+  assert.deepEqual(copy(courses[code].levels[level][index].practice),u.practice,'existing answers/question IDs remain stable');
+}
 const legacy={version:1,courses:{ja:{level:'C2',index:3,lessons:{'A1-0':{attempts:7,correct:5,passed:true,lastCorrect:true},'C2-3':{attempts:1,correct:0,passed:false,lastCorrect:false}}}}};
 const migrated=E.normalize(legacy,courses);
 assert.equal(migrated.version,2);assert.equal(migrated.courses.ja.lessons['A1-0'].attempts,7);
@@ -43,7 +49,12 @@ assert.equal(E.summary(migrated.courses.ja,courses.ja).completed,1);
 assert.equal(E.summary(migrated.courses.ja,courses.ja).pending.length,1);
 assert.equal(migrated.courses.ja.lessons['C2-3'].last,'legacy-check');
 assert.equal(E.summary(migrated.courses.es,courses.es).completed,0);
-assert.equal(E.summary(migrated.courses.ja,courses.ja).total,72);
+assert.equal(E.summary(migrated.courses.ja,courses.ja).total,78);
+const completed72={version:2,courses:{ja:{level:'C2',index:11,view:'practice',lessons:{},session:{lesson:'C2-11',question:'practice-3',order:[2,0,1],selected:0,attemptId:'old-saved-question'}}}};
+for(const [level,units] of Object.entries(beforeAdditions.ja.levels))units.forEach((u,index)=>{completed72.courses.ja.lessons[level+'-'+index]={attempts:2,correct:2,passed:true,pending:false,lastCorrect:true,mastered:['practice-1','practice-3'],seen:{'practice-3':1},last:'practice-3'};});
+const resumed=E.normalize(completed72,courses).courses.ja;
+assert.equal(E.summary(resumed,courses.ja).completed,72);assert.equal(E.summary(resumed,courses.ja).total,78);
+assert.deepEqual(copy(resumed.session),completed72.courses.ja.session);assert.equal(resumed.lessons['A1-12'],undefined);
 for(const [code,course] of Object.entries(courses))for(const [level,units] of Object.entries(course.levels))for(const [index,unit] of units.entries()){
   let state=E.normalize(null,courses),p=state.courses[code];p.level=level;p.index=index;p.view='practice';
   const id=E.lessonId(level,index);
@@ -89,4 +100,5 @@ forceAnswer('practice-2',true);assert.equal(repeated.lessons['A1-0'].pending,fal
 const malformed=E.normalize({courses:{ja:{level:'X',index:99,session:{lesson:'A1-0',question:'practice-1',order:[0,0,0],selected:null,attemptId:'x'},lessons:{'A1-0':{attempts:-1,correct:7,passed:true,lastCorrect:false}}}}},courses);
 assert.equal(malformed.courses.ja.level,'A1');assert.equal(malformed.courses.ja.index,0);assert.equal(malformed.courses.ja.session,null);
 assert.equal(malformed.courses.ja.lessons['A1-0'].passed,false);
-console.log('PASS Grammar practice: 216 detailed lessons / 720 answers, different-sentence review across every lesson, 2-answer mastery/recovery, v1 migration, reload/double-submit and language isolation.');
+console.log('PASS Grammar practice: 234 detailed lessons / 828 answers, different-sentence review across every lesson, 2-answer mastery/recovery, v1/v2 migration, stable old 72 IDs, reload/double-submit and language isolation.');
+require('./check-grammar-forms.cjs');

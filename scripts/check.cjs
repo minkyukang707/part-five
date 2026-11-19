@@ -4,7 +4,7 @@ const source=name=>fs.readFileSync(path.join(__dirname,'../site',name),'utf8');
 const bytes=source('library/questions.json'),questions=JSON.parse(bytes),manifest=JSON.parse(source('library/index.json'));
 assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),manifest.revision);
 assert.equal(questions.length,manifest.count);assert.equal(new Set(questions.map(q=>q.id)).size,questions.length);
-const data=vm.runInNewContext([source('data.js'),source('engine.js'),source('game.js'),source('vocabulary.js'),
+const data=vm.runInNewContext([source('data.js'),source('english-forms.js'),source('engine.js'),source('game.js'),source('vocabulary.js'),
   '({engine:new StudyEngine(STUDY_PATTERNS),game:Game,words:VOCABULARY.length})'].join('\n'));
 assert.equal(data.words,3000);assert(data.engine.labels.size>=30);
 for(const q of questions){

@@ -1,6 +1,6 @@
 'use strict';
 const GRAMMAR_TIERS=[
-  ['noun','agreement','modifier','countability','reflexive','independent-possessive','enough','distributive'],
+  ['noun','agreement','modifier','countability','reflexive','independent-possessive','enough','distributive','person-agreement','irregular-forms'],
   ['voice','tense','collocation','link','past-habit','time-clause','purpose','degree-result','parallel'],
   ['relative','complement','conditional','indirect-question','whether','multiples','accustomed','causative','substitution'],
   ['cleft','fused-relative','reduced-passive','prep-relative','sentential-relative','partitive-relative','modal-perfect','future-perfect','past-wish','appositive','double-comparative'],

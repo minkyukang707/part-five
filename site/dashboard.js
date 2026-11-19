@@ -35,6 +35,7 @@ const LearningDashboard=(()=>{
   function draw(){
     if(!mounted)return;
     const language=window.StudyLocale?.current()||'en',english=language==='en';
+    if(typeof GrammarReference!=='undefined')GrammarReference.render($('grammarReferenceDashboard'),language);
     const {data,storageOK}=LearningLog.summary(),items=Object.values(data.items).filter(item=>item.language===language);
     const g=read('partfive.progress.v1',{total:0,correct:0,pending:{},recovered:0});
     const words=read('partfive.vocabulary.v1',{marks:{}});
@@ -111,7 +112,7 @@ const LearningDashboard=(()=>{
   function mount(host){
     if(mounted)return;
     host.innerHTML=`<section class="growthHero"><div><p class="eyebrow" id="growthLanguage">나의 성장 기록</p><h1 id="growthHeadline"></h1><p id="growthSubtitle"></p></div><button id="continueStudy" class="primary">이어서 공부하기 →</button></section>
-      <section class="metricGrid" aria-label="누적 학습 지표"><article><span>지금까지 학습</span><strong id="dashAttempts">0</strong><small id="dashAttemptLabel">채점한 문제·단어·받아쓰기</small></article><article><span>누적 정답률</span><strong id="dashAccuracy">—</strong><small>기록된 전체 학습 기준</small></article><article><span>오답에서 회복</span><strong id="dashRepairs">0</strong><small>틀린 뒤 다시 맞힌 횟수</small></article><article><span>오늘의 연습</span><strong id="dashToday">0</strong><small>한 번의 시도도 성장 기록</small></article></section>
+      <div id="grammarReferenceDashboard"></div><section class="metricGrid" aria-label="누적 학습 지표"><article><span>지금까지 학습</span><strong id="dashAttempts">0</strong><small id="dashAttemptLabel">채점한 문제·단어·받아쓰기</small></article><article><span>누적 정답률</span><strong id="dashAccuracy">—</strong><small>기록된 전체 학습 기준</small></article><article><span>오답에서 회복</span><strong id="dashRepairs">0</strong><small>틀린 뒤 다시 맞힌 횟수</small></article><article><span>오늘의 연습</span><strong id="dashToday">0</strong><small>한 번의 시도도 성장 기록</small></article></section>
       <section class="dashboardGrid"><article class="dashCard"><div class="dashHeading"><h2>학습 리듬</h2><select id="chartRange" aria-label="학습 기간"><option value="14">최근 14일</option><option value="30">최근 30일</option></select></div><div id="activityChart"></div><p id="chartSummary" class="muted"></p></article><article class="dashCard"><h2>먼저 복습할 내용</h2><div id="reviewPlan"></div></article><article class="dashCard"><h2>헷갈리는 문법</h2><div id="grammarWeak"></div></article><article class="dashCard"><h2>다시 만날 단어</h2><div id="wordWeak"></div></article><article class="dashCard"><h2>다음 공부 단계</h2><p id="nextAdvice"></p><button id="applyRecommendation" class="primary" hidden></button></article><article class="dashCard"><div class="dashHeading"><h2>나의 원정</h2><span id="worldProgress"></span></div><div id="growthBlocks"></div></article></section>
       <p id="historyNote" class="muted"></p><p id="dashStorage" role="status" hidden>브라우저 저장 공간을 사용할 수 없어 이번 탭에서만 기록됩니다.</p>`;
     mounted=true;$('chartRange').onchange=draw;$('continueStudy').onclick=()=>StudyApp.open('grammar');draw();
