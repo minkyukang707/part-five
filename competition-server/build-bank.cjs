@@ -1,7 +1,7 @@
 'use strict';
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 const site=path.join(__dirname,'../site'),ctx=vm.createContext({});
-for(const file of ['data.js','engine.js','vocabulary.js','languages-data.js'])vm.runInContext(fs.readFileSync(path.join(site,file),'utf8'),ctx,{filename:file});
+for(const file of ['data.js','english-forms.js','engine.js','vocabulary.js','languages-data.js','french-vocabulary.js','french-questions.js','french-course.js'])vm.runInContext(fs.readFileSync(path.join(site,file),'utf8'),ctx,{filename:file});
 const source=vm.runInContext('({engine:new StudyEngine(STUDY_PATTERNS),words:VOCABULARY,languages:LANGUAGE_COURSES})',ctx);
 function rng(seed){return()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
 const random=rng(84729),shuffle=items=>{const a=[...items];for(let i=a.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};

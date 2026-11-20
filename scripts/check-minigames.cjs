@@ -37,5 +37,5 @@ for(let level=1;level<=5;level++){
  assert.equal(E.reward(500,level),[25,31,37,50,75][level-1]);
  if(level>1){assert(E.reward(1000,level)>E.reward(1000,level-1));for(const mode of ['memory','anagram','meteor','search'])assert(E.settings(level)[mode]<E.settings(level-1)[mode]);}
 }
-console.log('PASS Difficulty: 80 language/level/game pools, solvable boards, decreasing deadlines and increasing integer rewards.');
-console.log('PASS Minigames: Unicode letters, duplicate tiles, distinct meanings, solvable grids in all three languages, choices, scoring.');
+console.log('PASS Difficulty: 100 language/level/game pools, solvable boards, decreasing deadlines and increasing integer rewards.');
+console.log('PASS Minigames: Unicode letters, duplicate tiles, distinct meanings, solvable grids in all four additional languages, choices, scoring.');

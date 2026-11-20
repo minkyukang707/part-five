@@ -1,0 +1,35 @@
+프랑스어 문장 완성 문제 · 2026-11-20
+
+이 앱을 위해 작성한 프랑스어 문장 및 한국어 번역·해설입니다.
+외부 교재의 문제 또는 영상 자막을 복사하지 않았습니다.
+24개의 검수한 동사·목적어·상황 묶음과 명사·장소 자료를 50개 문법 구조에
+적용하여 총 1,200개의 서로 다른 문장 완성 문제를 구성합니다.
+숫자를 늘리기 위한 이름만 바꾸기나 임의 단어 조합은 사용하지 않습니다.
+
+난이도 1~5: 각각 240문항.
+일상·여행·학교·운동·음식/쇼핑·직장/사회·건강/자연·문화/취미: 각각 150문항.
+각 난이도와 주제의 교차 영역: 30문항.
+인칭·성·수, 모음 앞 축약, 어간 변화, 조동사와 분사 일치, 조건법,
+접속법, 관계대명사, 대명사 순서, 사역 구문 등 50개 문법 유형.
+
+규칙 참고 자료 (예문·번역은 자체 작성):
+TV5MONDE의 Grammaire 및 pronoms relatifs / pronoms compléments / subjonctif / possessifs:
+https://apprendre.tv5monde.com/fr/aides/grammaire
+https://apprendre.tv5monde.com/fr/aides/grammaire-les-pronoms-relatifs-qui-que-dont-ou
+https://apprendre.tv5monde.com/fr/aides/grammaire-les-pronoms-complements
+https://apprendre.tv5monde.com/fr/aides/grammaire-le-subjonctif
+https://apprendre.tv5monde.com/fr/aides/grammaire-les-possessifs-mon-ma-mes-etc
+
+OQLF Vitrine linguistique의 si, être/avoir 분사 일치, fait + infinitif, ni 주어 일치:
+https://vitrinelinguistique.oqlf.gouv.qc.ca/21324/la-grammaire/le-verbe/modes/concordance-des-temps/mode-verbal-apres-si
+https://vitrinelinguistique.oqlf.gouv.qc.ca/24222/la-grammaire/le-verbe/accord-du-participe-passe/avec-lauxiliaire-etre/synthese-des-regles-daccord-du-participe-passe-employe-avec-etre
+https://vitrinelinguistique.oqlf.gouv.qc.ca/24221/la-grammaire/le-verbe/accord-du-participe-passe/avec-lauxiliaire-avoir/synthese-des-regles-daccord-du-participe-passe-employe-avec-avoir
+https://vitrinelinguistique.oqlf.gouv.qc.ca/21710/la-grammaire/le-verbe/accord-du-participe-passe/cas-particuliers-daccord-du-participe-passe/invariabilite-du-participe-passe-fait-suivi-dun-infinitif
+https://vitrinelinguistique.oqlf.gouv.qc.ca/21490/la-grammaire/le-verbe/accord-du-verbe-avec-le-sujet/sujets-joints-par-une-conjonction/accord-du-verbe-avec-des-sujets-unis-par-ni
+
+Académie française의 après que 직설법 설명:
+https://www.academie-francaise.fr/apres-que
+
+수준은 이 앱의 5단계 연습 편성입니다. 공식 시험 전체 범위나 자격 인증을
+의미하지 않습니다. 1,200개가 무한히 서로 다른 문법 구조라는 뜻은 아니며,
+동일한 문법을 다른 단어·문장과 상황에서 다시 연습하는 유한 문제 은행입니다.

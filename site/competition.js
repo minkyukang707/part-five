@@ -1,6 +1,6 @@
 'use strict';
 const CompetitionStudy=(()=>{
-  const key='partfive.competition.v1',names={en:'영어',ja:'일본어',es:'스페인어',tr:'터키어'};
+  const key='partfive.competition.v1',names={en:'영어',ja:'일본어',es:'스페인어',tr:'터키어',fr:'프랑스어'};
   let host,mounted=false,visible=false,session={},room=null,busy=false,pollTimer,clockTimer,networkOK=false,polling=false,boardLanguage='',lastBoard=0,lifecycle=0;
   const $=id=>document.getElementById(id);
   const language=()=>typeof StudyLocale!=='undefined'?StudyLocale.current():'en';

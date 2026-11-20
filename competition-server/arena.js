@@ -1,4 +1,4 @@
-const LANGUAGES=['en','ja','es','tr'];
+const LANGUAGES=['en','ja','es','tr','fr'];
 const MIN_ANSWER_MS=500,ROUND_MS=90000,COUNTDOWN_MS=3000;
 class ApiError extends Error{constructor(status,message){super(message);this.status=status;}}
 const fail=(status,message)=>{throw new ApiError(status,message);};

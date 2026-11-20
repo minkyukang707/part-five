@@ -1,6 +1,6 @@
 'use strict';
 window.StudyLocale=(()=>{
-  const names={en:'영어',ja:'일본어',es:'스페인어',tr:'터키어'};
+  const names={en:'영어',ja:'일본어',es:'스페인어',tr:'터키어',fr:'프랑스어'};
   let language='en',selected=false;
   try{
     const previous=localStorage.getItem('partfive.language');

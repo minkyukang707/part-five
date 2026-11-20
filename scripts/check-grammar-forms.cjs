@@ -1,9 +1,9 @@
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
 const ctx=vm.createContext({}),site=path.resolve(__dirname,'../site');
-for(const f of ['grammar-courses.js','grammar-ja.js','grammar-es.js','grammar-tr.js','grammar-expand.js','grammar-ja-expanded.js','grammar-es-expanded.js','grammar-tr-expanded.js','grammar-forms.js','grammar-morphology.js','data.js','english-forms.js','engine.js'])vm.runInContext(fs.readFileSync(path.join(site,f),'utf8'),ctx,{filename:f});
+for(const f of ['grammar-courses.js','grammar-ja.js','grammar-es.js','grammar-tr.js','grammar-expand.js','grammar-ja-expanded.js','grammar-es-expanded.js','grammar-tr-expanded.js','grammar-forms.js','grammar-morphology.js','grammar-fr.js','grammar-fr-forms.js','data.js','english-forms.js','engine.js'])vm.runInContext(fs.readFileSync(path.join(site,f),'utf8'),ctx,{filename:f});
 const {courses,tables,guides,sources,patterns,Engine,tier}=vm.runInContext('({courses:GRAMMAR_COURSES,tables:GRAMMAR_FORM_TABLES,guides:GRAMMAR_FORM_GUIDES,sources:GRAMMAR_FORM_SOURCES,patterns:STUDY_PATTERNS,Engine:StudyEngine,tier:tierOf})',ctx);
 const plain=x=>JSON.parse(JSON.stringify(x));
-assert.equal(Object.keys(tables).length,20);
+assert.equal(Object.keys(tables).length,26);
 for(const table of Object.values(tables)){
   assert(table.caption&&table.note&&table.headers.length>=3&&table.rows.length>=4,table.caption);
   for(const row of table.rows){assert.equal(row.length,table.headers.length,table.caption);assert(row.every(v=>typeof v==='string'&&v.length));}
@@ -11,7 +11,7 @@ for(const table of Object.values(tables)){
 for(const [code,guide] of Object.entries(guides)){
   assert(guide.facts.length>=3&&guide.tables.every(key=>tables[key]));
   assert(guide.sources.every(key=>sources[key]?.url.startsWith('https://')));
-  if(code!=='en'){
+  if(['ja','es','tr'].includes(code)){
     const units=Object.values(courses[code].levels).flat().filter(u=>u.morphology);
     assert.equal(units.length,6);
     for(const u of units){
@@ -60,4 +60,4 @@ for(const p of added){
   const review=engine.next(wrong.topic);assert.notEqual(review.pattern,wrong.pattern,'English miss also reviews another sentence');
   engine.grade(review,review.options.indexOf(review.answer));assert.equal(engine.state.recovered,1);
 }
-console.log('PASS Morphology: 20 paradigms, 18 lessons/108 sentences, person vs gender distinctions, irregular-form regressions and 12 English exercises with review.');
+console.log('PASS Morphology: 26 paradigms, 18 lessons/108 sentences, person vs gender distinctions, irregular-form regressions and 12 English exercises with review.');

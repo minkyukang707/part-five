@@ -36,7 +36,7 @@ const LanguageStudy=(()=>{
     }
     const activeKeys=new Set(course.words.map(w=>w.key));
     for(const [key,entry] of Object.entries({...raw.retiredWords,...raw.words}).slice(0,10000)){
-      if(!activeKeys.has(key)&&/^(ja|es|tr)-(lex|dict|w)-[a-f0-9]+$/.test(key)&&entry&&natural(entry.attempts)&&natural(entry.correct)&&entry.correct<=entry.attempts&&typeof entry.lastCorrect==='boolean'){
+      if(!activeKeys.has(key)&&/^(ja|es|tr|fr)-(lex|dict|w)-[a-f0-9]+$/.test(key)&&entry&&natural(entry.attempts)&&natural(entry.correct)&&entry.correct<=entry.attempts&&typeof entry.lastCorrect==='boolean'){
         result.retiredWords[key]={attempts:entry.attempts,correct:entry.correct,lastCorrect:entry.lastCorrect,lastSequence:natural(entry.lastSequence)?entry.lastSequence:0};
       }
     }
@@ -222,6 +222,8 @@ const LanguageStudy=(()=>{
     ui.grammar.setAttribute('aria-pressed',String(isGrammar));ui.words.setAttribute('aria-pressed',String(!isGrammar));
     ui.review.checked=p.reviewOnly;
     ui.guide.textContent=course.guide;
+    if(!ui.courseNote.dataset.original)ui.courseNote.dataset.original=ui.courseNote.textContent;
+    ui.courseNote.textContent=data.language==='fr'?'프랑스어는 문법 구조와 문맥을 조합해 만든 자체 연습 문장입니다. 한국어 힌트와 해설을 함께 제공하며 인칭·성·수와 시제의 조건을 구별합니다. 단어는 한국어 사전 뜻과 프랑스어 기본형·빈도 자료를 대조해 선별했습니다. 아래 프랑스어 출처에서 선별 기준과 이용 조건을 확인할 수 있습니다.':ui.courseNote.dataset.original;
     ui.sources.replaceChildren(...course.sources.map(([label,url])=>{
       const link=node('a',label);link.href=url;link.target='_blank';link.rel='noopener';return link;
     }));
@@ -254,6 +256,9 @@ const LanguageStudy=(()=>{
         });
       }else if(data.language==='ja'){
         ui.reading.textContent=JapaneseReading.describe(item.word)||'이 단어의 읽기는 사전 원문에서 확인해 주세요.';ui.reading.lang='ko';ui.reading.hidden=false;
+      }else if(data.language==='fr'&&(item.reading||item.gender)){
+        const gender={m:'남성 명사',f:'여성 명사'}[item.gender];
+        ui.reading.textContent=[item.article?item.article+' '+item.word:'',gender,item.reading?'발음 '+item.reading:''].filter(Boolean).join(' · ');ui.reading.lang='ko';ui.reading.hidden=false;
       }else if(item.reading){
         ui.reading.textContent=item.reading;ui.reading.lang=data.language;ui.reading.hidden=false;
       }
@@ -290,7 +295,7 @@ const LanguageStudy=(()=>{
       '<div class="languageLessonActions"><button type="button" class="outline" data-lang="speak">발음 듣기</button><button type="button" class="primary" data-lang="next" hidden>다음 연습 →</button></div><p class="languageVoiceNote" data-lang="voiceNote"></p></div>'+
       '<div data-lang="empty" class="languageEmpty" hidden><h2 data-lang="emptyTitle"></h2><p data-lang="emptyText"></p><button type="button" class="primary" data-lang="continue">전체 연습으로</button></div></section>'+
       '<div id="languageBattleSlot" class="languageBattleSlot" data-lang="battleSlot"></div>'+
-      '<aside class="languageNotes"><details><summary>문자와 발음 익히기</summary><p data-lang="guide"></p></details><details><summary>과정 범위와 참고 자료</summary><p>자체 문법 문제와 공개 예문의 원문 표현 복원 문제를 함께 제공합니다. 수집 예문은 한국어 의미와 학습 설명을 표시합니다. 의미 힌트는 미리 번역해 저장했으며 자동 번역과 일부 편집 교정을 거쳤습니다. 다른 표현도 문법적으로 가능한 원문 복원형입니다. 단어는 한국어 사전 자료와 대조하고 기본 뜻을 교정했습니다. 사전 근거가 부족해 교체한 단어의 학습 횟수는 누적 기록에 보관합니다. 전체 원어민 감수 자료는 아니므로 번역이나 뜻의 오류가 남을 수 있습니다.</p><a href="notices/language-expansion.txt" target="_blank" rel="noopener">확장 자료 출처·이용 조건</a><div data-lang="sources"></div></details></aside>'+
+      '<aside class="languageNotes"><details><summary>문자와 발음 익히기</summary><p data-lang="guide"></p></details><details><summary>과정 범위와 참고 자료</summary><p data-lang="courseNote">자체 문법 문제와 공개 예문의 원문 표현 복원 문제를 함께 제공합니다. 수집 예문은 한국어 의미와 학습 설명을 표시합니다. 의미 힌트는 미리 번역해 저장했으며 자동 번역과 일부 편집 교정을 거쳤습니다. 다른 표현도 문법적으로 가능한 원문 복원형입니다. 단어는 한국어 사전 자료와 대조하고 기본 뜻을 교정했습니다. 사전 근거가 부족해 교체한 단어의 학습 횟수는 누적 기록에 보관합니다. 전체 원어민 감수 자료는 아니므로 번역이나 뜻의 오류가 남을 수 있습니다.</p><a href="notices/language-expansion.txt" target="_blank" rel="noopener">확장 자료 출처·이용 조건</a><div data-lang="sources"></div></details></aside>'+
       '<div data-lang="kana" hidden></div><p class="languageStorage" data-lang="status" role="status"></p>';
     ui=Object.fromEntries([...host.querySelectorAll('[data-lang]')].map(element=>[element.dataset.lang,element]));
     JapaneseReading.guide(ui.kana);

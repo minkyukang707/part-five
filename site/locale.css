@@ -27,7 +27,7 @@ body[data-language-ready=false] > :is(.appHeader,.workspaceNav,main:not(#languag
 .bar {flex-wrap:wrap}
 .bar nav {flex:1}
 .bar nav .navGroup {flex-wrap:wrap}
-[data-language=ja] #growthHeadline,[data-language=es] #growthHeadline,[data-language=tr] #growthHeadline {font-size:clamp(24px,3vw,38px)}
+body:not([data-language=en]) #growthHeadline {font-size:clamp(24px,3vw,38px)}
 [data-theme=light] #battle {background:linear-gradient(145deg,#eff6ee,#dfe9e2);color:#25453d;border-color:#a3bbb1}
 @media(max-width:1000px){.appHeader .brand{font-size:23px}.bar nav{order:5;flex-basis:100%;justify-content:flex-start}.bar{gap:12px}#profileOpen{margin-left:0}#themeToggle{margin-left:auto}}
 @media(max-width:600px){#languageSelectPage{padding:22px 18px 30px}.welcomeIntro{margin:32px 0 24px}.languageCards{grid-template-columns:1fr;gap:13px}.languageCard{min-height:195px;padding:22px}.languageResume{margin-top:20px}.welcomeTop .brand{font-size:26px}.bar nav{overflow-x:auto;flex-wrap:nowrap}.bar nav .navGroup{flex-wrap:nowrap}#chooseLanguage{padding:5px 8px}.bar #profileOpen{max-width:100px}.appHeader .brand{font-size:20px}.bar nav button{white-space:nowrap}.appHeader .brand img{width:25px;height:25px}}

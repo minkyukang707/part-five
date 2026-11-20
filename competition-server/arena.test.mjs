@@ -127,9 +127,9 @@ test('concurrent join accepts only one opponent; cancel releases host; auth and 
     assert.equal((await h.api('/rooms',{method:'POST',token:a.token,body:{language:'es'}})).status,200);
   }finally{h.db.close();}
 });
-test('four languages alternate validated grammar and vocabulary; guest token stored only hashed',async()=>{
+test('five languages alternate validated grammar and vocabulary; guest token stored only hashed',async()=>{
   const h=setup();try{
-    for(const language of ['en','ja','es','tr']){
+    for(const language of ['en','ja','es','tr','fr']){
       const a=await h.session('Player '+language);const room=(await h.api('/rooms',{method:'POST',token:a.token,body:{language}})).data.room;
       const questions=h.db.sqlite.prepare('SELECT * FROM questions WHERE room_id=? ORDER BY idx').all(room.id);assert(questions.length>=80);
       questions.forEach((q,i)=>{assert.equal(q.kind,i%2?'word':'grammar');assert.equal(new Set(JSON.parse(q.options)).size,4);assert(q.answer>=0&&q.answer<4);});
@@ -142,23 +142,23 @@ test('authenticated deletion removes only own all-language results, invalidates 
   const h=setup();try{
     const a=await h.session('Delete me'),b=await h.session('Keep opponent'),roomIds=[];
     assert.equal((await h.api('/session',{method:'DELETE'})).status,401);
-    for(const language of ['en','ja','es','tr']){
+    for(const language of ['en','ja','es','tr','fr']){
       const room=(await h.api('/rooms',{method:'POST',token:a.token,body:{language}})).data.room;roomIds.push(room.id);
       assert.equal((await h.api('/session',{method:'DELETE',token:a.token})).status,409,'waiting host must cancel first');
       const joined=(await h.api('/rooms/join',{method:'POST',token:b.token,body:{code:room.code,language}})).data.room;
       assert.equal((await h.api('/session',{method:'DELETE',token:b.token})).status,409,'active player must finish first');
       h.tick(joined.endsAt-h.now());await h.api('/rooms/'+room.id,{token:a.token});
     }
-    assert.equal(h.db.sqlite.prepare('SELECT COUNT(*) AS n FROM results').get().n,8);
+    assert.equal(h.db.sqlite.prepare('SELECT COUNT(*) AS n FROM results').get().n,10);
     const deleted=await h.api('/session',{method:'DELETE',token:a.token});assert.equal(deleted.status,200);assert.equal(deleted.data.deleted,true);
     assert.equal((await h.api('/session',{token:a.token})).status,401);
     assert.equal((await h.api('/session',{method:'DELETE',token:a.token})).status,401);
     const guest=h.db.sqlite.prepare('SELECT name,expires_at FROM guests WHERE id=?').get(a.player.id);assert.equal(guest.name,'삭제된 참가자');assert.equal(guest.expires_at,0);
     for(const id of roomIds){const replay=await h.api('/rooms/'+id,{token:b.token});assert.equal(replay.status,200);assert(replay.data.room.players.some(p=>p.name==='삭제된 참가자'));}
-    for(const language of ['en','ja','es','tr']){const entries=(await h.api('/leaderboard?language='+language)).data.entries;assert.equal(entries.length,1);assert.equal(entries[0].id,b.player.id);assert.equal(entries[0].matches,1);}
+    for(const language of ['en','ja','es','tr','fr']){const entries=(await h.api('/leaderboard?language='+language)).data.entries;assert.equal(entries.length,1);assert.equal(entries[0].id,b.player.id);assert.equal(entries[0].matches,1);}
     assert.equal(h.db.sqlite.prepare('SELECT COUNT(*) AS n FROM results WHERE player_id=?').get(a.player.id).n,0,'room reads and leaderboard sweeps cannot resurrect deleted results');
     assert.equal((await h.api('/session',{method:'DELETE',token:b.token})).status,200);
-    for(const language of ['en','ja','es','tr'])assert.equal((await h.api('/leaderboard?language='+language)).data.entries.length,0);
+    for(const language of ['en','ja','es','tr','fr'])assert.equal((await h.api('/leaderboard?language='+language)).data.entries.length,0);
     const c=await h.session('Race me');
     const race=await Promise.all([h.api('/session',{method:'DELETE',token:c.token}),h.api('/rooms',{method:'POST',token:c.token,body:{language:'en'}})]);
     assert(!(race[0].status===200&&race[1].status===200),'creation and deletion cannot both succeed');

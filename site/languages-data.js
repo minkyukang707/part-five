@@ -299,5 +299,6 @@ if(typeof window!=='undefined')window.LANGUAGE_COURSES=LANGUAGE_COURSES;
 if(typeof module!=='undefined'){
   const expansion=require('./languages-expansion.js');
   for(const [code,data] of Object.entries(expansion))Object.assign(LANGUAGE_COURSES[code],data);
+  LANGUAGE_COURSES.fr=require('./french-course.js');
   module.exports=LANGUAGE_COURSES;
 }

@@ -1,0 +1,77 @@
+Part Five · French vocabulary · 2026-11-20
+
+Content: 2,000 distinct French headwords and expressions, with Korean learner
+glosses. 67 sets (66 × 30 words, final set 20), and five in-app difficulty
+levels of 400 words each. Levels are a pedagogical ordering based on core
+vocabulary and corpus frequency, not an official CEFR certification.
+
+1. Korean Wiktionary contributors / Kaikki.org
+   https://ko.wiktionary.org/
+   https://kaikki.org/kowiktionary/프랑스어/
+   https://kaikki.org/kowiktionary/rawdata.html
+   French subset: 5,764 distinct words in the locally retained Korean
+   Wiktionary export. Direct Korean definitions are used; there is no English
+   translation pivot or WordNet synset-to-synset Korean meaning inference.
+   Per-card sourceUrl links identify the source headword. That page's history
+   credits individual contributors. Kaikki extraction: wiktextract by Tatu
+   Ylonen and contributors; https://github.com/tatuylonen/wiktextract
+   Data license: Creative Commons Attribution-ShareAlike 4.0 International
+   https://creativecommons.org/licenses/by-sa/4.0/
+   See also https://ko.wiktionary.org/wiki/위키낱말사전:저작권
+
+2. Lexique 3.83 · Boris New, Christophe Pallier and contributors
+   https://www.lexique.org/databases/Lexique383/
+   https://www.lexique.org/databases/Lexique383/Lexique383.tsv
+   https://github.com/chrplr/openlexicon/blob/master/datasets-info/Lexique383/README-Lexique.md
+   Used for lemma filtering, noun gender when unambiguous, and lemma frequency
+   (film frequency + 0.4 × book frequency). Core learner vocabulary is placed
+   before corpus ranking. Frequency is not used as a CEFR claim.
+   License: Creative Commons Attribution-ShareAlike 4.0 International.
+   Citation: New, B., Pallier, C., Ferrand, L., & Matos, R. (2001).
+   Une base de données lexicales du français contemporain sur internet:
+   LEXIQUE. L'Année Psychologique, 101, 447–462.
+
+3. Editorial adaptation
+   The dictionary subset is normalized, filtered, shortened into quiz answers,
+   deduplicated (including œ/oe aliases), and manually reviewed in a 2,000-word
+   list. Approximately 495 entries use explicitly edited learner glosses.
+   Examples of corrected raw-source mistakes: coûter (비용이 들다), toit (지붕),
+   compagnie (동행·회사), prêter (빌려주다), stade (경기장), feu (불).
+   Primary reference checks for disputed meanings:
+   https://www.dictionnaire-academie.fr/article/A9C4693 (coûter)
+   https://www.dictionnaire-academie.fr/article/A9C3188 (compagnie)
+   https://www.dictionnaire-academie.fr/article/A9P4232 (prêter)
+   https://www.dictionnaire-academie.fr/article/A8T0713 (toit)
+   These reference definitions are not copied. The Korean learner wording is
+   an editorial adaptation, not a complete account of every sense of a word.
+
+   Noun gender is only attached to noun senses. Missing or ambiguous gender is
+   left blank rather than guessed; grammatical gender is not inferred from a
+   player's gender. un/une are learning cues, and les vacances is plural.
+   IPA is included only where supplied by a dictionary. être and vraiment use
+   the headword transcription checked at https://fr.wiktionary.org/wiki/être
+   and https://fr.wiktionary.org/wiki/vraiment. Other transcriptions may retain
+   regional/alternative pronunciation notation from the source. No invented
+   Korean phonetic transcription is included. Browser speech uses fr-FR.
+   Synonyms/antonyms are not inferred from co-occurrence or ambiguous links.
+
+   The field reviewed records dictionary comparison/editorial screening; it
+   does not claim professional native-speaker proofreading of every sense.
+   Derived vocabulary data and these adaptations are distributed under
+   CC BY-SA 4.0. This attribution applies to the vocabulary data, independently
+   of the application's code license.
+
+Rebuild:
+   python scripts/build-french-vocabulary.py FRENCH_DICTIONARY_JSON Lexique383.tsv
+   FRENCH_DICTIONARY_JSON is a JSON array of rows with lang_code == 'fr' from
+   the retained Kaikki Korean Wiktionary export. Inputs are not bundled with
+   the browser. The generated site/french-vocabulary.js is usable offline.
+   Recorded input SHA-256 values:
+   French dictionary subset:
+   59e89bb40ecb74281dc8edfd9ae140d6771a4a8d3f02a6c5e66112b0e3dd8b6b
+   Lexique383.tsv:
+   637ba37a767a66679c48371d673ece50cbf541b49a4e40e598963d4f3fbce52b
+
+Regression checks in the builder cover count, unique NFC headwords and
+ligature aliases, Korean meanings, 30-word sets, five difficulty pools,
+person pronouns, noun gender, and the corrected confusing translations.

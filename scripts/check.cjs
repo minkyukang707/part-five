@@ -20,12 +20,12 @@ assert.deepEqual([...fs.readFileSync(path.join(__dirname,'../site/vendor/harper/
 console.log(manifest.count+' downloaded exercises, '+data.engine.pool.length+' total variants, '+data.words+' words; OK');
 const languages=require('../site/languages-data.js');
 const originalLanguages=vm.runInNewContext(source('languages-data.js')+';LANGUAGE_COURSES');
-for(const code of ['ja','es','tr']){
+for(const code of ['ja','es','tr','fr']){
   const course=languages[code];
   assert.equal(course.words.length,2000);assert(course.questions.length>=1000);
   assert.equal(new Set(course.words.map(w=>w.word.toLocaleLowerCase())).size,2000);
   assert.equal(new Set(course.questions.map(q=>q.key)).size,course.questions.length);
-  for(const kind of ['questions','words'])for(const original of originalLanguages[code][kind])assert(course[kind].some(q=>q.key===original.key),'preserve saved ID '+original.key);
+  for(const kind of ['questions','words'])for(const original of originalLanguages[code]?.[kind]||[])assert(course[kind].some(q=>q.key===original.key),'preserve saved ID '+original.key);
   for(const genre of ['daily','travel','school','sport','food','work','health','culture'])assert(course.questions.filter(q=>q.genre===genre).length>=100,code+' '+genre);
   assert(new Set(course.questions.map(q=>q.topic)).size>=30);
   for(const [index,w] of course.words.entries()){assert(w.meanings.length>0);assert(w.meanings.every(m=>/[가-힣]/.test(m)));assert(w.reviewed);assert.equal(w.set,Math.floor(index/30));}
@@ -41,9 +41,10 @@ assert(languages.ja.words.find(w=>w.word==='彼女').meanings.includes('그녀')
 const songs=require('../site/listening-data.js').LISTENING_SONGS;
 assert.equal(songs.length,3);assert(songs.every(s=>s.lines.length===4&&s.license.includes('Attribution')));
 assert.equal(fs.readdirSync(path.join(__dirname,'../site/arena/scenes')).filter(n=>n.endsWith('.webp')).length,40);
-console.log('3 introductory language courses, 12 licensed song excerpts and 40 battle backgrounds; OK');
+console.log('4 additional language courses, 12 licensed song excerpts and 40 battle backgrounds; OK');
 require('./check-learning.cjs');
 require('./check-minigames.cjs');
 require('./check-language-review.cjs');
 require('./check-equipment.cjs');
 require('./check-foundations.cjs');
+require('./check-french.cjs');
